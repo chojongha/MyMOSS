@@ -28,30 +28,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 //====================================================
-// ¿ÉÆ¼ÄÃ ÆÄ¿ö ÃøÁ¤¿ë ¾×Æ¼ºñÆ¼
-//
-// º» ¾×Æ¼ºñÆ¼´Â ½º½º·Î ±âµ¿ ÇÒ ¼öµµ ÀÖÁö¸¸,
-// »óÀ§ÀÇ ¾îÇÃ¸®ÄÉÀÌ¼Ç¿¡¼­ È£ÃâµÇ¸é ºÒ·çÅõ½º ÀåÄ¡¸¦ ÅëÇØ ±¤ÆÄ¿ö¸¦ ÃøÁ¤ÇÏ°í
-// ÃøÁ¤ °á°ú¸¦ ¼­¹ö¿¡ Àü¼ÛÇÏ´Â °ÍÀ» ¸ñÀûÀ¸·Î ÇÑ´Ù.
-// (»ç½Ç »óÀ§¿¡ ¾ÛÀÌ Á¸Àç ÇÏ¹Ç·Î ÃøÁ¤°ª¸¸ ³Ñ°Ü ¹Þ¾Æ¼­ ½º½º·Î º¸°í ÇÏ´Â°ÍÀÌ
-//  ÆíÇÒÅÙµ¥ ¿Ö ÀÌ¸® ¼³°è Çß´ÂÁö ÀÇ½É½º·´Áö¸¸)
-// ¶Ç ºí·çÅõ½º ÀåÄ¡ÀÇ ½ºÆ®¸² ¿ÀÇÂ°úÁ¤¿¡¼­ ÀåÄ¡ÀÇ »óÅÂ¿¡ µû¶ó
-// ÀûÁö ¾ÊÀº ½Ã°£ÀÌ ¼Ò¿äµÇ±âµµ ÇÏ°í, ¿¬°áµÈ ÀåÄ¡°¡
-// °Å¸®³ª ¿©·¯ ÀÌÀ¯·Î ¿µ±¸ÀûÀÎ ¿¬°á »óÅÂ¸¦ º¸ÀåÇÏÁö ¾ÊÀ¸¹Ç·Î
-// ¾×Æ¼ºñÆ¼°¡ È°¼ºÈ­ »óÅÂÀÏ onResume ÀÌÈÄ¿¡ ÁÖ¿äÇÑ È°µ¿À» Ã³¸®ÇÏ°í
-// ¹é±×¶ó¿îµå·Î ³»·Á°¡´Â onPause »óÅÂ¿¡¼­ ½º½º·Î Á¾·áÇÑ´Ù.
-// µû¶ó¼­ ÃøÁ¤ Áß¿¡ ÀüÈ­, ¹®ÀÚ µîÀÇ ¿©·¯ ÀÌÀ¯·Î ´Ù¸¥ ¾×Æ¼ºñÆ¼°¡ È°¼ºÈ­ µÇ¸é
-// º» ¾×Æ¼ºñÆ¼´Â Á¾·á µÇ¹Ç·Î »õ·Ó°Ô ½ÃÀÛÇÏ¿©¾ß ÇÑ´Ù.
-//
-// 2013-11-09 ÃÖÁ¾ ¼öÁ¤ by
-//   SOLME Programmer ±è¿µÀÏ (mademlm@gmail.com) 
+// ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½Ä¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼ï¿½ï¿½Æ¼
+// test
+// 2013-11-09 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ by
+//   SOLME Programmer ï¿½è¿µï¿½ï¿½ (mademlm@gmail.com) 
 //====================================================
 public class MainActivity extends Activity implements OnClickListener {
 
-	// µð¹ö±×¿ë ÅÂ±×
+	// ï¿½ï¿½ï¿½ï¿½×¿ï¿½ ï¿½Â±ï¿½
 	private static final String TAG = "OpticalTest";
 	
-	// ½ºÅ©¸° °´Ã¼ ÂüÁ¶ (TextView)
+	// ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ (TextView)
 	private TextView mTextTitle;
 	private TextView mTextMessage;
 	private ImageView mImageBattery;
@@ -61,23 +48,23 @@ public class MainActivity extends Activity implements OnClickListener {
 	private TextView mText_Lambda;
 	private TextView mText_Power;
 	
-	// ½ºÅ©¸° °´Ã¼ ÂüÁ¶ (Button)
+	// ï¿½ï¿½Å©ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ (Button)
 	private Button mButton_Exit;
 	private ImageView mButton_Power;
 	private ImageView mButton_Lambda;
 	private ImageView mButton_Select;
 	private Button mButton_Send;
 	
-	// ³»ºÎ »ç¿ë º¯¼ö
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	private String mWorkOdrNum;
 	private String mCustName;
 	private String mTelNum;
 	private static final String mPostAddress = "http://moss.kt.com/moss/OpticTestResult";
 	
-    // ºí·çÅõ½º ¼­ºñ½º Å¬·¡½º
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
     private BluetoothService mBluetoothService = null;
     
-    // ¹é±×¶ó¿îµå ÀüÈ¯½Ã Á¾·á ÇÃ·¡±×
+    // ï¿½ï¿½×¶ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½ï¿½
     private boolean mExitActivity = true;
     
     private final String INIT_LAMBDA = "---- nm";
@@ -88,12 +75,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "OnCreate");
 		
-		// Å¸ÀÌÆ² ¿µ¿ªÀ» »ç¿ëÀÚ Á¤ÀÇÇÑ´Ù.
+		// Å¸ï¿½ï¿½Æ² ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.activity_main);
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.cust_title);
 
-		// È­¸é¿¡ »ç¿ëµÈ ¸ðµç °´Ã¼ ÂüÁ¶
+		// È­ï¿½é¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½
 		mTextTitle = (TextView) findViewById(R.id.text_title);
 		mImageBattery = (ImageView) findViewById(R.id.image_batt);
 		mText_WorkOrderNum = (TextView) findViewById(R.id.text_workOrdNum);
@@ -115,36 +102,36 @@ public class MainActivity extends Activity implements OnClickListener {
 		mButton_Select.setOnClickListener(this);
 		mButton_Send.setOnClickListener(this);
 
-		// ¿ÜºÎ¿¡¼­ È£ÃâÇÒ¶§ ³Ñ°ÜÁØ ÆÄ¶ó¹ÌÅÍ È®ÀÎ
+		// ï¿½ÜºÎ¿ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½Ò¶ï¿½ ï¿½Ñ°ï¿½ï¿½ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 		Intent mIntent = getIntent();
 		mWorkOdrNum = mIntent.getStringExtra("workOdrNum");
 		mCustName = mIntent.getStringExtra("custName");
 		mTelNum = mIntent.getStringExtra("telNum");
 		//mPostAddress = mIntent.getStringExtra("postAddress");
-		Log.d(TAG, "Àü¼ÛÁÖ¼Ò:" + mPostAddress);
+		Log.d(TAG, "ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½:" + mPostAddress);
 
-		// Ã¢ Á¦¸ñ Ç¥½Ã
+		// Ã¢ ï¿½ï¿½ï¿½ï¿½ Ç¥ï¿½ï¿½
 		mTextTitle.setText(R.string.win_title);
 		
-		// ¿À´õ¹øÈ£, °í°´¸íÄª, ÀüÈ­¹øÈ£ Ç¥½Ã
-		mText_WorkOrderNum.setText(mWorkOdrNum == null ? "ÀÓÀÇÃøÁ¤" : mWorkOdrNum);
-		mText_CustName.setText(mCustName == null ? "¾øÀ½" : mCustName);
-		mText_TelNum.setText(mTelNum == null ? "¾øÀ½" : mTelNum);
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£, ï¿½?ï¿½ï¿½Äª, ï¿½ï¿½È­ï¿½ï¿½È£ Ç¥ï¿½ï¿½
+		mText_WorkOrderNum.setText(mWorkOdrNum == null ? "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" : mWorkOdrNum);
+		mText_CustName.setText(mCustName == null ? "ï¿½ï¿½ï¿½ï¿½" : mCustName);
+		mText_TelNum.setText(mTelNum == null ? "ï¿½ï¿½ï¿½ï¿½" : mTelNum);
 
-		// ÃøÁ¤°ª ÃÊ±âÈ­
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
 		mText_Lambda.setText(INIT_LAMBDA);
 		mText_Power.setText(INIT_POWER);
 
-		// ºí·çÅõ½º ¼­ºñ½º »ý¼º
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 		mBluetoothService = new BluetoothService(this, mHandler);
 	}
 
-	// È­¸éÀÇ °¢Á¾ ¹öÆ° °´Ã¼¸¦ È°¼ºÈ­ ¶Ç´Â ºñÈ°¼ºÈ­ ÇÑ´Ù.
+	// È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° ï¿½ï¿½Ã¼ï¿½ï¿½ È°ï¿½ï¿½È­ ï¿½Ç´ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ ï¿½Ñ´ï¿½.
 	private void screenEnable(boolean enable) {
 		mButton_Power.setEnabled(enable);
 		mButton_Lambda.setEnabled(enable);
 		mButton_Select.setEnabled(enable);
-		// ÀÚÃ¼ Å×½ºÆÃÀÇ °æ¿ì Àü¼Û(Send) ¹öÆ°À» ºñ È°¼ºÈ­ ÇÑ´Ù.
+		// ï¿½ï¿½Ã¼ ï¿½×½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½(Send) ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ È°ï¿½ï¿½È­ ï¿½Ñ´ï¿½.
 		if (enable && (mWorkOdrNum != null) && (mPostAddress != null)) {
 			mButton_Send.setEnabled(true);
 		} else {
@@ -156,9 +143,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	protected void onStart() {
 		super.onStart();
 		Log.d(TAG, "OnStart");
-		// È­¸éÀÇ ¹öÆ°À» ºñÈ°¼ºÈ­ ½ÃÅ²´Ù.
+		// È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ ï¿½ï¿½Å²ï¿½ï¿½.
 		screenEnable(false);
-		// ºí·çÅõ½º ¼­ºñ½º¸¦ ½ÃÀÛÇÑ´Ù.
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ñ½º¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 		mBluetoothService.startWork();
 	}
 
@@ -178,31 +165,31 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.button_exit:
-			Log.d(TAG, "Á¾·á ¹öÆ° ´­¸²");
+			Log.d(TAG, "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½");
 			checkExit();
 			break;
 		case R.id.button_Power:
-			Log.d(TAG, "Power ¹öÆ° ´­¸²");
+			Log.d(TAG, "Power ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½");
 			mPowerFlag = !mPowerFlag;
 			mButton_Power.setImageResource(mPowerFlag ? R.drawable.button_power_on : R.drawable.button_power_off);
 			mBluetoothService.sendSerial(mPowerFlag ? 'o' : 'x');
 			break;
 		case R.id.button_Lambda:
-			Log.d(TAG, "Lambda ¹öÆ° ´­¸²");
+			Log.d(TAG, "Lambda ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½");
 			mBluetoothService.sendSerial('l');
 			break;
 		case R.id.button_Select:
-			Log.d(TAG, "Select ¹öÆ° ´­¸²");
+			Log.d(TAG, "Select ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½");
 			mBluetoothService.sendSerial('r');
 			break;
 		case R.id.button_Send:
-			Log.d(TAG, "Send ¹öÆ° ´­¸²");
+			Log.d(TAG, "Send ï¿½ï¿½Æ° ï¿½ï¿½ï¿½ï¿½");
 			String mLambda = mText_Lambda.getText().toString();
 			String mPower = mText_Power.getText().toString();
 			if (mLambda.equals(INIT_LAMBDA)) {
-				ShowMessage("ÆÄÀå°ªÀÌ ÃøÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+				ShowMessage("ï¿½ï¿½ï¿½å°ªï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
 			} else if (mPower.equals(INIT_POWER)) {
-				ShowMessage("ÆÄ¿ö°ªÀÌ ÃøÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.");				
+				ShowMessage("ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");				
 			} else {
 				mLambda = mLambda.split(" ")[0];
 				mPower = mPower.split(" ")[0];
@@ -220,7 +207,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		checkExit();
 	}
 
-	// Åä½ºÆ® ¸Þ½ÃÁöÀÇ ·¹ÀÌ¾Æ¿ôÀ» »ç¿ëÀÚ Á¤ÀÇÇÏ¿© º¸¿©ÁØ´Ù.
+	// ï¿½ä½ºÆ® ï¿½Þ½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾Æ¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
 	private void ShowMessage(CharSequence msg) {
 		View layout = getLayoutInflater().inflate(R.layout.toast_border, (ViewGroup) findViewById(R.id.toast_layout_root));
 		TextView text = (TextView) layout.findViewById(R.id.text_toast);
@@ -233,18 +220,18 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	
-	// ¼­ºñ½º¿¡¼­ °¢Á¾ »óÅÂ º¸°í
+	// ï¿½ï¿½ï¿½ñ½º¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	private void report(CharSequence msg) {
 		mTextMessage.setText(msg);
 	}
 	
-	// BACK ¹öÆ°ÀÌ³ª, Á¾·á ¹öÆ°¿¡ ÀÇÇÑ Á¾·á È®ÀÎ
+	// BACK ï¿½ï¿½Æ°ï¿½Ì³ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 	private void checkExit() {
 		AlertDialog dialog = new AlertDialog.Builder(this)
-		.setTitle("¾È³»")
-		.setMessage("Á¾·áÇÏ½Ã°Ú½À´Ï±î?")
+		.setTitle("ï¿½È³ï¿½")
+		.setMessage("ï¿½ï¿½ï¿½ï¿½ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?")
 		.setIcon(android.R.drawable.ic_dialog_alert)
-		.setPositiveButton("¿¹", new DialogInterface.OnClickListener() {
+		.setPositiveButton("ï¿½ï¿½", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				if (mBluetoothService != null) {
@@ -252,17 +239,17 @@ public class MainActivity extends Activity implements OnClickListener {
 				}
 				finish();
 			}})
-		.setNegativeButton("¾Æ´Ï¿À", mClick).create();
+		.setNegativeButton("ï¿½Æ´Ï¿ï¿½", mClick).create();
 		dialog.show();
 	}
 	
-	// ¼­¹ö½º ÁøÇàÁß Ä¡¸íÀûÀÎ ¿À·ù·Î ¸Þ½ÃÁö È®ÀÎ ÈÄ Á¾·á
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	private void errorExit(CharSequence msg) {
 		AlertDialog dialog = new AlertDialog.Builder(this)
-			.setTitle("¾È³»")
+			.setTitle("ï¿½È³ï¿½")
 			.setMessage(msg)
 			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setPositiveButton("È®ÀÎ", new DialogInterface.OnClickListener() {
+			.setPositiveButton("È®ï¿½ï¿½", new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					mBluetoothService.stop();
@@ -272,20 +259,20 @@ public class MainActivity extends Activity implements OnClickListener {
 		dialog.show();
 	}
 	
-	// ÀåÄ¡ Ã£±â ½ÇÆÐ½Ã Àç½Ãµµ ¿©ºÎ È®ÀÎ
+	// ï¿½ï¿½Ä¡ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½Ð½ï¿½ ï¿½ï¿½Ãµï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 	private void findErrorRetryCheck() {
 		AlertDialog dialog = new AlertDialog.Builder(this)
-		.setTitle("¾È³»")
-		.setMessage("ÆÄ¿ö¹ÌÅÍ¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.\n´Ù½Ã °Ë»ö ÇÏ½Ã°Ú½À´Ï±î?")
+		.setTitle("ï¿½È³ï¿½")
+		.setMessage("ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.\nï¿½Ù½ï¿½ ï¿½Ë»ï¿½ ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?")
 		.setIcon(android.R.drawable.ic_dialog_alert)
-		.setPositiveButton("Àç½Ãµµ", new DialogInterface.OnClickListener() {
+		.setPositiveButton("ï¿½ï¿½Ãµï¿½", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				mBluetoothService.currentStatus = workStatus.None;
 				mBluetoothService.startWork();
 			}
 		})
-		.setNegativeButton("Á¾·á", new DialogInterface.OnClickListener() {
+		.setNegativeButton("ï¿½ï¿½ï¿½ï¿½", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				mBluetoothService.stop();
@@ -296,20 +283,20 @@ public class MainActivity extends Activity implements OnClickListener {
 		dialog.show();
 	}
 
-	// ¿¬°á ¿À·ù¿¡ ´ëÇÑ Àç½Ãµµ ¿©ºÎ È®ÀÎ
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ãµï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 	private void connectErrorRetryCheck() {
 		AlertDialog dialog = new AlertDialog.Builder(this)
-		.setTitle("¾È³»")
-		.setMessage("ÆÄ¿ö¹ÌÅÍ¿Í ¿¬°á¿¡ ¹®Á¦°¡ ÀÖ½À´Ï´Ù.\n´Ù½Ã ½Ãµµ ÇÏ½Ã°Ú½À´Ï±î?")
+		.setTitle("ï¿½È³ï¿½")
+		.setMessage("ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½ï¿½ï¿½á¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.\nï¿½Ù½ï¿½ ï¿½Ãµï¿½ ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?")
 		.setIcon(android.R.drawable.ic_dialog_alert)
-		.setPositiveButton("Àç½Ãµµ", new DialogInterface.OnClickListener() {
+		.setPositiveButton("ï¿½ï¿½Ãµï¿½", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				mBluetoothService.currentStatus = workStatus.None;
 				mBluetoothService.startWork();
 			}
 		})
-		.setNegativeButton("Á¾·á", new DialogInterface.OnClickListener() {
+		.setNegativeButton("ï¿½ï¿½ï¿½ï¿½", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				mBluetoothService.stop();
@@ -320,21 +307,21 @@ public class MainActivity extends Activity implements OnClickListener {
 		dialog.show();
 	}
 
-//	// ÀåÄ¡ÀÇ Æä¾î¸µÀÌ ¿Ï·áµÊ
+//	// ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½î¸µï¿½ï¿½ ï¿½Ï·ï¿½ï¿½
 //	public synchronized void onBondedDevice() {
 //		Log.d(TAG, "onBondedDevice");
 //		mExitActivity = true;
 //		mBluetoothService.connect();
 //	}
 //	
-//	// ÀåÄ¡ÀÇ Æä¾î¸µÀÌ ÇØÁ¦µÊ
+//	// ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½î¸µï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //	public synchronized void onUnbondDevice() {
 //		Log.d(TAG, "onUnbondDevice");
 //		setupMeasure();
 //	}
 	
 	
-	// ºí·çÅõ½º Å¬·¡½º¿Í Åë½Å
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 	public static final int MESSAGE_BLUETOOTH_ENABLED = 11;
 	public static final int MESSAGE_BOND_DEVICE_FINDING = 13;
 	public static final int MESSAGE_BOND_DEVICE_FINDED = 16;
@@ -352,7 +339,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	public static final int MESSAGE_RECV = 63;
 	
 	public static final int MESSAGE_ERROR = 81;
-	// À¥Àü¼Û Å¬·¡½º¿Í Åë½Å
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 	public static final int MESSAGE_POST_OK = 91;
 	public static final int MESSAGE_POST_ERR = 95;
 
@@ -369,48 +356,48 @@ public class MainActivity extends Activity implements OnClickListener {
 				break;
 			case MESSAGE_BOND_DEVICE_FINDING:
 				Log.d(TAG, "MESSAGE_BOND_DEVICE_FINDING");
-				report("Æä¾î¸µµÈ ÆÄ¿ö¹ÌÅÍ °Ë»öÁß.");
+				report("ï¿½ï¿½î¸µï¿½ï¿½ ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ï¿½ï¿½.");
 				break;
 			case MESSAGE_BOND_DEVICE_FINDED:
 				Log.d(TAG, "MESSAGE_BOND_DEVICE_FINDED");
-				report("Æä¾î¸µµÈ ÆÄ¿ö¹ÌÅÍ¸¦ Ã£¾Ò½À´Ï´Ù.");
+				report("ï¿½ï¿½î¸µï¿½ï¿½ ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ Ã£ï¿½Ò½ï¿½ï¿½Ï´ï¿½.");
 				mIsBond = true;
 				break;
 			case MESSAGE_UNBOND_DEVICE_FINDING:
 				Log.d(TAG, "MESSAGE_UNBOND_DEVICE_FINDING");
-				report("Æä¾î¸µµÇÁö ¾ÊÀº ÆÄ¿ö¹ÌÅÍ °Ë»öÁß");
+				report("ï¿½ï¿½î¸µï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ï¿½ï¿½");
 				mBluetoothService.startWork();
 				break;
 			case MESSAGE_UNBOND_DEVICE_FINDED:
 				Log.d(TAG, "MESSAGE_UNBOND_DEVICE_FINDED");
-				report("Æä¾î¸µµÇÁö ¾ÊÀº ÆÄ¿ö¹ÌÅÍ¸¦ Ã£¾Ò½À´Ï´Ù.");
+				report("ï¿½ï¿½î¸µï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ Ã£ï¿½Ò½ï¿½ï¿½Ï´ï¿½.");
 				mExitActivity = false;
 				mBluetoothService.startWork();
 				break;
 			case MESSAGE_FIND_ERROR:
 				Log.d(TAG, "MESSAGE_FIND_ERROR");
-				report("ÆÄ¿ö¹ÌÅÍ °Ë»ö ½ÇÆÐ");
+				report("ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ ï¿½ï¿½ï¿½ï¿½");
 				findErrorRetryCheck();
 				break;
 			case MESSAGE_DEVICE_BONDED:
 				Log.d(TAG, "MESSAGE_DEVICE_BONDED");
-				report("ÆÄ¿ö¹ÌÅÍ¸¦ Æä¾î¸µ Çß½À´Ï´Ù.");
+				report("ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½î¸µ ï¿½ß½ï¿½ï¿½Ï´ï¿½.");
 				mBluetoothService.startWork();
 				break;
 			case MESSAGE_DEVICE_UNBONDED:
 				Log.d(TAG, "MESSAGE_DEVICE_UNBONDED");
-				report("ÆÄ¿ö¹ÌÅÍ¸¦ Æä¾î¸µ ÇØÁ¦ Çß½À´Ï´Ù.");
+				report("ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½î¸µ ï¿½ï¿½ï¿½ï¿½ ï¿½ß½ï¿½ï¿½Ï´ï¿½.");
 				mBluetoothService.startWork();
 				break;
 			case MESSAGE_CONNECT_START:
 				mExitActivity = false;
-				report("ÆÄ¿ö¹ÌÅÍ¿Í ¿¬°áÀ» ½ÃÀÛÇÕ´Ï´Ù.");
+				report("ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
 				break;
 			case MESSAGE_CONNECT_COMPLETE:
 				mExitActivity = true;
-				report("ÆÄ¿ö¹ÌÅÍ¿Í ¿¬°áÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.");
-				Toast.makeText(MainActivity.this, "ÃøÁ¤À» ½ÃÀÛÇÏ¼¼¿ä!",  Toast.LENGTH_SHORT).show();
-				// È­¸éÀ» È°¼ºÈ­ ÇÑ´Ù.
+				report("ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½Ç¾ï¿½ï¿½ï¿½Ï´ï¿½.");
+				Toast.makeText(MainActivity.this, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½!",  Toast.LENGTH_SHORT).show();
+				// È­ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ ï¿½Ñ´ï¿½.
 				screenEnable(true);
 				break;
 			case MESSAGE_CONNECT_ERROR:
@@ -465,11 +452,11 @@ public class MainActivity extends Activity implements OnClickListener {
 			case MESSAGE_POST_OK:
 				String mMsg1 = (String) msg.obj;
 				AlertDialog dialog1 = new AlertDialog.Builder(MainActivity.this)
-				.setTitle("¾È³»")
+				.setTitle("ï¿½È³ï¿½")
 				
-				.setMessage((mMsg1 == null || mMsg1.isEmpty()) ? "°á°ú Àü¼ÛÀ» ¿Ï·á ÇÏ¿´½À´Ï´Ù." : "°á°úÀü¼Û ½ÇÆÐ \n »çÀ¯: " + mMsg1)
+				.setMessage((mMsg1 == null || mMsg1.isEmpty()) ? "ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½Ï´ï¿½." : "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ \n ï¿½ï¿½ï¿½ï¿½: " + mMsg1)
 				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setPositiveButton("È®ÀÎ", null)
+				.setPositiveButton("È®ï¿½ï¿½", null)
 				.create();
 				dialog1.show();
 				mButton_Send.setEnabled(true);
@@ -478,10 +465,10 @@ public class MainActivity extends Activity implements OnClickListener {
 			case MESSAGE_POST_ERR:
 				String mMsg2 = (String) msg.obj;
 				AlertDialog dialog2 = new AlertDialog.Builder(MainActivity.this)
-				.setTitle("¾È³»")
-				.setMessage("¿À·ù·Î ÀÎÇÏ¿© °á°ú Àü¼Û¿¡ ½ÇÆÐ ÇÏ¿´½À´Ï´Ù.\n" + mMsg2)
+				.setTitle("ï¿½È³ï¿½")
+				.setMessage("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.\n" + mMsg2)
 				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setPositiveButton("È®ÀÎ", null)
+				.setPositiveButton("È®ï¿½ï¿½", null)
 				.create();
 				dialog2.show();
 				mButton_Send.setEnabled(true);
@@ -503,7 +490,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onPause() {
 		Log.d(TAG, "OnPause");
-		// ¾×Æ¼ºñÆ¼°¡ ¹é±×¶ó¿îµå·Î ³»·Á°¥¶§ ¿µ±¸ Á¾·á Ã³¸® ÇÑ´Ù.
+		// ï¿½ï¿½Æ¼ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½×¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½Ñ´ï¿½.
 		//exitError(mExitActivity);
 		super.onPause();
 	}
