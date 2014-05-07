@@ -28,30 +28,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 //====================================================
-// ��Ƽ�� �Ŀ� ������ ��Ƽ��Ƽ
+// 옵티컬 파워 측정용 액티비티
 //
-// �� ��Ƽ��Ƽ�� ������ �⵿ �� ���� ������,
-// ������ ���ø����̼ǿ��� ȣ��Ǹ� �ҷ����� ��ġ�� ���� ���Ŀ��� �����ϰ�
-// ���� ��� ������ ����ϴ� ���� �������� �Ѵ�.
-// (��� ������ ���� ���� �ϹǷ� �������� �Ѱ� �޾Ƽ� ������ ���� �ϴ°���
-//  �����ٵ� �� �̸� ���� �ߴ��� �ǽɽ�������)
-// �� ������� ��ġ�� ��Ʈ�� ���°������� ��ġ�� ���¿� ���
-// ���� ���� �ð��� �ҿ�Ǳ⵵ �ϰ�, ����� ��ġ��
-// �Ÿ��� ���� ������ �������� ���� ���¸� �������� �����Ƿ�
-// ��Ƽ��Ƽ�� Ȱ��ȭ ������ onResume ���Ŀ� �ֿ��� Ȱ���� ó���ϰ�
-// ��׶���� �������� onPause ���¿��� ������ �����Ѵ�.
-// ��� ���� �߿� ��ȭ, ���� ���� ���� ������ �ٸ� ��Ƽ��Ƽ�� Ȱ��ȭ �Ǹ�
-// �� ��Ƽ��Ƽ�� ���� �ǹǷ� ���Ӱ� �����Ͽ��� �Ѵ�.
+// 본 액티비티는 스스로 기동 할 수도 있지만,
+// 상위의 어플리케이션에서 호출되면 불루투스 장치를 통해 광파워를 측정하고
+// 측정 결과를 서버에 전송하는 것을 목적으로 한다.
+// (사실 상위에 앱이 존재 하므로 측정값만 넘겨 받아서 스스로 보고 하는것이
+//  편할텐데 왜 이리 설계 했는지 의심스럽지만)
+// 또 블루투스 장치의 스트림 오픈과정에서 장치의 상태에 따라
+// 적지 않은 시간이 소요되기도 하고, 연결된 장치가
+// 거리나 여러 이유로 영구적인 연결 상태를 보장하지 않으므로
+// 액티비티가 활성화 상태일 onResume 이후에 주요한 활동을 처리하고
+// 백그라운드로 내려가는 onPause 상태에서 스스로 종료한다.
+// 따라서 측정 중에 전화, 문자 등의 여러 이유로 다른 액티비티가 활성화 되면
+// 본 액티비티는 종료 되므로 새롭게 시작하여야 한다.
 //
-// 2013-11-09 ���� ���� by
-//   SOLME Programmer �迵�� (mademlm@gmail.com) 
+// 2013-11-09 최종 수정 by
+//   SOLME Programmer 김영일 (mademlm@gmail.com) 
 //====================================================
 public class MainActivity extends Activity implements OnClickListener {
 
-	// ����׿� �±�
+	// 디버그용 태그
 	private static final String TAG = "OpticalTest";
 	
-	// ��ũ�� ��ü ���� (TextView)
+	// 스크린 객체 참조 (TextView)
 	private TextView mTextTitle;
 	private TextView mTextMessage;
 	private ImageView mImageBattery;
@@ -61,23 +61,23 @@ public class MainActivity extends Activity implements OnClickListener {
 	private TextView mText_Lambda;
 	private TextView mText_Power;
 	
-	// ��ũ�� ��ü ���� (Button)
+	// 스크린 객체 참조 (Button)
 	private Button mButton_Exit;
 	private ImageView mButton_Power;
 	private ImageView mButton_Lambda;
 	private ImageView mButton_Select;
 	private Button mButton_Send;
 	
-	// ���� ��� ����
+	// 내부 사용 변수
 	private String mWorkOdrNum;
 	private String mCustName;
 	private String mTelNum;
 	private static final String mPostAddress = "http://moss.kt.com/moss/OpticTestResult";
 	
-    // ������� ���� Ŭ����
+    // 블루투스 서비스 클래스
     private BluetoothService mBluetoothService = null;
     
-    // ��׶��� ��ȯ�� ���� �÷���
+    // 백그라운드 전환시 종료 플래그
     private boolean mExitActivity = true;
     
     private final String INIT_LAMBDA = "---- nm";
@@ -88,12 +88,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "OnCreate");
 		
-		// Ÿ��Ʋ ������ ����� �����Ѵ�.
+		// 타이틀 영역을 사용자 정의한다.
 		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.activity_main);
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.cust_title);
 
-		// ȭ�鿡 ���� ��� ��ü ����
+		// 화면에 사용된 모든 객체 참조
 		mTextTitle = (TextView) findViewById(R.id.text_title);
 		mImageBattery = (ImageView) findViewById(R.id.image_batt);
 		mText_WorkOrderNum = (TextView) findViewById(R.id.text_workOrdNum);
@@ -115,36 +115,36 @@ public class MainActivity extends Activity implements OnClickListener {
 		mButton_Select.setOnClickListener(this);
 		mButton_Send.setOnClickListener(this);
 
-		// �ܺο��� ȣ���Ҷ� �Ѱ��� �Ķ���� Ȯ��
+		// 외부에서 호출할때 넘겨준 파라미터 확인
 		Intent mIntent = getIntent();
 		mWorkOdrNum = mIntent.getStringExtra("workOdrNum");
 		mCustName = mIntent.getStringExtra("custName");
 		mTelNum = mIntent.getStringExtra("telNum");
 		//mPostAddress = mIntent.getStringExtra("postAddress");
-		Log.d(TAG, "����ּ�:" + mPostAddress);
+		Log.d(TAG, "전송주소:" + mPostAddress);
 
-		// â ���� ǥ��
+		// 창 제목 표시
 		mTextTitle.setText(R.string.win_title);
 		
-		// ������ȣ, �?��Ī, ��ȭ��ȣ ǥ��
-		mText_WorkOrderNum.setText(mWorkOdrNum == null ? "��������" : mWorkOdrNum);
-		mText_CustName.setText(mCustName == null ? "����" : mCustName);
-		mText_TelNum.setText(mTelNum == null ? "����" : mTelNum);
+		// 오더번호, 고객명칭, 전화번호 표시
+		mText_WorkOrderNum.setText(mWorkOdrNum == null ? "임의측정" : mWorkOdrNum);
+		mText_CustName.setText(mCustName == null ? "없음" : mCustName);
+		mText_TelNum.setText(mTelNum == null ? "없음" : mTelNum);
 
-		// ������ �ʱ�ȭ
+		// 측정값 초기화
 		mText_Lambda.setText(INIT_LAMBDA);
 		mText_Power.setText(INIT_POWER);
 
-		// ������� ���� ��
+		// 블루투스 서비스 생성
 		mBluetoothService = new BluetoothService(this, mHandler);
 	}
 
-	// ȭ���� ���� ��ư ��ü�� Ȱ��ȭ �Ǵ� ��Ȱ��ȭ �Ѵ�.
+	// 화면의 각종 버튼 객체를 활성화 또는 비활성화 한다.
 	private void screenEnable(boolean enable) {
 		mButton_Power.setEnabled(enable);
 		mButton_Lambda.setEnabled(enable);
 		mButton_Select.setEnabled(enable);
-		// ��ü �׽����� ��� ���(Send) ��ư�� �� Ȱ��ȭ �Ѵ�.
+		// 자체 테스팅의 경우 전송(Send) 버튼을 비 활성화 한다.
 		if (enable && (mWorkOdrNum != null) && (mPostAddress != null)) {
 			mButton_Send.setEnabled(true);
 		} else {
@@ -156,9 +156,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	protected void onStart() {
 		super.onStart();
 		Log.d(TAG, "OnStart");
-		// ȭ���� ��ư�� ��Ȱ��ȭ ��Ų��.
+		// 화면의 버튼을 비활성화 시킨다.
 		screenEnable(false);
-		// ������� ���񽺸� �����Ѵ�.
+		// 블루투스 서비스를 시작한다.
 		mBluetoothService.startWork();
 	}
 
@@ -178,31 +178,31 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.button_exit:
-			Log.d(TAG, "���� ��ư ����");
+			Log.d(TAG, "종료 버튼 눌림");
 			checkExit();
 			break;
 		case R.id.button_Power:
-			Log.d(TAG, "Power ��ư ����");
+			Log.d(TAG, "Power 버튼 눌림");
 			mPowerFlag = !mPowerFlag;
 			mButton_Power.setImageResource(mPowerFlag ? R.drawable.button_power_on : R.drawable.button_power_off);
 			mBluetoothService.sendSerial(mPowerFlag ? 'o' : 'x');
 			break;
 		case R.id.button_Lambda:
-			Log.d(TAG, "Lambda ��ư ����");
+			Log.d(TAG, "Lambda 버튼 눌림");
 			mBluetoothService.sendSerial('l');
 			break;
 		case R.id.button_Select:
-			Log.d(TAG, "Select ��ư ����");
+			Log.d(TAG, "Select 버튼 눌림");
 			mBluetoothService.sendSerial('r');
 			break;
 		case R.id.button_Send:
-			Log.d(TAG, "Send ��ư ����");
+			Log.d(TAG, "Send 버튼 눌림");
 			String mLambda = mText_Lambda.getText().toString();
 			String mPower = mText_Power.getText().toString();
 			if (mLambda.equals(INIT_LAMBDA)) {
-				ShowMessage("���尪�� �������� �ʾҽ��ϴ�.");
+				ShowMessage("파장값이 측정되지 않았습니다.");
 			} else if (mPower.equals(INIT_POWER)) {
-				ShowMessage("�Ŀ����� �������� �ʾҽ��ϴ�.");				
+				ShowMessage("파워값이 측정되지 않았습니다.");				
 			} else {
 				mLambda = mLambda.split(" ")[0];
 				mPower = mPower.split(" ")[0];
@@ -220,7 +220,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		checkExit();
 	}
 
-	// �佺Ʈ �޽����� ���̾ƿ��� ����� �����Ͽ� �����ش�.
+	// 토스트 메시지의 레이아웃을 사용자 정의하여 보여준다.
 	private void ShowMessage(CharSequence msg) {
 		View layout = getLayoutInflater().inflate(R.layout.toast_border, (ViewGroup) findViewById(R.id.toast_layout_root));
 		TextView text = (TextView) layout.findViewById(R.id.text_toast);
@@ -233,18 +233,18 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	
-	// ���񽺿��� ���� ���� ����
+	// 서비스에서 각종 상태 보고
 	private void report(CharSequence msg) {
 		mTextMessage.setText(msg);
 	}
 	
-	// BACK ��ư�̳�, ���� ��ư�� ���� ���� Ȯ��
+	// BACK 버튼이나, 종료 버튼에 의한 종료 확인
 	private void checkExit() {
 		AlertDialog dialog = new AlertDialog.Builder(this)
-		.setTitle("�ȳ�")
-		.setMessage("�����Ͻðڽ��ϱ�?")
+		.setTitle("안내")
+		.setMessage("종료하시겠습니까?")
 		.setIcon(android.R.drawable.ic_dialog_alert)
-		.setPositiveButton("��", new DialogInterface.OnClickListener() {
+		.setPositiveButton("예", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				if (mBluetoothService != null) {
@@ -252,17 +252,17 @@ public class MainActivity extends Activity implements OnClickListener {
 				}
 				finish();
 			}})
-		.setNegativeButton("�ƴϿ�", mClick).create();
+		.setNegativeButton("아니오", mClick).create();
 		dialog.show();
 	}
 	
-	// ������ ������ ġ������ ����� �޽��� Ȯ�� �� ����
+	// 서버스 진행중 치명적인 오류로 메시지 확인 후 종료
 	private void errorExit(CharSequence msg) {
 		AlertDialog dialog = new AlertDialog.Builder(this)
-			.setTitle("�ȳ�")
+			.setTitle("안내")
 			.setMessage(msg)
 			.setIcon(android.R.drawable.ic_dialog_alert)
-			.setPositiveButton("Ȯ��", new DialogInterface.OnClickListener() {
+			.setPositiveButton("확인", new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					mBluetoothService.stop();
@@ -272,20 +272,20 @@ public class MainActivity extends Activity implements OnClickListener {
 		dialog.show();
 	}
 	
-	// ��ġ ã�� ���н� ��õ� ���� Ȯ��
+	// 장치 찾기 실패시 재시도 여부 확인
 	private void findErrorRetryCheck() {
 		AlertDialog dialog = new AlertDialog.Builder(this)
-		.setTitle("�ȳ�")
-		.setMessage("�Ŀ����͸� ã�� �� ����ϴ�.\n�ٽ� �˻� �Ͻðڽ��ϱ�?")
+		.setTitle("안내")
+		.setMessage("파워미터를 찾을 수 없습니다.\n다시 검색 하시겠습니까?")
 		.setIcon(android.R.drawable.ic_dialog_alert)
-		.setPositiveButton("��õ�", new DialogInterface.OnClickListener() {
+		.setPositiveButton("재시도", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				mBluetoothService.currentStatus = workStatus.None;
 				mBluetoothService.startWork();
 			}
 		})
-		.setNegativeButton("����", new DialogInterface.OnClickListener() {
+		.setNegativeButton("종료", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				mBluetoothService.stop();
@@ -296,20 +296,20 @@ public class MainActivity extends Activity implements OnClickListener {
 		dialog.show();
 	}
 
-	// ���� ���� ���� ��õ� ���� Ȯ��
+	// 연결 오류에 대한 재시도 여부 확인
 	private void connectErrorRetryCheck() {
 		AlertDialog dialog = new AlertDialog.Builder(this)
-		.setTitle("�ȳ�")
-		.setMessage("�Ŀ����Ϳ� ���ῡ ������ �ֽ��ϴ�.\n�ٽ� �õ� �Ͻðڽ��ϱ�?")
+		.setTitle("안내")
+		.setMessage("파워미터와 연결에 문제가 있습니다.\n다시 시도 하시겠습니까?")
 		.setIcon(android.R.drawable.ic_dialog_alert)
-		.setPositiveButton("��õ�", new DialogInterface.OnClickListener() {
+		.setPositiveButton("재시도", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				mBluetoothService.currentStatus = workStatus.None;
 				mBluetoothService.startWork();
 			}
 		})
-		.setNegativeButton("����", new DialogInterface.OnClickListener() {
+		.setNegativeButton("종료", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				mBluetoothService.stop();
@@ -320,21 +320,21 @@ public class MainActivity extends Activity implements OnClickListener {
 		dialog.show();
 	}
 
-//	// ��ġ�� ���� �Ϸ��
+//	// 장치의 페어링이 완료됨
 //	public synchronized void onBondedDevice() {
 //		Log.d(TAG, "onBondedDevice");
 //		mExitActivity = true;
 //		mBluetoothService.connect();
 //	}
 //	
-//	// ��ġ�� ���� ������
+//	// 장치의 페어링이 해제됨
 //	public synchronized void onUnbondDevice() {
 //		Log.d(TAG, "onUnbondDevice");
 //		setupMeasure();
 //	}
 	
 	
-	// ������� Ŭ������ ���
+	// 블루투스 클래스와 통신
 	public static final int MESSAGE_BLUETOOTH_ENABLED = 11;
 	public static final int MESSAGE_BOND_DEVICE_FINDING = 13;
 	public static final int MESSAGE_BOND_DEVICE_FINDED = 16;
@@ -352,7 +352,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	public static final int MESSAGE_RECV = 63;
 	
 	public static final int MESSAGE_ERROR = 81;
-	// ����� Ŭ������ ���
+	// 웹전송 클래스와 통신
 	public static final int MESSAGE_POST_OK = 91;
 	public static final int MESSAGE_POST_ERR = 95;
 
@@ -369,48 +369,48 @@ public class MainActivity extends Activity implements OnClickListener {
 				break;
 			case MESSAGE_BOND_DEVICE_FINDING:
 				Log.d(TAG, "MESSAGE_BOND_DEVICE_FINDING");
-				report("���� �Ŀ����� �˻���.");
+				report("페어링된 파워미터 검색중.");
 				break;
 			case MESSAGE_BOND_DEVICE_FINDED:
 				Log.d(TAG, "MESSAGE_BOND_DEVICE_FINDED");
-				report("���� �Ŀ����͸� ã�ҽ��ϴ�.");
+				report("페어링된 파워미터를 찾았습니다.");
 				mIsBond = true;
 				break;
 			case MESSAGE_UNBOND_DEVICE_FINDING:
 				Log.d(TAG, "MESSAGE_UNBOND_DEVICE_FINDING");
-				report("������ ���� �Ŀ����� �˻���");
+				report("페어링되지 않은 파워미터 검색중");
 				mBluetoothService.startWork();
 				break;
 			case MESSAGE_UNBOND_DEVICE_FINDED:
 				Log.d(TAG, "MESSAGE_UNBOND_DEVICE_FINDED");
-				report("������ ���� �Ŀ����͸� ã�ҽ��ϴ�.");
+				report("페어링되지 않은 파워미터를 찾았습니다.");
 				mExitActivity = false;
 				mBluetoothService.startWork();
 				break;
 			case MESSAGE_FIND_ERROR:
 				Log.d(TAG, "MESSAGE_FIND_ERROR");
-				report("�Ŀ����� �˻� ����");
+				report("파워미터 검색 실패");
 				findErrorRetryCheck();
 				break;
 			case MESSAGE_DEVICE_BONDED:
 				Log.d(TAG, "MESSAGE_DEVICE_BONDED");
-				report("�Ŀ����͸� �� �߽��ϴ�.");
+				report("파워미터를 페어링 했습니다.");
 				mBluetoothService.startWork();
 				break;
 			case MESSAGE_DEVICE_UNBONDED:
 				Log.d(TAG, "MESSAGE_DEVICE_UNBONDED");
-				report("�Ŀ����͸� �� ���� �߽��ϴ�.");
+				report("파워미터를 페어링 해제 했습니다.");
 				mBluetoothService.startWork();
 				break;
 			case MESSAGE_CONNECT_START:
 				mExitActivity = false;
-				report("�Ŀ����Ϳ� ������ �����մϴ�.");
+				report("파워미터와 연결을 시작합니다.");
 				break;
 			case MESSAGE_CONNECT_COMPLETE:
 				mExitActivity = true;
-				report("�Ŀ����Ϳ� ������ �Ϸ�Ǿ���ϴ�.");
-				Toast.makeText(MainActivity.this, "������ �����ϼ���!",  Toast.LENGTH_SHORT).show();
-				// ȭ���� Ȱ��ȭ �Ѵ�.
+				report("파워미터와 연결이 완료되었습니다.");
+				Toast.makeText(MainActivity.this, "측정을 시작하세요!",  Toast.LENGTH_SHORT).show();
+				// 화면을 활성화 한다.
 				screenEnable(true);
 				break;
 			case MESSAGE_CONNECT_ERROR:
@@ -465,11 +465,11 @@ public class MainActivity extends Activity implements OnClickListener {
 			case MESSAGE_POST_OK:
 				String mMsg1 = (String) msg.obj;
 				AlertDialog dialog1 = new AlertDialog.Builder(MainActivity.this)
-				.setTitle("�ȳ�")
+				.setTitle("안내")
 				
-				.setMessage((mMsg1 == null || mMsg1.isEmpty()) ? "��� ����� �Ϸ� �Ͽ����ϴ�." : "������ ���� \n ����: " + mMsg1)
+				.setMessage((mMsg1 == null || mMsg1.isEmpty()) ? "결과 전송을 완료 하였습니다." : "결과전송 실패 \n 사유: " + mMsg1)
 				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setPositiveButton("Ȯ��", null)
+				.setPositiveButton("확인", null)
 				.create();
 				dialog1.show();
 				mButton_Send.setEnabled(true);
@@ -478,10 +478,10 @@ public class MainActivity extends Activity implements OnClickListener {
 			case MESSAGE_POST_ERR:
 				String mMsg2 = (String) msg.obj;
 				AlertDialog dialog2 = new AlertDialog.Builder(MainActivity.this)
-				.setTitle("�ȳ�")
-				.setMessage("����� ���Ͽ� ��� ��ۿ� ���� �Ͽ����ϴ�.\n" + mMsg2)
+				.setTitle("안내")
+				.setMessage("오류로 인하여 결과 전송에 실패 하였습니다.\n" + mMsg2)
 				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setPositiveButton("Ȯ��", null)
+				.setPositiveButton("확인", null)
 				.create();
 				dialog2.show();
 				mButton_Send.setEnabled(true);
@@ -503,7 +503,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onPause() {
 		Log.d(TAG, "OnPause");
-		// ��Ƽ��Ƽ�� ��׶���� �������� ���� ���� ó�� �Ѵ�.
+		// 액티비티가 백그라운드로 내려갈때 영구 종료 처리 한다.
 		//exitError(mExitActivity);
 		super.onPause();
 	}

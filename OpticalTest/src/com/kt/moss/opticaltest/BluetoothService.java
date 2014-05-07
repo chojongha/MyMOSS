@@ -30,28 +30,28 @@ import android.widget.Toast;
 
 
 //==========================================================
-// ºí·çÅõ½º ÀåÄ¡ÀÇ °Ë»ö°ú ¿¬°á, ¼Û¼ö½ÅÀ» ´ã´çÇÏ´Â Å¬·¡½º
-// °Ë»ö ÀÛ¾÷Àº ½Ã½ºÅÛ¿¡ ¿äÃ»ÇÑ ÈÄ ¹æ¼ÛÀ» ¼ö½ÅÇÏ°í
-// Æä¾î¸µ ÀÛ¾÷ ¿ª½Ã ½Ã½ºÅÛ¿¡ ¿äÃ»ÈÄ ¹æ¼ÛÀ» ¼ö½ÅÇÑ´Ù.
-// ¿¬°áÀº Àå½Ã°£ ¼Ò¿äµÇ¹Ç·Î ¾²·¹µå¿¡ À§ÀÓÇÏ°í ¸Ş½ÃÁö¸¦ ¹Ş´Â´Ù.
-// ¼Û,¼ö½Å ¿ª½Ã ¾²·¹µå¿¡¼­ Ã³¸®ÇÏ°í ¸Ş½ÃÁö¸¦ ¹Ş´Â´Ù.
+// ë¸”ë£¨íˆ¬ìŠ¤ ì¥ì¹˜ì˜ ê²€ìƒ‰ê³¼ ì—°ê²°, ì†¡ìˆ˜ì‹ ì„ ë‹´ë‹¹í•˜ëŠ” í´ë˜ìŠ¤
+// ê²€ìƒ‰ ì‘ì—…ì€ ì‹œìŠ¤í…œì— ìš”ì²­í•œ í›„ ë°©ì†¡ì„ ìˆ˜ì‹ í•˜ê³ 
+// í˜ì–´ë§ ì‘ì—… ì—­ì‹œ ì‹œìŠ¤í…œì— ìš”ì²­í›„ ë°©ì†¡ì„ ìˆ˜ì‹ í•œë‹¤.
+// ì—°ê²°ì€ ì¥ì‹œê°„ ì†Œìš”ë˜ë¯€ë¡œ ì“°ë ˆë“œì— ìœ„ì„í•˜ê³  ë©”ì‹œì§€ë¥¼ ë°›ëŠ”ë‹¤.
+// ì†¡,ìˆ˜ì‹  ì—­ì‹œ ì“°ë ˆë“œì—ì„œ ì²˜ë¦¬í•˜ê³  ë©”ì‹œì§€ë¥¼ ë°›ëŠ”ë‹¤.
 //==========================================================
 public class BluetoothService {
 
-	// µğ¹ö±×¿ë ÅÂ±×
+	// ë””ë²„ê·¸ìš© íƒœê·¸
 	private static final String TAG = "BluetoothService";
 
-	// ¸ŞÀÎ ¾×Æ¼ºñÆ¼ ÂüÁ¶
+	// ë©”ì¸ ì•¡í‹°ë¹„í‹° ì°¸ì¡°
 	private final MainActivity mMainActivity;
-	// ºí·çÅõ½º ¾î´ğÅÍ
+	// ë¸”ë£¨íˆ¬ìŠ¤ ì–´ëŒ‘í„°
     private final BluetoothAdapter mAdapter;
-    // ¸Ş½ÃÁö ÇÚµé·¯
+    // ë©”ì‹œì§€ í•¸ë“¤ëŸ¬
     private final Handler mHandler;
-    // ºí·çÅõ½º ¿ø°İÀåÄ¡
+    // ë¸”ë£¨íˆ¬ìŠ¤ ì›ê²©ì¥ì¹˜
     private BluetoothDevice mDevice = null;
-    // ºí·çÅõ½º Á¢¼Ó ¹× ¼Û¼ö½Å ¾²·¹µå
+    // ë¸”ë£¨íˆ¬ìŠ¤ ì ‘ì† ë° ì†¡ìˆ˜ì‹  ì“°ë ˆë“œ
     BluetoothThread mBluetoothThread = null;
-    // À¥ Æ÷½ºÆÃ ¾²·¹µå
+    // ì›¹ í¬ìŠ¤íŒ… ì“°ë ˆë“œ
     HttpThread mHttpThread = null;
 
     public enum workStatus {
@@ -70,42 +70,42 @@ public class BluetoothService {
     	Running
     }
     
-    // ÇöÀçÀÇ ¼­ºñ½º »óÅÂ
+    // í˜„ì¬ì˜ ì„œë¹„ìŠ¤ ìƒíƒœ
     public workStatus currentStatus = workStatus.None;
     
-    // »ı¼ºÀÚ
+    // ìƒì„±ì
     public BluetoothService(MainActivity context, Handler handler) {
     	mMainActivity = context;
         mHandler = handler;
         mAdapter = BluetoothAdapter.getDefaultAdapter();
     
-        // ºí·çÅõ½º°¡ Áö¿øµÇÁö ¾Ê´Â Àåºñ¸é Á¾·áÇÑ´Ù.
+        // ë¸”ë£¨íˆ¬ìŠ¤ê°€ ì§€ì›ë˜ì§€ ì•ŠëŠ” ì¥ë¹„ë©´ ì¢…ë£Œí•œë‹¤.
 		if (mAdapter == null) {
-			Toast.makeText(context, "ºí·çÅõ½º°¡ Áö¿øµÇÁö ¾Ê´Â ÀåºñÀÔ´Ï´Ù.", Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "ë¸”ë£¨íˆ¬ìŠ¤ê°€ ì§€ì›ë˜ì§€ ì•ŠëŠ” ì¥ë¹„ì…ë‹ˆë‹¤.", Toast.LENGTH_LONG).show();
 			context.finish();
 			return;
 		}
 
         IntentFilter filter;
-        // ºí·çÅõ½º È°¼ºÈ­ »óÅÂ ¼ö½Å±â¸¦ µî·ÏÇÑ´Ù.
+        // ë¸”ë£¨íˆ¬ìŠ¤ í™œì„±í™” ìƒíƒœ ìˆ˜ì‹ ê¸°ë¥¼ ë“±ë¡í•œë‹¤.
         filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         context.registerReceiver(mReceiver, filter);
-		// ÀåÄ¡ °Ë»ö ¼ö½Å±â¸¦ µî·ÏÇÑ´Ù.
+		// ì¥ì¹˜ ê²€ìƒ‰ ìˆ˜ì‹ ê¸°ë¥¼ ë“±ë¡í•œë‹¤.
 		filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		context.registerReceiver(mReceiver, filter);
-		// ÀåÄ¡ÀÇ º»µù »óÅÂ º¯°æ ¼ö½Å±â¸¦ µî·ÏÇÑ´Ù.
+		// ì¥ì¹˜ì˜ ë³¸ë”© ìƒíƒœ ë³€ê²½ ìˆ˜ì‹ ê¸°ë¥¼ ë“±ë¡í•œë‹¤.
 		filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
 		context.registerReceiver(mReceiver, filter);
-		// ÀåÄ¡ °Ë»ö ¿Ï·á ¼ö½Å±â¸¦ µî·ÏÇÑ´Ù.
+		// ì¥ì¹˜ ê²€ìƒ‰ ì™„ë£Œ ìˆ˜ì‹ ê¸°ë¥¼ ë“±ë¡í•œë‹¤.
 		filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 		context.registerReceiver(mReceiver, filter);
-		// ºí·çÅõ½º Æä¾î¸µ ¼ö½Å±â¸¦ µî·ÏÇÑ´Ù.
+		// ë¸”ë£¨íˆ¬ìŠ¤ í˜ì–´ë§ ìˆ˜ì‹ ê¸°ë¥¼ ë“±ë¡í•œë‹¤.
 		filter = new IntentFilter("android.bluetooth.device.action.PAIRING_REQUEST");
 		context.registerReceiver(mReceiver, filter);
     }
 
 
-    // ºí·çÅõ½º ÀåÄ¡ÀÇ Æä¾î¸µÀ» ÇØÁ¦ÇÑ´Ù.
+    // ë¸”ë£¨íˆ¬ìŠ¤ ì¥ì¹˜ì˜ í˜ì–´ë§ì„ í•´ì œí•œë‹¤.
 //    public void unBondDevice() {
 //    }
     
@@ -118,12 +118,12 @@ public class BluetoothService {
     }
     
     //=================================================
-    // ºí·çÅõ½º ÀåÄ¡°¡ ²¨Á® ÀÖÀ¸¸é ÄÑ°í
-    // ÀåÄ¡ °Ë»öÀÌ ½ÃÀÛµÇÁö ¾Ê¾ÒÀ¸¸é Æä¾î¸µµÈ ÀåÄ¡¸¦ °Ë»öÇÏ°í
-    // Æä¾î¸µµÈ ÀåÄ¡¿¡ 
-    // Æä¾î¸µµÈ ÀåÄ¡ °Ë»öÀ» ½ÃÀÛÇÑ´Ù.
-    // ¸ÕÀú Æä¾î¸µµÈ ÀåÄ¡¸¦ °Ë»öÇÏ°í ÀåÄ¡°¡ ¾øÀ»°æ¿ì
-    // ½ÅÈ£°¡ ÀÖ´Â ÀåÄ¡¸¦ °Ë»öÇÑ´Ù.
+    // ë¸”ë£¨íˆ¬ìŠ¤ ì¥ì¹˜ê°€ êº¼ì ¸ ìˆìœ¼ë©´ ì¼œê³ 
+    // ì¥ì¹˜ ê²€ìƒ‰ì´ ì‹œì‘ë˜ì§€ ì•Šì•˜ìœ¼ë©´ í˜ì–´ë§ëœ ì¥ì¹˜ë¥¼ ê²€ìƒ‰í•˜ê³ 
+    // í˜ì–´ë§ëœ ì¥ì¹˜ì— 
+    // í˜ì–´ë§ëœ ì¥ì¹˜ ê²€ìƒ‰ì„ ì‹œì‘í•œë‹¤.
+    // ë¨¼ì € í˜ì–´ë§ëœ ì¥ì¹˜ë¥¼ ê²€ìƒ‰í•˜ê³  ì¥ì¹˜ê°€ ì—†ì„ê²½ìš°
+    // ì‹ í˜¸ê°€ ìˆëŠ” ì¥ì¹˜ë¥¼ ê²€ìƒ‰í•œë‹¤.
     public synchronized void startWork() {
     	Thread mThread = new Thread(new Runnable() {
 			@Override
@@ -131,11 +131,11 @@ public class BluetoothService {
 		    	while (true) {
 		        	switch (currentStatus) {
 		    		case None:
-		    			// ºí·çÅõ½º ÀåÄ¡°¡ ²¨Á® ÀÖÀ¸¸é ÄÒ´Ù.
+		    			// ë¸”ë£¨íˆ¬ìŠ¤ ì¥ì¹˜ê°€ êº¼ì ¸ ìˆìœ¼ë©´ ì¼ ë‹¤.
 		    			if (mAdapter.isEnabled() == false) {
-		    				Log.d(TAG, "²¨Á®ÀÖ´Â ºí·çÅõ½º ÄÔ");
+		    				Log.d(TAG, "êº¼ì ¸ìˆëŠ” ë¸”ë£¨íˆ¬ìŠ¤ ì¼¬");
 		    				mAdapter.enable();
-		        			// TODO ÀÏÁ¤ ½Ã°£ÀÌ °æ°ú ÇØµµ È°¼ºÈ­ »óÅÂ°¡ ¹Ù²îÁö ¾ÊÀ¸¸é Á¾·á Ã³¸®
+		        			// TODO ì¼ì • ì‹œê°„ì´ ê²½ê³¼ í•´ë„ í™œì„±í™” ìƒíƒœê°€ ë°”ë€Œì§€ ì•Šìœ¼ë©´ ì¢…ë£Œ ì²˜ë¦¬
 		    				return;
 		    			} else {
 		    				currentStatus = workStatus.PowerOn;
@@ -144,7 +144,7 @@ public class BluetoothService {
 		    		case Device_UnBonded:
 		    		case PowerOn:
 		    			currentStatus = workStatus.Finding_Bond;
-		    	        // Æä¾î¸µµÈ ÀåÄ¡ ¸ñ·Ï °¡Á®¿À±â
+		    	        // í˜ì–´ë§ëœ ì¥ì¹˜ ëª©ë¡ ê°€ì ¸ì˜¤ê¸°
 		    			mHandler.obtainMessage(MainActivity.MESSAGE_BOND_DEVICE_FINDING).sendToTarget();
 		    			mydelay();
 		    	    	mDevice = null;
@@ -152,25 +152,25 @@ public class BluetoothService {
 		    			if (pairedDevices.size() > 0) {
 		    				for (BluetoothDevice device : pairedDevices) {
 		    					String mName = device.getName();
-		    					Log.d(TAG, "ÀåÄ¡°Ë»ö: " + mName + " / " + device.getAddress());
+		    					Log.d(TAG, "ì¥ì¹˜ê²€ìƒ‰: " + mName + " / " + device.getAddress());
 		    					if (mName.equals("SOLMEPM3")) {
-		    						// ¼Ö¸Ş¿ÉÆ¼ÄÃÆÄ¿ö¸ŞÅÍ¸¦ Ã£¾ÒÀ½ (Æä¾î¸µ ¿Ï·á »óÅÂ)
+		    						// ì†”ë©”ì˜µí‹°ì»¬íŒŒì›Œë©”í„°ë¥¼ ì°¾ì•˜ìŒ (í˜ì–´ë§ ì™„ë£Œ ìƒíƒœ)
 		    						mDevice = device;
-		    						Log.d(TAG, "¿ÉÆ¼ÄÃ ÆÄ¿ö¹ÌÅÍ ¹ß°ß (Æä¾î¸µ)");
+		    						Log.d(TAG, "ì˜µí‹°ì»¬ íŒŒì›Œë¯¸í„° ë°œê²¬ (í˜ì–´ë§)");
 		    						currentStatus = workStatus.Find_Complete;
-		    						// ÀåÄ¡ °Ë»ö º¸°í
+		    						// ì¥ì¹˜ ê²€ìƒ‰ ë³´ê³ 
 		    						mHandler.obtainMessage(MainActivity.MESSAGE_BOND_DEVICE_FINDED).sendToTarget();
 		    						mydelay();
 		    					}
 		    				}
 		    			}
-		    			// Æä¾î¸µ ÀåÄ¡¸¦ Ã£À» ¼ö ¾ø´Â °æ¿ì
+		    			// í˜ì–´ë§ ì¥ì¹˜ë¥¼ ì°¾ì„ ìˆ˜ ì—†ëŠ” ê²½ìš°
 		    			if (mDevice == null) {
-		    	    		Log.d(TAG, "Æä¾î¸µµÈ ÀåÄ¡ °Ë»ö ½ÇÆĞ");
-		    	    		// ÀÏ¹İ ÀåÄ¡ °Ë»ö ½ÃÀÛ
+		    	    		Log.d(TAG, "í˜ì–´ë§ëœ ì¥ì¹˜ ê²€ìƒ‰ ì‹¤íŒ¨");
+		    	    		// ì¼ë°˜ ì¥ì¹˜ ê²€ìƒ‰ ì‹œì‘
 		    	    		mHandler.obtainMessage(MainActivity.MESSAGE_UNBOND_DEVICE_FINDING).sendToTarget();
 		    	    		mydelay();
-		    	    		// ÁÖº¯ ºí·çÅõ½º ÀåÄ¡¸¦ °Ë»öÇÑ´Ù.
+		    	    		// ì£¼ë³€ ë¸”ë£¨íˆ¬ìŠ¤ ì¥ì¹˜ë¥¼ ê²€ìƒ‰í•œë‹¤.
 		    	    		if (mAdapter.isDiscovering()) {
 		    	    			mAdapter.cancelDiscovery();
 		    	    		}
@@ -222,7 +222,7 @@ public class BluetoothService {
     	mThread.start();
     }
 
-    // ½ÇÇàÁßÀÎ ¾²·¹µå¸¦ ÁßÁö ½ÃÅ²´Ù.
+    // ì‹¤í–‰ì¤‘ì¸ ì“°ë ˆë“œë¥¼ ì¤‘ì§€ ì‹œí‚¨ë‹¤.
     public synchronized void stop() {
     	if (mBluetoothThread != null) {
     		mBluetoothThread.cancel();
@@ -230,7 +230,7 @@ public class BluetoothService {
     	}
     }
     
-    // ÄÚ¸àµå¸¦ ¿ø°İ ÀåÄ¡¿¡ Àü¼ÛÇÑ´Ù.
+    // ì½”ë©˜ë“œë¥¼ ì›ê²© ì¥ì¹˜ì— ì „ì†¡í•œë‹¤.
     public synchronized void sendSerial(int dat) {
     	if (mBluetoothThread != null) {
     		mBluetoothThread.WriteSerial(dat);
@@ -249,34 +249,34 @@ public class BluetoothService {
 		mHttpThread.start();
     }
 
-	// ºí·çÅõ½º ÀåÄ¡ °Ë»ö ¼ö½Å±â
+	// ë¸”ë£¨íˆ¬ìŠ¤ ì¥ì¹˜ ê²€ìƒ‰ ìˆ˜ì‹ ê¸°
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			
-			// ºí·çÅõ½º È°¼ºÈ­ »óÅÂ º¯°æ
+			// ë¸”ë£¨íˆ¬ìŠ¤ í™œì„±í™” ìƒíƒœ ë³€ê²½
 			if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
 				int stat = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0);
 				if (stat == BluetoothAdapter.STATE_ON) {
-					Log.d(TAG, "Broadcast: ºí·çÅõ½º ON");
+					Log.d(TAG, "Broadcast: ë¸”ë£¨íˆ¬ìŠ¤ ON");
 					currentStatus = workStatus.PowerOn;
 					mHandler.obtainMessage(MainActivity.MESSAGE_BLUETOOTH_ENABLED).sendToTarget();
 				}
 				return;
 			}
 			
-			// ºí·çÅõ½º ¿ø°İ ÀåÄ¡ ¹ß°ß
+			// ë¸”ë£¨íˆ¬ìŠ¤ ì›ê²© ì¥ì¹˜ ë°œê²¬
 			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 				int mBond = device.getBondState();
-				Log.d(TAG, "Broadcast: ¿ø°İÀåÄ¡ ¹ß°ß");
+				Log.d(TAG, "Broadcast: ì›ê²©ì¥ì¹˜ ë°œê²¬");
 				if (mBond != BluetoothDevice.BOND_BONDED) {
 					if (device.getName().equals("SOLMEPM3")) {
-						// ÀåÄ¡ °Ë»öÀ» Áß´ÜÇÑ´Ù.
+						// ì¥ì¹˜ ê²€ìƒ‰ì„ ì¤‘ë‹¨í•œë‹¤.
 						mAdapter.cancelDiscovery();
 						mDevice = device;
-						// ÀåÄ¡ °Ë»ö º¸°í
+						// ì¥ì¹˜ ê²€ìƒ‰ ë³´ê³ 
 						currentStatus = workStatus.Find_Complete;
 						mHandler.obtainMessage(MainActivity.MESSAGE_UNBOND_DEVICE_FINDED).sendToTarget();
 					}
@@ -284,20 +284,20 @@ public class BluetoothService {
 				return;
 			}
 			
-			// ºí·çÅõ½º ¿ø°İ ÀåÄ¡ Ã£±â Á¾·á
+			// ë¸”ë£¨íˆ¬ìŠ¤ ì›ê²© ì¥ì¹˜ ì°¾ê¸° ì¢…ë£Œ
 			if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-				Log.d(TAG, "Broadcast: ¿ø°İÀåÄ¡ Ã£±â Á¾·á");
-				// °Ë»ö Á¾·á ÀÌº¥Æ®
+				Log.d(TAG, "Broadcast: ì›ê²©ì¥ì¹˜ ì°¾ê¸° ì¢…ë£Œ");
+				// ê²€ìƒ‰ ì¢…ë£Œ ì´ë²¤íŠ¸
 				if (mDevice == null) {
-					// ÀåÄ¡ °Ë»ö ¿À·ù º¸°í
+					// ì¥ì¹˜ ê²€ìƒ‰ ì˜¤ë¥˜ ë³´ê³ 
 					mHandler.obtainMessage(MainActivity.MESSAGE_FIND_ERROR).sendToTarget();
 				}
 				return;
 			}
 			
-			// ºí·çÅõ½º ÀåÄ¡ÀÇ º»µù »óÅÂ º¯°æ
+			// ë¸”ë£¨íˆ¬ìŠ¤ ì¥ì¹˜ì˜ ë³¸ë”© ìƒíƒœ ë³€ê²½
 			if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)) {
-				Log.d(TAG, "Broadcast: º»µù »óÅÂ º¯°æ");
+				Log.d(TAG, "Broadcast: ë³¸ë”© ìƒíƒœ ë³€ê²½");
 				int stat = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, 0);
 				if (stat == BluetoothDevice.BOND_BONDED) {
 					currentStatus = workStatus.Device_Bonded;
@@ -309,10 +309,10 @@ public class BluetoothService {
 				return;
 			}
 			
-			// Æä¾î¸µÀÌ ½ÃÀÛµÊ
+			// í˜ì–´ë§ì´ ì‹œì‘ë¨
 			if ("android.bluetooth.device.action.PAIRING_REQUEST".equals(action)) {
-			    // Æä¾î¸µ °úÁ¤¿¡¼­ ¿ä±¸ÇÏ´Â PIN ¹øÈ£¸¦ ÀÚµ¿À¸·Î ÀÔ·ÂÇÑ´Ù.
-				Log.d(TAG, "Broadcast: Æä¾î¸µ ½ÃÀÛ");
+			    // í˜ì–´ë§ ê³¼ì •ì—ì„œ ìš”êµ¬í•˜ëŠ” PIN ë²ˆí˜¸ë¥¼ ìë™ìœ¼ë¡œ ì…ë ¥í•œë‹¤.
+				Log.d(TAG, "Broadcast: í˜ì–´ë§ ì‹œì‘");
 		    	byte[] pins = { 0x31, 0x32, 0x33, 0x34 };
 		    	try {
 		    		BluetoothDevice device = intent.getParcelableExtra("android.bluetooth.device.extra.DEVICE");
@@ -325,7 +325,7 @@ public class BluetoothService {
 					//mClass.getMethod("cancelPairingUserInput", boolean.class).invoke(mDevice);
 		    		//mMainActivity.onBondedDevice();
 				} catch (Exception e) {
-					Log.d(TAG, "ÀÚµ¿ Æä¾î¸µ ¿À·ù: " + e.getMessage());
+					Log.d(TAG, "ìë™ í˜ì–´ë§ ì˜¤ë¥˜: " + e.getMessage());
 					e.printStackTrace();
 				}
 		    	return;
@@ -333,7 +333,7 @@ public class BluetoothService {
 		}
 	};
 	
-	// ºí·çÅõ½º ÀåÄ¡ ¿¬°á ¹× ¼Û¼ö½Å ¾²·¹µå
+	// ë¸”ë£¨íˆ¬ìŠ¤ ì¥ì¹˜ ì—°ê²° ë° ì†¡ìˆ˜ì‹  ì“°ë ˆë“œ
 	private class BluetoothThread extends Thread {
 		private final BluetoothSocket mSocket;
 		private InputStream mInStream = null;
@@ -341,20 +341,20 @@ public class BluetoothService {
 		private boolean IsRun = false;
 
 		public BluetoothThread(BluetoothDevice device) {
-			Log.d(TAG, "ÆÄ¿ö¹ÌÅÍ¿¡ ¿¬°áÀ» ½ÃÀÛÇÕ´Ï´Ù.");
+			Log.d(TAG, "íŒŒì›Œë¯¸í„°ì— ì—°ê²°ì„ ì‹œì‘í•©ë‹ˆë‹¤.");
 			BluetoothSocket tmp = null;
 			try {
-				// ¿ø·¡¼Ò½º: device.createRfcommSocketToServiceRecord(SERIAL_UUID);
+				// ì›ë˜ì†ŒìŠ¤: device.createRfcommSocketToServiceRecord(SERIAL_UUID);
 				Method m = mDevice.getClass().getMethod("createRfcommSocket", new Class[] { int.class });
 				tmp = (BluetoothSocket) m.invoke(mDevice, 1);
-				Log.d(TAG, "¼ÒÄÏ »ı¼º ¿Ï·á");
+				Log.d(TAG, "ì†Œì¼“ ìƒì„± ì™„ë£Œ");
 			} catch (Exception e) {
-				Log.d(TAG, "¼ÒÄÏ »ı¼º ½ÇÆĞ");
+				Log.d(TAG, "ì†Œì¼“ ìƒì„± ì‹¤íŒ¨");
 			}
 			mSocket = tmp;
 		}
 
-		// ¿ø°İ ÀåÄ¡¿¡ Á¢¼Ó ÇÏ±â
+		// ì›ê²© ì¥ì¹˜ì— ì ‘ì† í•˜ê¸°
 		private synchronized boolean Connect() {
 			boolean mIsConnect = false;
 			try {
@@ -363,23 +363,23 @@ public class BluetoothService {
 				Log.d(TAG, "BluetoothThread:Connect");
 				mSocket.connect();
 				mIsConnect = true;
-				// ¼ÒÄÏ ¿¬°á ¼º°ø º¸°í
+				// ì†Œì¼“ ì—°ê²° ì„±ê³µ ë³´ê³ 
 				mHandler.obtainMessage(MainActivity.MESSAGE_CONNECT_COMPLETE).sendToTarget();
 				Thread.sleep(20);
 			} catch (Exception e) {
-				// ¿À·ù º¸°í
+				// ì˜¤ë¥˜ ë³´ê³ 
 				mHandler.obtainMessage(MainActivity.MESSAGE_CONNECT_ERROR, "Connect Error").sendToTarget();
-				Log.d(TAG, "¿¬°á ¿À·ù: " + e.getMessage());
+				Log.d(TAG, "ì—°ê²° ì˜¤ë¥˜: " + e.getMessage());
 				try {
 					mSocket.close();
 				} catch (IOException e2) {
-					Log.d(TAG, "¿¬°á ´İ±â ¿À·ù: " + e.getMessage());
+					Log.d(TAG, "ì—°ê²° ë‹«ê¸° ì˜¤ë¥˜: " + e.getMessage());
 				}
 			}
 			return mIsConnect;
 		}
 		
-		// Á¢¼ÓµÈ ÀåÄ¡ÀÇ ÀÔ,Ãâ·Â ½ºÆ®¸² ¾ò±â
+		// ì ‘ì†ëœ ì¥ì¹˜ì˜ ì…,ì¶œë ¥ ìŠ¤íŠ¸ë¦¼ ì–»ê¸°
 		private synchronized boolean GetStream() {
 			boolean mIsGet = false;
             try {
@@ -387,7 +387,7 @@ public class BluetoothService {
             	mOutStream = mSocket.getOutputStream();
             	mIsGet = true;
             } catch (IOException e) {
-            	// ¿À·ù º¸°í
+            	// ì˜¤ë¥˜ ë³´ê³ 
 				mHandler.obtainMessage(MainActivity.MESSAGE_ERROR, "GetStream Error").sendToTarget();
             }
             return mIsGet;
@@ -397,7 +397,7 @@ public class BluetoothService {
 			setName("ConnectThread");
 			mAdapter.cancelDiscovery();
 			if (mSocket == null) return;
-			// ¿¬°áÀ» µÎ¹ø ½Ãµµ
+			// ì—°ê²°ì„ ë‘ë²ˆ ì‹œë„
 			if (Connect() == false) {
 				if (Connect() == false) {
 					return;
@@ -411,7 +411,7 @@ public class BluetoothService {
             String mRecvMsg = "";
             while (IsRun == true) {
                 try {
-                    // ÀÔ·Â ½ºÆ®¸²¿¡¼­ µ¥ÀÌÅÍ¸¦ ÀĞ¾î µéÀÎ´Ù.
+                    // ì…ë ¥ ìŠ¤íŠ¸ë¦¼ì—ì„œ ë°ì´í„°ë¥¼ ì½ì–´ ë“¤ì¸ë‹¤.
                     int dat = mInStream.read();
                     switch (dat) {
 					case ':':
@@ -419,9 +419,9 @@ public class BluetoothService {
 						break;
 					case '\n':
                     	if (mRecvMsg.length() > 0) {
-                            // ÀĞ¾îµéÀÎ °á°ú¸¦ ¸ŞÀÎ UI ¿¢Æ¼ºñÆ¼¿¡ º¸°íÇÑ´Ù.
+                            // ì½ì–´ë“¤ì¸ ê²°ê³¼ë¥¼ ë©”ì¸ UI ì—‘í‹°ë¹„í‹°ì— ë³´ê³ í•œë‹¤.
                             mHandler.obtainMessage(MainActivity.MESSAGE_RECV, mRecvMsg).sendToTarget();
-                            Log.d(TAG, "¹®ÀÚ¿­ ¼ö½Å º¸°í: " + mRecvMsg);
+                            Log.d(TAG, "ë¬¸ìì—´ ìˆ˜ì‹  ë³´ê³ : " + mRecvMsg);
                     	}
                     	break;
 					case '\r':
@@ -431,7 +431,7 @@ public class BluetoothService {
 						break;
 					}
                 } catch (Exception e) {
-                	// ¿À·ù º¸°í
+                	// ì˜¤ë¥˜ ë³´ê³ 
     				//mHandler.obtainMessage(MainActivity.MESSAGE_ERROR, "ReadStream").sendToTarget();
                 }
             }
@@ -443,31 +443,31 @@ public class BluetoothService {
         	}
             try {
                 mOutStream.write(cmd);
-                // Àü¼Û ¿Ï·á¸¦ ¸ŞÀÎ ¾×Æ¼ºñÆ¼¿¡ º¸°í
+                // ì „ì†¡ ì™„ë£Œë¥¼ ë©”ì¸ ì•¡í‹°ë¹„í‹°ì— ë³´ê³ 
                 mHandler.obtainMessage(MainActivity.MESSAGE_SEND, cmd).sendToTarget();
             } catch (IOException e) {
 				mHandler.obtainMessage(MainActivity.MESSAGE_ERROR, "WriteStream").sendToTarget();
             }
         }
 
-        // ¿¬°áµÈ ¼ÒÄÏÀ» ´İ´Â´Ù.
+        // ì—°ê²°ëœ ì†Œì¼“ì„ ë‹«ëŠ”ë‹¤.
 		public void cancel() {
 			try {
 				IsRun = false;
 				this.join(100);
 	            mSocket.close();
-				Log.d(TAG, "¼ÒÄÏ ÇØÁö ¿Ï·á");
+				Log.d(TAG, "ì†Œì¼“ í•´ì§€ ì™„ë£Œ");
 				mInStream.close();
-				Log.d(TAG, "ÇØÁö(I)");
+				Log.d(TAG, "í•´ì§€(I)");
 	            mOutStream.close();
-				Log.d(TAG, "ÇØÁö(O)");
+				Log.d(TAG, "í•´ì§€(O)");
 			} catch (Exception e) {
-				Log.d(TAG, "¼ÒÄÏ ´İ±â ¹× ½º·¹µå Á¾·á ¿À·ù: " + e.getMessage());
+				Log.d(TAG, "ì†Œì¼“ ë‹«ê¸° ë° ìŠ¤ë ˆë“œ ì¢…ë£Œ ì˜¤ë¥˜: " + e.getMessage());
 			}
 		}
 	}
 	
-	// À¥ POST¸¦ ´ã´çÇÏ´Â ¾²·¹µå
+	// ì›¹ POSTë¥¼ ë‹´ë‹¹í•˜ëŠ” ì“°ë ˆë“œ
 	private class HttpThread extends Thread {
 		private final URL mHttpUrl;
 		private final String mPostData;
@@ -480,7 +480,7 @@ public class BluetoothService {
 			}
 			mHttpUrl = tmp;
 			mPostData = data;
-			Log.d(TAG, "Àü¼Û½ÃÀÛ: " + url);
+			Log.d(TAG, "ì „ì†¡ì‹œì‘: " + url);
 		}
 
 		private String SubmitData() {
@@ -515,7 +515,7 @@ public class BluetoothService {
 		        }
 		        
 		        br.close();
-				// JSON °á°ú ÆÄ½Ì			
+				// JSON ê²°ê³¼ íŒŒì‹±			
 				
 				JSONObject json = new JSONObject(result.toString());
 				JSONArray mBody = json.getJSONArray("body");
