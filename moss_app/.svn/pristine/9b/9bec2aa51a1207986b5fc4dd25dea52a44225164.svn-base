@@ -1,0 +1,253 @@
+var manualList_debugPrefix = "[board_manual.js] : ";
+var alarmNoti_serCode=new Array();
+var alarmNoti_serName=new Array();
+
+//라디오버튼, 셀렉트박스 생성 및 연결 및 리스트불러오기
+function connect_radio_select(){
+	
+	var manualRa="";
+	var manualSel="";
+	
+	if(serCode.length > 0){
+		
+		for(var i=0; i<serCode.length; i++){
+			
+			manualRa += "<input type='radio' name='manual' data-theme='d' data-iconpos='right' id='" + serName[i] + "' value='" + serCode[i] + "' checked=''>" +
+						"<label for='" + serName[i] + "'>"+serName[i]+"</label>\n";
+		}
+			
+		if(detail_services.length > 0){
+			console.log(manualList_debugPrefix + "======고장관련분야 셀렉트박스 만들기======= ::: " + detail_services);
+			//고장관련 서비스코드 배열생성(문자열로 넘어온것 ","로 끊어서 배열에 저장)
+			alarmNoti_serCode = detail_services.split(",");
+
+			for(var i=0; i<alarmNoti_serCode.length; i++){
+				console.log(manualList_debugPrefix + "고장관련 서비스코드 배열생성 ::: " + alarmNoti_serCode[i]);
+			}
+			//고장관련 서비스이름 배열생성 (서비스코드와 같은 서비스이름 인덱스 번호의 값을 가져옴)			
+			var index = alarmNoti_serName.length;
+			for(var i=0; i<alarmNoti_serCode.length; i++){	
+				var aaa = alarmNoti_serCode[i];   	// '01', '02', '03', '04' ...
+				var bbb = eval(aaa)-1;				// 1, 2, 3, 4  //eval 함수는 문자열을 숫자로 변환시켜줌 01->1  //-1한 이유는 밸류와 index번호를 맞춰주기 위함. bbb의 값이 내가 꺼내올 배열의 인덱스 번호가 되어야 한다. 
+				var ccc = serName[bbb];				// "a", "b", "c", ....
+				alarmNoti_serName[index] = ccc;
+				index++;
+				//alarmNoti_serName[index++] = serName[eval(alarmNoti_serCode[i])-1];  이것은 위에 5줄을 한줄로 표현한것.
+			}
+
+			for(var i=0; i<alarmNoti_serName.length; i++){
+				console.log(manualList_debugPrefix + "고장관련 서비스이름 배열생성 ::: " + alarmNoti_serName[i]);
+			}
+
+			//고장상황에 맞춘 셀렉트 박스 생성
+			for(var i=0; i<alarmNoti_serCode.length; i++){
+				manualSel += "<option value='" + alarmNoti_serCode[i] + "'>" + alarmNoti_serName[i] + "</option>";
+			}
+			//셀렉트박스에 삽입
+			$('#manualField').html(manualSel).trigger("create").selectmenu( "refresh" );
+		}else{
+			console.log(manualList_debugPrefix + "=======전체분야 셀렉트박스를 만들기=======");
+
+			for(var i=0; i<serCode.length; i++){																			
+				manualSel += "<option value='" + serCode[i] + "'>" + serName[i] + "</option>";			
+			}
+			//셀렉트박스에 삽입
+			$('#manualField').append(manualSel).trigger("create").selectmenu( "refresh" );
+		}	
+	}else{
+		manualRa = "<input type='radio' name='manual' data-theme='d' data-iconpos='right' id='not' value='not' checked=''>" +
+				   "<label for='not'>분야없음</label>\n";
+		manualSel = '<option value="no">분야없음</option>';
+		
+		$('#manualField').append(manualSel).trigger("create").selectmenu( "refresh" );
+	}
+		
+	//라디오버튼생성
+	$('#manualRa-controlgroup').html(manualRa).trigger("create");
+	
+	//라디오버튼, 셀렉트박스 연결		
+	var choice = getParam("checked");
+	$("#manualField").val(choice).selectmenu( "refresh" );
+
+	var serviceId=$("#manualField > option:selected").val();
+
+	$.ajax({
+		url: url + "ManualList",
+		type: "post",
+		timeout: 10*1000,
+		dataType: "json",
+		data:{serviceid:serviceId},
+		success: function(result){ 
+			var bodyData = result.body;
+			var headerData = result.header;
+			var manualLi = "";
+		
+		if(headerData.result != 0){
+			manualLi = "<li data-icon='false'> "+
+					   "<a href='#'>" +
+					   "<center><h2>분야를 선택하세요.</h2></center>" +     //"<center><h2>"+headerData.errMsg+"</h2></center>"
+					   "</a>" +
+					   "</li>";
+		}
+		else{
+			$.each(bodyData, function(key, val){					
+				manualLi += "<li data-icon='false'>" +
+							"<a href='board_manual_detail.html?manualSeqNum="+val.MANUALSEQNUM+"'>" +										 
+							"<table id='dynamicList'>" +
+							"<tr>" +
+							"<td class='dynamicTable_td'><h2 style='display:inline-block;'>"+ val.SUBJECT +"</h2></td>" +
+							"</tr>" +
+							"<tr>" +
+							"<td class='dynamicTable_td'>"+ val.WRITEDATE +"</td>" +
+							"</tr>" +
+							"<tr>" +
+							"<td class='dynamicTable_td' align='right'>"+ val.WRITERNAME +"</td>" +
+							"</tr>" +
+							"</table>" +
+							"</a>" +
+							"</li>";				
+			});
+		}
+		
+		$('#listview').html(manualLi).listview("refresh");
+		$.mobile.hidePageLoadingMsg();
+	
+		console.log(manualList_debugPrefix + "라디오버튼을 통해 선택된 값 : " + serviceId);
+		
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+//			console.log(manualList_debugPrefix + "매뉴얼리스트 출력 에러 : " + jqXHR.status);
+//			console.log(manualList_debugPrefix + "매뉴얼리스트 출력 에러 : " + jqXHR.responseText);
+//			console.log(manualList_debugPrefix + "매뉴얼리스트 출력 에러 : " + errorThrown);		
+		} 
+	});
+	
+}	
+	
+//라디오 버튼 선택후 확인 클릭시 파라미터 전송
+function SendParameter(){
+	
+	var isChecked=$(":input:radio[name=manual]:checked").val();
+	
+	console.log(manualList_debugPrefix + "셀렉트박스로 넘어갈 파라미터 값 : " + isChecked);
+	
+	$.mobile.changePage('board_manual.html?checked='+isChecked);	
+}
+
+//get parameter 파라미터 받기
+	var getParam = function(key){
+	    var _parammap = {};
+	    document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
+	        function decode(s) {
+	            return decodeURIComponent(s.split("+").join(" "));
+	        }
+
+	        _parammap[decode(arguments[1])] = decode(arguments[2]);
+	    });
+
+	    return _parammap[key];
+	};
+
+//검색기능
+function filter(){
+	var value = $('#word').val().toUpperCase();	//toUpperCase : 검색어를 대문자로 전환
+	$('#listview > li').hide();
+	$("#listview > li:contains('"+value+"')").show();
+}
+
+//셀렉트박스 선택을 통해 업무매뉴얼 리스트불러오기
+function showManualList(){
+	// 페이지가 보여지면서 로더를 보여준다.
+	$.mobile.loading( "show", {
+		  text: "리스트를 읽어오는 중 입니다.",
+		  textVisible: true,
+		  theme: "a",
+		  html: ""
+	});
+
+	var serviceId=$("#manualField > option:selected").val();
+	
+	$.ajax({
+		url: url + "ManualList",
+		type: "post",
+		timeout: 10*1000,
+		dataType: "json",
+		data:{serviceid:serviceId},
+		success: function(result){ 
+			var bodyData = result.body;
+			var manualLi = "";
+			
+			if(bodyData.length > 0){
+				$.each(bodyData, function(key, val){					
+					manualLi += "<li data-icon='false'>" +
+					"<a href='board_manual_detail.html?manualSeqNum="+val.MANUALSEQNUM+"'>" +										 
+					"<table id='dynamicList'>" +
+					"<tr>" +
+					"<td class='dynamicTable_td'><h2 style='display:inline-block;'>"+ val.SUBJECT +"</h2></td>" +
+					"</tr>" +
+					"<tr>" +
+					"<td class='dynamicTable_td'>"+ val.WRITEDATE +"</td>" +
+					"</tr>" +
+					"<tr>" +
+					"<td class='dynamicTable_td' align='right'>"+ val.WRITERNAME +"</td>" +
+					"</tr>" +
+					"</table>" +
+					"</a>" +
+					"</li>";				
+				});
+			}else{
+				manualLi = "<li data-icon='false'> "+
+			    		   "	<a href='#'>" +
+			    		   "		<center><h2>데이터가 존재하지 않습니다.</h2></center>" +
+			    		   "	</a>" +
+			    		   "</li>";
+			}
+			
+			if(serviceId=="select"){
+				manualLi = "<li data-icon='false'> "+
+	    		   "	<a href='#'>" +
+	    		   "		<center><h2>분야를 선택하세요.</h2></center>" +
+	    		   "	</a>" +
+	    		   "</li>";
+			}
+			
+			$('#listview').html(manualLi).listview("refresh");
+			$.mobile.hidePageLoadingMsg();
+			
+			console.log(manualList_debugPrefix + "셀렉트 박스에서 선택된 값 : " + serviceId);
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			console.log(manualList_debugPrefix + "매뉴얼리스트 출력 에러 : " + jqXHR.status);
+	        console.log(manualList_debugPrefix + "매뉴얼리스트 출력 에러 : " + jqXHR.responseText);
+			console.log(manualList_debugPrefix + "매뉴얼리스트 출력 에러 : " + errorThrown);
+		} 
+	});
+}
+
+$(document).on("pageshow","#page_login", function(event){  
+	serviceCode_CodeName();
+});
+
+$(document).on("pageshow","#page_index", function(event){
+	connect_radio_select();
+});
+
+$(document).on("pageshow","#page_alarmList_noti", function(event){
+	connect_radio_select();
+});
+
+$(document).on("pageshow","#page_alarmList_success", function(event){
+	connect_radio_select();
+});
+
+$(document).on("pageshow","#page_notice_list", function(event){
+	connect_radio_select();
+});
+
+$(document).on("pageshow","#page_manualList", function(event){
+	connect_radio_select(); 
+});
+
+$(document).on("pageshow","#page_config", function(event){
+	connect_radio_select();
+});

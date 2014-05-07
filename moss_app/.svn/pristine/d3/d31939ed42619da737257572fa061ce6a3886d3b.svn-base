@@ -1,0 +1,31 @@
+function fileUpload() {
+	var contents = $("#content").val();
+    var options = new FileUploadOptions();
+    options.fileKey="file";
+    options.fileName=imgUrl.substr(imgUrl.lastIndexOf('/')+1);
+    options.mimeType="image/jpeg";
+
+    var params = new Object();
+    params.notiseqnum = notiseqnum;
+    params.writerid = loginId;
+    params.writername = userName;
+    params.usertype = "1";
+    params.userstate = "0";
+    params.content = contents;
+    options.params = params;
+    
+    var ft = new FileTransfer();
+    ft.upload(imgUrl, encodeURI("http://192.168.25.18:8080/moss/FaultNotiComment"), win, fail, options);
+ }
+
+function win(r) {
+    console.log("Code = " + r.responseCode);
+    console.log("Response = " + r.response);
+    console.log("Sent = " + r.bytesSent);
+}
+
+function fail(error) {
+    alert("An error has occurred: Code = " + error.code);
+    console.log("upload error source " + error.source);
+    console.log("upload error target " + error.target);
+}

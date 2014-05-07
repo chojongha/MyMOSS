@@ -1,0 +1,540 @@
+/**
+ *		alarmList_noti_detail.js
+ */
+
+var alarmList_noti_detail_debugPrefix = "[alarmList_noti_detail.js] : ";
+
+var pictureSource;   // picture source
+var destinationType; // sets the format of returned value 
+var imgUrl = "";
+var notiseqnum = "";
+var setOfficeName = "";
+var interval = null;	// 상세 페이지 폴링용 변수
+
+function take_pic() {
+    navigator.camera.getPicture(onPhotoURISuccess, function(ex) {
+        alert("Camera Error!");
+    }, { quality : 100, 
+    	targetWidth: 300,
+    	correctOrientation: true,
+    	destinationType: destinationType.FILE_URI });
+}
+
+function album_pic() { 
+    navigator.camera.getPicture(onPhotoURISuccess, function(ex) {
+            alert("Camera Error!"); }, 
+            { quality: 30, 
+            targetWidth: 300,
+            correctOrientation: true,
+	        destinationType: destinationType.FILE_URI,
+	        sourceType: pictureSource.SAVEDPHOTOALBUM });
+}
+
+function captureError(error) {
+    var msg = 'An error occurred during capture: ' + error.code;
+    navigator.notification.alert(msg, null, 'Error!');
+}
+function formatError(error) {
+    alert("Error getting file format data: " + error.code); 
+}
+
+function onPhotoURISuccess(imageURI) {
+  var smallImage = document.getElementById('smallImage');
+  smallImage.style.display = 'block';
+  smallImage.src = imageURI;
+  console.log(alarmList_noti_detail_debugPrefix + $("#smallImage").attr("src"));
+  console.log(alarmList_noti_detail_debugPrefix + "img data load end");
+  
+  imgUrl = imageURI;
+  console.log(alarmList_noti_detail_debugPrefix + "imgURL = " + imgUrl);
+}
+
+function getPositionSuccess(position) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    
+    console.log(alarmList_noti_detail_debugPrefix + "latitude = " + latitude);
+    console.log(alarmList_noti_detail_debugPrefix + "longitude = " + longitude);
+    
+    setLocationInfo(latitude, longitude);
+}
+
+function getCurrentPosition(position) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    
+    console.log(alarmList_noti_detail_debugPrefix + "latitude = " + latitude);
+    console.log(alarmList_noti_detail_debugPrefix + "longitude = " + longitude);
+    
+    return " 'position': '" + latitude + "," + longitude + "' ";
+}
+
+function getPositionError(error) {
+    console.log(alarmList_noti_detail_debugPrefix + 'code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+}
+
+//현재 위치 전송 기능
+var setLocation = function() {
+	function onConfirm(button) {
+		if(button == "2") {
+			navigator.geolocation.watchPosition(getPositionSuccess, getPositionError);
+			console.log(alarmList_noti_detail_debugPrefix + "현재 위치 전송");
+		} else {
+			console.log(alarmList_noti_detail_debugPrefix + "현재 위치 전송 취소");
+		}	
+	}
+	navigator.notification.confirm(
+		'현재 위치를 서버로 전송하시겠습니까?', // message
+		onConfirm, // callback to invoke with index of button pressed
+		'현재 위치 전송', // title
+		'취소,확인'
+	);
+};
+
+function getAlarmDetailPage() {
+	$.mobile.loading( "show", {
+		  text: "로딩중...",
+		  textVisible: true,
+		  theme: "z",
+		  html: ""
+	});
+	
+	notiseqnum = Request("notiseqnum");
+
+	console.log(alarmList_noti_detail_debugPrefix + " request notiseqnum = " + notiseqnum);
+	
+	$.ajax({
+		url: url + "FaultNotiDetailInfo",
+		type: "post",
+		timeout: 10 * 1000,
+		dataType: "json",
+		data: {notiseqnum:notiseqnum},
+		success: function (result) {
+			var bodyData = result.body;
+			
+			$.each(bodyData, function(key, val){
+				console.log(alarmList_noti_detail_debugPrefix + "============ 고장상황[완료] 상세 ============");
+				
+				$.each(val, function(key, val) {
+					console.log(alarmList_noti_detail_debugPrefix + key + ", " + val);
+				});
+			
+				$("#detail_subject").text(val.SUBJECT);
+				$("#detail_writeDate").text(val.LASTUPDATEDATE);
+				$("#detail_writerName").text(val.WRITERNAME);
+				$("#detail_services").text(val.SERVICES);
+				$("#detail_addr").text("detail_addr");
+				if(val.TT_YN == "Y") {
+					$("#detail_vocCnt").text("총발생 : " + val.TOTAL_VOC_CNT);
+				} else {
+					$("#detail_vocCnt").text("없음");
+				}
+				$("#detail_officeName").text(val.OFFICENAMES);
+				// office name을 전송 파라미터용도로 따로 저장
+				setOfficeName = val.OFFICENAMES;
+				$("#detail_content").text(val.CONTENT);
+				
+				// 고장 상황 상세 댓글
+				var commentData = result.comment;
+				var liText = "";
+				var userType = "";
+				
+				$.each(commentData, function(key, val){
+					console.log(alarmList_noti_detail_debugPrefix + "============ 고장상황[완료] 상세 댓글 ============");
+					
+					$.each(val, function(key, val) {
+						console.log(alarmList_noti_detail_debugPrefix + key + ", " + val);
+					});
+					
+					if(val.USERTYPE == "1") {
+						userType = "[현장]";
+					} else {
+						userType = "[센터]";
+					}
+					
+					if(val.FILEBINARY == null) {
+						liText += 	"<li>" +
+					        			"<p><b>" + val.WRITEDATE + " (" + val.WRITERNAME + ")</b></p>" +
+					        			"<p>" + userType + " " + val.CONTENT + "</p>" +
+				        			"</li>";
+					} else {
+						liText += 	"<li>" +
+					        			"<p><b>" + val.WRITEDATE + " (" + val.WRITERNAME + ")</b></p>" +
+					        			"<p>" + userType + " " + val.CONTENT + "</p>" +
+					        			"<p align='center'><img src='data:image/jpeg;base64," + val.FILEBINARY + "' width='250px'></p>" +
+				        			"</li>";
+					}
+				});
+				$("#Detail_commentList").empty();
+				$("#Detail_commentList").append(liText).listview("refresh");
+		    });
+			// 화면에 리스트 출력이 완료되면 loader를 종료
+			$.mobile.hidePageLoadingMsg();
+			console.log(alarmList_noti_detail_debugPrefix + "============ 고장상황[완료] 상세 출력 완료 ============");
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			$.mobile.hidePageLoadingMsg();
+//	        alert(textStatus); // this will be "timeout"
+	        console.log(alarmList_noti_detail_debugPrefix + "고장상황[완료] 상세 리스트 출력 에러 : " + jqXHR.status);
+	        console.log(alarmList_noti_detail_debugPrefix + "고장상황[완료] 상세 리스트 출력 에러 : " + jqXHR.responseText);
+			console.log(alarmList_noti_detail_debugPrefix + "고장상황[완료] 상세 리스트 출력 에러 : " + errorThrown);
+	    }
+	});
+}
+
+//	현재 위치 전송
+function setLocationInfo(latitude, longitude) {
+	
+	$.mobile.loading( "show", {
+		  text: "현재 위치 전송 중...",
+		  textVisible: true,
+		  theme: "z",
+		  html: ""
+	});
+	
+	var setWorkerId = loginId;
+	var setLatLng = latitude + "," + longitude;
+	var setReverseGeocoding = "";
+	
+	$.ajax({
+	    url: "http://maps.googleapis.com/maps/api/geocode/json",
+	    timeout: 10 * 1000,
+	    type: 'get',
+	    dataType: "json",
+	    data:{latlng:setLatLng, sensor:true},
+	    cache: false,
+	    success: function(result){
+	    	var resultData = result.results;
+	    	console.log(alarmList_noti_detail_debugPrefix + "============ Reverse Geocoding 완료 ============");
+	    	$.each(resultData, function(key, val){
+	    		if(key == "0") {
+	    			setReverseGeocoding = val.formatted_address;
+	    			console.log(alarmList_noti_detail_debugPrefix + "setReverseGeocoding = " + setReverseGeocoding);
+	    		}
+		    	$.each(val, function(key, val){
+		    		console.log(alarmList_noti_detail_debugPrefix + key + "," + val);
+		    	});
+	    	});
+	    }
+	}).done (function() {
+		$.ajax({
+			url: url + "CurLocRegist",
+			type: "post",
+			timeout: 10 * 1000,
+			dataType: "json",
+			data: {workerid:setWorkerId, latitude:latitude, longitude:longitude, address:setReverseGeocoding},
+			success: function (result) {
+				var bodyData = result.body;
+				console.log(alarmList_noti_detail_debugPrefix + "============ 현재 위치 전송 ============");
+				console.log(alarmList_noti_detail_debugPrefix + "workerid = " + setWorkerId);
+				console.log(alarmList_noti_detail_debugPrefix + "latitude = " + latitude);
+				console.log(alarmList_noti_detail_debugPrefix + "longitude = " + longitude);
+				console.log(alarmList_noti_detail_debugPrefix + "address = " + setReverseGeocoding);
+				
+				$.each(bodyData, function(key, val){
+					if(val.result == "0") {
+						console.log(alarmList_noti_detail_debugPrefix + "============ 현재 위치 전송 완료 ============");
+					} else {
+						console.log(alarmList_noti_detail_debugPrefix + "============ 현재 위치 전송 실패 ============");
+						console.log(alarmList_noti_detail_debugPrefix + val.errMsg);
+						alert(val.errMsg);
+					}
+					$.each(val, function(key, val) {
+						console.log(alarmList_noti_detail_debugPrefix + key + ", " + val);
+					});
+			    });
+				// 화면에 리스트 출력이 완료되면 loader를 종료
+				$.mobile.hidePageLoadingMsg();
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				$.mobile.hidePageLoadingMsg();
+//		        alert(textStatus); // this will be "timeout"
+		        console.log(alarmList_noti_detail_debugPrefix + "현재 위치 전송 에러 : " + jqXHR.status);
+		        console.log(alarmList_noti_detail_debugPrefix + "현재 위치 전송 에러 : " + jqXHR.responseText);
+				console.log(alarmList_noti_detail_debugPrefix + "현재 위치 전송 에러 : " + errorThrown);
+		    }
+		});
+	});
+}
+
+//	상황 보고
+function setReport() {
+	
+	$.mobile.loading( "show", {
+		  text: "상황 보고...",
+		  textVisible: true,
+		  theme: "z",
+		  html: ""
+	});
+	
+	console.log(alarmList_noti_detail_debugPrefix + "============ 상황 보고 Parameter ============");
+	
+	var workerid = loginId;
+	var userstate = $(":input:radio[name=detail_report]:checked").val();
+	var destination = setOfficeName;
+	var writenrname = userName;
+	var usertype = "1";	//	현장 작업자 코드 1 고정;
+	
+	console.log(alarmList_noti_detail_debugPrefix + "workerid = " + workerid);
+	console.log(alarmList_noti_detail_debugPrefix + "userstate = " + userstate);
+	console.log(alarmList_noti_detail_debugPrefix + "destination = " + destination);
+	console.log(alarmList_noti_detail_debugPrefix + "notiseqnum = " + notiseqnum);
+	console.log(alarmList_noti_detail_debugPrefix + "writenrname = " + writenrname);
+	console.log(alarmList_noti_detail_debugPrefix + "usertype = " + usertype);
+	
+	$.ajax({
+		url: url + "FaultNotiReport",
+		type: "post",
+		timeout: 10 * 1000,
+		dataType: "json",
+		data: {workerid:workerid, userstate:userstate, destination:destination, notiseqnum:notiseqnum, writername:writenrname, usertype:usertype},
+		success: function (result) {
+			var bodyData = result.body;
+			
+			$.each(bodyData, function(key, val){
+				if(val.result == "0") {
+					console.log(alarmList_noti_detail_debugPrefix + "============ 상황 보고 완료 ============");
+					console.log(url);
+				} else {
+					console.log(alarmList_noti_detail_debugPrefix + "============ 상황 보고 실패 ============");
+					console.log(alarmList_noti_detail_debugPrefix + val.errMsg);
+					alert(val.errMsg);
+				}
+				$.each(val, function(key, val) {
+					console.log(alarmList_noti_detail_debugPrefix + key + ", " + val);
+				});
+		    });
+			// 화면에 리스트 출력이 완료되면 loader를 종료
+			$.mobile.hidePageLoadingMsg();
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			$.mobile.hidePageLoadingMsg();
+//		        alert(textStatus); // this will be "timeout"
+	        console.log(alarmList_noti_detail_debugPrefix + "상황 보고 에러 : " + jqXHR.status);
+	        console.log(alarmList_noti_detail_debugPrefix + "상황 보고 에러 : " + jqXHR.responseText);
+			console.log(alarmList_noti_detail_debugPrefix + "상황 보고 에러 : " + errorThrown);
+	    }
+	}).done( function() {
+		$("#Detail_commentList").empty();
+		getAlarmDetailPage();
+	});
+}
+
+//Request
+function Request(valuename) {
+	var rtnval = "";
+	var nowAddress = unescape(location.href);
+	var parameters = (nowAddress.slice(nowAddress.indexOf("?")+1,nowAddress.length)).split("&");
+
+	for(var i = 0 ; i < parameters.length ; i++) {
+		var varName = parameters[i].split("=")[0];
+		if(varName.toUpperCase() == valuename.toUpperCase())
+		{
+			rtnval = parameters[i].split("=")[1];
+			break;
+		}
+	}
+	return rtnval;
+}
+
+function setFormData() {
+	
+	alert(alarmList_noti_detail_debugPrefix + "setFormData() call");	
+	console.log(alarmList_noti_detail_debugPrefix + "notiseqnum = " + notiseqnum);
+	console.log(alarmList_noti_detail_debugPrefix + "writerid = " + loginId);
+	console.log(alarmList_noti_detail_debugPrefix + "writername = " + userName);
+	console.log(alarmList_noti_detail_debugPrefix + "usertype = " + "1");
+	console.log(alarmList_noti_detail_debugPrefix + "userstate = " + "0");
+	console.log(alarmList_noti_detail_debugPrefix + "content = " + $('#setContent').val());
+
+	$.ajax({
+		url: "http://192.168.25.18:8080/moss/FaultNotiComment",
+		type: "post",
+		timeout: 10 * 1000,
+		data: {notiseqnum:notiseqnum, writerid:loginId, writername:userName, usertype:"1", userstate:"0", content:$('#setContent').val(), file:null},
+		cache: false,
+		contentType: false,
+        processData: false,
+		success: function (result) {
+			var bodyData = result.body;
+			
+			$.each(bodyData, function(key, val){
+				if(val.result == "0") {
+					console.log(alarmList_noti_detail_debugPrefix + "============ 댓글 작성 완료 ============");
+					console.log(url);
+				} else {
+					console.log(alarmList_noti_detail_debugPrefix + "============ 댓글 작성 실패 ============");
+					console.log(alarmList_noti_detail_debugPrefix + val.errMsg);
+					alert(val.errMsg);
+				}
+				$.each(val, function(key, val) {
+					console.log(alarmList_noti_detail_debugPrefix + key + ", " + val);
+				});
+		    });
+			// 화면에 리스트 출력이 완료되면 loader를 종료
+			$.mobile.hidePageLoadingMsg();
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			$.mobile.hidePageLoadingMsg();
+//		        alert(textStatus); // this will be "timeout"
+	        console.log(alarmList_noti_detail_debugPrefix + "댓글 작성 에러 : " + jqXHR.status);
+	        console.log(alarmList_noti_detail_debugPrefix + "댓글 작성 에러 : " + jqXHR.responseText);
+			console.log(alarmList_noti_detail_debugPrefix + "댓글 작성 에러 : " + errorThrown);
+	    }
+	});
+}
+
+// cordova api fileUploader
+function fileUpload() {
+	
+	$.mobile.loading( "show", {
+		  text: "댓글 등록 중...",
+		  textVisible: true,
+		  theme: "z",
+		  html: ""
+	});
+	
+	var contents = $("#setContent").val();
+    var options = new FileUploadOptions();
+    options.fileKey="file";
+    options.fileName=imgUrl.substr(imgUrl.lastIndexOf('/')+1);
+    options.mimeType="image/jpeg";
+
+    var params = new Object();
+    params.notiseqnum = notiseqnum;
+    params.writerid = loginId;
+    params.writername = userName;
+    params.usertype = "1";
+    params.userstate = "0";
+    params.content = contents;
+    options.params = params;
+    
+    var ft = new FileTransfer();
+    ft.upload(imgUrl, encodeURI("http://192.168.25.18:8080/moss/FaultNotiComment"), winUpload, failUpload, options);
+}
+
+function winUpload(r) {
+	$.mobile.hidePageLoadingMsg();
+    console.log("Code = " + r.responseCode);
+    console.log("Response = " + r.response);
+    console.log("Sent = " + r.bytesSent);
+}
+
+function failUpload(error) {
+	$.mobile.hidePageLoadingMsg();
+    alert("An error has occurred: Code = " + error.code);
+    console.log("upload error source " + error.source);
+    console.log("upload error target " + error.target);
+}
+
+function setComment() {
+	$("#notiseqnum").val(notiseqnum);
+	$("#writerid").val(loginId);
+	$("#writername").val(userName);
+	$("#usertype").val("1");
+	$("#userstate").val("0");
+	$("#form_content").val($("#setContent").val());
+	
+	console.log(alarmList_noti_detail_debugPrefix + "============= 댓글 입력 파라미터 ==========");
+	console.log(alarmList_noti_detail_debugPrefix + "notiseqnum = " + $("#notiseqnum").val());
+	console.log(alarmList_noti_detail_debugPrefix + "writerid = " + $("#writerid").val());
+	console.log(alarmList_noti_detail_debugPrefix + "writername = " + $("#writername").val());
+	console.log(alarmList_noti_detail_debugPrefix + "usertype = " + $("#usertype").val());
+	console.log(alarmList_noti_detail_debugPrefix + "userstate = " + $("#userstate").val());
+	console.log(alarmList_noti_detail_debugPrefix + "content = " + $("#form_content").val());
+	
+	$("#btn_submitComment").click();
+}
+
+function showRequest(formData, jqForm, options) {
+	$.mobile.loading( "show", {
+		  text: "댓글 및 이미지 업로드...",
+		  textVisible: true,
+		  theme: "z",
+		  html: ""
+	});
+	
+    var queryString = $.param(formData); 
+    alert('About to submit: \n\n' + queryString); 
+
+    return true; 
+} 
+
+function showResponse(responseText, statusText, xhr, $form)  { 
+    alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
+        '\n\nThe output div should have already been updated with the responseText.');
+    $.mobile.hidePageLoadingMsg();
+	$("#Detail_commentList").empty();
+	getAlarmDetailPage();
+} 
+
+var options = { 
+        beforeSubmit:  showRequest,  // pre-submit callback 
+        success:       showResponse,  // post-submit callback 
+        dataType:  "json",        // 'xml', 'script', or 'json' (expected server response type)
+        clearForm: true,        // clear all form fields after successful submit 
+        resetForm: true,        // reset the form after successful submit 
+        timeout:   10*1000
+};
+
+// 고장 상황(진행) 상세 지도 보기
+$(document).on("pagebeforeshow","#page_alarmList_detail_map",function(event) {
+
+	var position = navigator.geolocation.watchPosition(getCurrentPosition, getPositionError);
+	
+	$.getJSON( 'http://jquery-ui-map.googlecode.com/svn/trunk/demos/json/demo.json', function(data) { 
+		$.each( data.markers, function(i, marker) {
+			$('#map_canvas').gmap('addMarker', { 
+				'position': new google.maps.LatLng(marker.latitude, marker.longitude), 
+				'bounds': true 
+			}).click(function() {
+				$('#map_canvas').gmap('openInfoWindow', { 'content': marker.content }, this);
+			});
+		});
+	});
+});
+
+// 고장 상황(진행)상세 댓글 + 사진 입력
+$(document).on("pagebeforeshow","#page_alarmList_detail_capture",function(event) {
+	$('#btn_captureImg').click(function() {
+		take_pic();
+	});
+	$('#btn_loadImg').click(function() {
+		album_pic();
+	});
+	$('#btn_setComment_capture').click(function() {
+		fileUpload();
+	});
+	$('#myForm').ajaxForm(options); 
+});
+
+//	고장 상황(진행) 상세 페이지
+$(document).on("pagebeforeshow","#page_alarmList_detail",function(event) {
+	$("#btn_setLocation").click(function () {
+		setLocation();
+	});
+	$("#btn_setReport").click(function () {
+		setReport();
+	});
+	// 폼 전송 전 데이터 셋팅
+	$("#btn_setComment_text").click(function () {
+		setComment();
+	});
+	// 상세 페이지 출력
+	getAlarmDetailPage();
+
+	$('#myForm_onlyComment').ajaxForm(options);
+	// 상세 페이지 폴링
+	interval = setInterval(function(){
+		getAlarmDetailPage();
+	}, 10*1000);
+});
+// 고장 상황(진행) 페이지 이동 시 폴링 인터벌 해제
+$(document).on("pagebeforehide","#page_alarmList_detail",function(event) {
+	clearInterval(interval); // stop the interval
+});
+
+// 고장 상황(완료)
+$(document).on("pagebeforehide","#page_alarmList_success",function(event) {
+
+});

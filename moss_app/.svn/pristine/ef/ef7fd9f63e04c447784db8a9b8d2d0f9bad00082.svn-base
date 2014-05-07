@@ -1,0 +1,430 @@
+/**
+ *	 board_open_detail.js
+ */
+
+var board_open_detail_debugPrefix = "[board_open_detail.js] : ";
+var freeSeqNum="";
+var attachSeqNum="";
+//var openCommentCount="";	//댓글 개수
+
+//댓글 삭제
+function deleteComment(commentSeqNum){
+		
+			$.ajax({
+				url: url + "DeleteBDFreeComment",
+				type: "post",
+				timeout: 10 * 1000,
+				dataType: "json",
+				data: {freeSeqNum:freeSeqNum,commentSeqNum:commentSeqNum},
+				success: function (result) {
+					var headerData = result.header;
+					// header log
+					console.log(board_open_detail_debugPrefix + "########### Header Data : boardCommentDelete  ###########");
+					$.each(headerData, function(key, val){
+						console.log(board_open_detail_debugPrefix + key + " : " + val);
+					});
+
+					if(headerData.result != 0) {
+						$.mobile.hidePageLoadingMsg();
+						showCommonAlert("자유게시판[상세화면]", headerData.errMsg);
+					} else { 	
+						
+						
+							// 화면에 리스트 출력이 완료되면 loader를 종료				                
+							$.mobile.hidePageLoadingMsg();					    
+					}
+					console.log(board_open_detail_debugPrefix + "============ 자유게시판 댓글 삭제 완료 ============");
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					$.mobile.hidePageLoadingMsg();				
+			        console.log(board_open_detail_debugPrefix + "자유게시판 댓글 삭제 에러 : " + jqXHR.status);
+			        console.log(board_open_detail_debugPrefix + "자유게시판 댓글 삭제 에러 : " + jqXHR.responseText);
+					console.log(board_open_detail_debugPrefix + "자유게시판 댓글 삭제 에러 : " + errorThrown);
+			    }
+			}).done(function() {
+				getBoardOpenDetailPage();
+			});
+}
+//게시판 삭제
+function deleteBoard(){
+    
+    $.ajax({
+        url: url + "DeleteBDFree",
+        type: "post",
+        timeout: 10 * 1000,
+        dataType: "json",
+        data: {freeSeqNum:freeSeqNum,attachSeqNum:attachSeqNum},
+        success: function (result) {
+            var headerData = result.header;
+            // header log
+            console.log(board_open_detail_debugPrefix + "########### Header Data : boardDelete  ###########");
+            $.each(headerData, function(key, val){
+                console.log(board_open_detail_debugPrefix + key + " : " + val);
+            });
+
+            if(headerData.result != 0) {
+                $.mobile.hidePageLoadingMsg();
+                showCommonAlert("자유게시판[게시글삭제]", headerData.errMsg);
+            } else {    
+                
+                
+                    // 화면에 리스트 출력이 완료되면 loader를 종료                              
+                    $.mobile.hidePageLoadingMsg();                      
+            }
+            console.log(board_open_detail_debugPrefix + "============ 자유게시판 댓글 삭제 완료 ============");
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            $.mobile.hidePageLoadingMsg();
+            console.log(board_open_detail_debugPrefix + "자유게시판 댓글 삭제 에러 : " + jqXHR.status);
+            console.log(board_open_detail_debugPrefix + "자유게시판 댓글 삭제 에러 : " + jqXHR.responseText);
+            console.log(board_open_detail_debugPrefix + "자유게시판 댓글 삭제 에러 : " + errorThrown);
+        }
+    }).done(function() {
+        //리스트 화면으로 
+        showCommonAlert("알림", '게시글이 삭제되었습니다.!');
+        $.mobile.changePage("board_open.html");
+    });
+}
+
+//댓글 삭제 확인창
+var showCommetDeleteConfirm = function(commentSeqNum) {
+	function showCommetDeleteConfirmCallback(button) {
+//		alert('You selected button ' + button);
+		if (button == 2) {
+			deleteComment(commentSeqNum)
+		}
+		confirmFlag = true;
+	}
+	if(confirmFlag) {
+		confirmFlag = false;
+		navigator.notification.confirm(
+				'댓글을 삭제 하시겠습니까?', // message
+				showCommetDeleteConfirmCallback, // callback to invoke with index of button pressed
+				'자유게시판', // title
+				'취소,확인' // buttonLabels
+			);
+	}
+};
+//게시글 삭제 버튼
+var showBoardDeleteConfirm = function() {
+    
+    function showBoardDeleteConfirmCallback(button) {
+//      alert('You selected button ' + button);
+        if (button == 2) {
+           
+            deleteBoard()
+        }
+        confirmFlag = true;
+    }
+    if(confirmFlag) {
+        confirmFlag = false;
+        navigator.notification.confirm(
+                '게시글을 삭제 하시겠습니까?', // message
+                showBoardDeleteConfirmCallback, // callback to invoke with index of button pressed
+                '자유게시판', // title
+                '취소,확인' // buttonLabels
+            );
+    }
+};
+
+//자유게시판 상세페이지 컨텐츠부분
+function getBoardOpenDetailPage() {
+    
+	$.mobile.loading( "show", {
+		  text: "로딩중...",
+		  textVisible: true,
+		  theme: "a",
+		  html: ""
+	});
+	
+	freeSeqNum = Request("freeSeqNum");
+	freeSeqNum = freeSeqNum.replace("#", "");
+	console.log(board_open_detail_debugPrefix + "================ request freeseqnum ================ : " + freeSeqNum);
+
+	$.ajax({
+		url: url + "BDFreeDetail",
+		type: "post",
+		timeout: 10 * 1000,
+		dataType: "json",
+		data: {freeSeqNum:freeSeqNum},
+		success: function (result) {
+			var headerData = result.header;
+			// header log
+			console.log(board_open_detail_debugPrefix + "########### Header Data : BDFreeDetail  ###########");
+			$.each(headerData, function(key, val){
+				console.log(board_open_detail_debugPrefix + key + " : " + val);
+			});
+
+			if(headerData.result != 0) {
+				$.mobile.hidePageLoadingMsg();
+				showCommonAlert("자유게시판[상세화면]", headerData.errMsg);
+			} else { 
+				var bodyData = result.detail;
+				
+				$.each(bodyData, function(key, val){
+					console.log(board_open_detail_debugPrefix + "============ 자유게시판 상세화면 출력 ============");
+					
+					$.each(val, function(key, val) {
+						console.log(board_open_detail_debugPrefix + key + " : " + val);
+					});
+					
+					//	본문 테이블 생성
+					var open_tableText =  "<table id='table_detail'>"+
+	                "<tr>"+ 
+	                "<td width='25%'>제 목</td>"+
+	                "<td colspan='3' id='board_open_title'></td>"+
+	                "</tr>"+
+	                "<tr>"+
+	                "<td>작성일시</td>"+
+	                "<td colspan='3' id='board_open_writeDate'></td>"+
+	                "</tr>"+                           
+	                "<tr>"+
+	                "<td width='25%'>작 성 자</td>"+
+	                "<td width='25%' id='board_open_writer'></td>"+
+	                "<td width='25%'>조 회 수</td>"+
+	                "<td width='25%' id='board_open_viewCount'></td>"+
+	                "</tr>"+   
+	                "<tr>"+
+	                "<td colspan='4' id='board_open_content' valign='top' height='200'></td>"+
+	                "</tr>"+
+	                "<tr>"+
+	                "<td width='20%'>첨부파일</td>"+
+	                "<td colspan='3' id='board_open_file'></td>"+
+	                "</tr>"+
+	                
+	                "</table>";
+					 
+                    if(loginId == val.WRITERID){
+                        var board_button =                                                                                                                     
+            			'<a href="#" id="btn_deleteButton" onClick="showBoardDeleteConfirm();" data-role="button" data-mini="false" class="ui-btn-right">삭제</a>';
+                    }
+                    
+					  var board_openCon = "<div id='board_openContents' style='overflow-y:auto; width:100%; height:100%; padding:4px'><div>";
+	                  
+	                    console.log(board_open_detail_debugPrefix + "첨부파일 일련번호 : " + val.ATTACHSEQNUM);
+	                    console.log(board_open_detail_debugPrefix + "content : " + val.CONTENT);
+	                    
+	                    //본문 테이블 넣기                                                                             
+	                    $('#board_open_table').html(open_tableText);                
+	                    $('#board_open_content').html(board_openCon);
+	                    //본문 데이터 세팅             
+	                    $('#board_open_title').text(val.SUBJECT);
+	                    $('#board_open_writeDate').text(val.WRITEDATE);
+	                    $('#board_open_writer').text(val.WRITERNAME);
+	                    $('#board_open_viewCount').text(val.READCNT);
+	                    $('#board_openContents').text(val.CONTENT);
+	                    
+	                    $('#writerbutton').html(board_button);
+	                    $( '#btn_deleteButton' ).buttonMarkup( "refresh" );
+	                    //본문 삭제용
+	                    attachSeqNum = val.attachSeqNum;
+	                     
+	                    
+	                console.log(board_open_detail_debugPrefix + "content : " +  $('#board_openContents').val(val.CONTENT));
+	                if(val.FILENAME==null){
+	                    $('#board_open_file').text("  없음");
+	                }else{	                  
+	                        if(val.FILENAME.length > 20){ //길이가 20보다 클경우
+	                            if(deviceInfo == "Android"){ //안드로이드일땐 로더가 돌며 
+	                        $('#board_open_file').append("  " + val.FILENAME.substr(0,20)+ "..." + "  <img class='fileDown' src='../img/floppy.png' onmouseover='Downloadloder();' onclick=commonDownloadURL('filedownload?attachSeqNum="+ val.ATTACHSEQNUM +"');>");
+	                            }else{
+	                        $('#board_open_file').append("  " + val.FILENAME.substr(0,20)+ "..." + "  <img class='fileDown' src='../img/floppy.png' onclick=commonDownloadURL('filedownload?attachSeqNum="+ val.ATTACHSEQNUM +"');>");
+	                            }
+	                        }else{//길이가 20과 같거나 작을경우
+	                            if(deviceInfo == "Android"){ //그외 단말기일땐 로더가 실행되지 않는다.
+	                        $('#board_open_file').append("  " + val.FILENAME + "  <img class='fileDown' src='../img/floppy.png' onmouseover='Downloadloder();'onclick=commonDownloadURL('filedownload?attachSeqNum="+ val.ATTACHSEQNUM +"');>");
+	                      }else{
+	                        $('#board_open_file').append("  " + val.FILENAME + "  <img class='fileDown' src='../img/floppy.png' onclick=commonDownloadURL('filedownload?attachSeqNum="+ val.ATTACHSEQNUM +"');>");
+	                          }
+	                      }
+	                     }
+	                
+	             // 자유게시판 상세 댓글
+					var commentData = result.comment;
+					var liText = "";
+				
+					
+					$.each(commentData, function(key, val){
+						console.log(board_open_detail_debugPrefix + "============ 자유게시판 상세화면 댓글 출력 ============ CommentSeqNum => " + val.COMMENTSEQNUM);
+						
+						$.each(val, function(key, val) {
+							console.log(board_open_detail_debugPrefix + key + " : " + val);
+						});
+						
+//						commentSeqArray.push(parseInt(val.COMMENTSEQNUM));	// commentSeqNum을 배열에 저장
+						
+						// 자신이 쓴 댓글만 지울수 있음
+						if(loginId == val.WRITERID){
+							liText += 	"<li>" +
+										"<div id='comment_list'>"+
+										"<p><b>" + val.WRITEDATE + " (" + val.WRITERNAME + ")</b></p>" +
+										"<p><div style='float:right'; onClick='showCommetDeleteConfirm("+val.COMMENTSEQNUM+");'><font color='red'>삭제</font></div></p>" +
+										"</div>" +
+										"<p style='white-space:pre-wrap; font-size:1em;'><div style='display:inline;'>" + val.CONTENT + "</div></p>"+
+										"</li>";
+						}else{
+							liText += 	"<li>" +
+										"<div id='comment_list'>" +
+										"<p><b>" + val.WRITEDATE + " (" + val.WRITERNAME + ")</b></p>" +
+										"</div>" +
+										"<p style='white-space:pre-wrap; font-size:1em;'><div style='display:inline;'>" + val.CONTENT + "</div></p>"+
+										"</li>";
+						}						
+					});
+					$("#board_commentList").empty();
+					$("#board_commentList").append(liText).listview("refresh");
+					
+//					openCommentCount = commentData.length;
+//					
+//					console.log("댓글 개수==== " + openCommentCount);
+					
+					// 화면에 리스트 출력이 완료되면 loader를 종료				                
+					$.mobile.hidePageLoadingMsg();
+			    });
+				 
+			}
+			console.log(board_open_detail_debugPrefix + "============ 자유게시판 상세화면 출력 완료 ============");
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			$.mobile.hidePageLoadingMsg();
+	        console.log(board_open_detail_debugPrefix + "자유게시판 상세화면 출력 에러 : " + jqXHR.status);
+	        console.log(board_open_detail_debugPrefix + "자유게시판 상세화면 출력 에러 : " + jqXHR.responseText);
+			console.log(board_open_detail_debugPrefix + "자유게시판 상세화면 출력 에러 : " + errorThrown);
+	    }
+	}).done(function() {
+	   
+	});
+}
+
+// cordova api fileUploader
+function boardFileUpload() {
+	// 댓글이 입력 되지 않고 전송 버튼을 눌렸을 때 체크
+	if($("#setContent").val().length == "") {
+		showCommonAlert("댓글작성", '댓글을 입력하세요');
+	} else {
+		$.mobile.loading( "show", {
+			  text: "댓글 등록 중...",
+			  textVisible: true,
+			  theme: "a",
+			  html: ""
+		});
+		
+		var contents = $("#setContent").val();
+	    var options = new FileUploadOptions();
+	    options.fileKey="file";
+	    options.fileName=imgUrl.substr(imgUrl.lastIndexOf('/')+1);
+	    options.mimeType="image/jpeg";
+
+	    var params = new Object();
+	    params.notiseqnum = notiseqnum;
+	    params.writerid = loginId;
+	    params.writername = userName;
+	    params.content = contents;
+	    options.params = params;
+	    
+	    var ft = new FileTransfer();
+	    ft.upload(imgUrl, encodeURI(url + "FaultNotiComment"), winUpload, failUpload, options);
+	}
+}
+
+function boardWinUpload(r) {
+	$.mobile.hidePageLoadingMsg();
+	$("#setContent").val("");
+    console.log("Code = " + r.responseCode);
+    console.log("Response = " + r.response);
+    console.log("Sent = " + r.bytesSent);
+    
+    // 업로드 완료 후 다시 상세페이지로 전환한다.
+    $('#btn_back').click();
+}
+
+function boardFailUpload(error) {
+	$.mobile.hidePageLoadingMsg();
+    showCommonAlert("An error has occurred: Code" , error.code);
+    console.log("upload error source " + error.source);
+    console.log("upload error target " + error.target);
+}
+
+function setBoardComment() {
+	// 댓글이 입력 되지 않고 전송 버튼을 눌렸을 때 체크
+	if($("#open_input_content").val().length == "") {
+		showCommonAlert("댓글작성", '댓글을 입력하세요');
+	} else {
+		$("#freeseqnum").val(freeSeqNum);
+		$("#writerid").val(loginId);
+		$("#writername").val(userName);
+		$("#open_content").val($("#open_input_content").val());
+		
+		console.log(board_open_detail_debugPrefix + "============= 댓글 입력 파라미터 ==========");
+		console.log(board_open_detail_debugPrefix + "freeseqnum = " + $("#freeseqnum").val());
+		console.log(board_open_detail_debugPrefix + "writerid = " + $("#writerid").val());
+		console.log(board_open_detail_debugPrefix + "writername = " + $("#writername").val());
+		console.log(board_open_detail_debugPrefix + "content = " + $("#open_content").val());
+		
+		 $( "#myForm_openComment" ).submit();
+	}
+}
+
+function showBoardRequest(formData, jqForm, options) {
+	$.mobile.loading( "show", {
+		  text: "댓글 업로드...",
+		  textVisible: true,
+		  theme: "a",
+		  html: ""
+	});
+	
+    var queryString = $.param(formData); 
+//    alert('About to submit: \n\n' + queryString);
+    console.log(board_open_detail_debugPrefix + 'About to submit: \n\n' + queryString);
+
+    return true; 
+} 
+
+function showBoardResponse(responseText, statusText, xhr, $form)  { 
+//    alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + '\n\nThe output div should have already been updated with the responseText.');
+//    console.log(board_open_detail_debugPrefix + 'status: ' + statusText + '\n\nresponseText: \n' + responseText + '\n\nThe output div should have already been updated with the responseText.');
+   
+    var headerData = responseText.header;      
+	// header log
+	console.log(board_open_detail_debugPrefix + "============= showBoardCommentResponse =============");
+	$.each(headerData, function(key, val){
+		console.log(board_open_detail_debugPrefix + key + " : " + val);
+	});
+	
+	if(headerData.result != 0) {
+		showCommonAlert("자유게시판", headerData.errMsg);
+		$.mobile.hidePageLoadingMsg();		
+	} else { 				
+		// 화면에 리스트 출력이 완료되면 loader를 종료				                
+		$.mobile.hidePageLoadingMsg();									    
+	}
+          
+    getBoardOpenDetailPage();
+    
+    $("#open_input_content").val("");
+} 
+
+var boardOptions = { 
+        beforeSubmit:  showBoardRequest,  	// pre-submit callback 
+        success:       showBoardResponse,  	// post-submit callback
+        url : url + "WriteBDFreeComment",
+        dataType:  "json",        		// 'xml', 'script', or 'json' (expected server response type)
+        clearForm: true,        		// clear all form fields after successful submit 
+        resetForm: true,        		// reset the form after successful submit 
+        timeout:   10*1000
+};
+
+$(document).on("pageshow","#page_board_open_detail",function(event){
+    
+    getBoardOpenDetailPage();
+    
+    $('#btn_openComment_text').click(function(){
+    	setBoardComment();
+    });
+    
+    //	하위버전 OS에서 해당 폼 안에 아래 속성이 존재할 경우 
+	//	페이지 로딩이 되지 않아 페이지 로딩 후 스크립트로 속성 추가
+	$("#myForm_openComment").attr("data-ajax", false);
+	
+	$('#myForm_openComment').ajaxForm(boardOptions);		// ajax 폼 전송
+}); 

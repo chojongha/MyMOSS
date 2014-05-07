@@ -1,0 +1,124 @@
+//       공지사항 리스트
+
+function showNoticeList_noti (listStatus_notice) {
+    // 페이지가 보여지면서 로더를 보여준다.
+    $.mobile.loading( "show", {
+          text: "리스트를 읽어오는 중 입니다.",
+          textVisible: true,
+          theme: "z",
+          html: ""
+    });
+    
+    $.ajax({
+        url:  url + "FaultNoti",
+        type: "post",
+        timeout: 10 * 1000,
+        dataType: "json",
+        data: {loginId:userId, departmentCd:"", userTypeCd:"3", status:listStatus},
+        success: function (result) {
+            var bodyData = result.body;
+            var liText = "";
+            
+            if(bodyData.length > 0) {
+                $.each(bodyData, function(key, val){
+                   $.each(val, function(key, val){
+                       
+                    });
+                    
+                    if(val.result == "-1") {
+                        alert(val.errMsg);
+                    } else {
+                        if(listStatus == "1") {
+//                          TT유무에 따른 TT이미지 삽입 >> 고장상황(진행) 페이지 이동...
+                            if(val.TT_YN == "Y") {
+                                liText +=   "<li data-icon='false'>" +
+                                 "<a href='alarmList_noti_detail.html?notiseqnum="+ val.NOTISEQNUM +"'>" +
+                                        "<table id='dynamicList'>" +
+                                            "<tr>" +
+                                                "<td class='dynamicTable_td'><div class='test' style='text-overflow:ellipsis; padding:0; margin:0;'><img src='../img/tt.png' style='width:1.5em; height:1.5em; display:inline-block;'><h2 style='display:inline-block;'>"+ val.SUBJECT +"</h2></div></td>" +
+                                            "</tr>" +
+                                            "<tr>" +
+                                                "<td class='dynamicTable_td'>"+ val.WRITEDATE +"</td>" +
+                                            "</tr>" +
+                                        "</table>" +
+                                    "</a>" +
+                                "</li>";
+                            } else {
+                                liText +=   "<li data-icon='false'>" +
+                                 "<a href='alarmList_noti_detail.html?notiseqnum="+ val.NOTISEQNUM +"'>" +
+                                        "<table id='dynamicList'>" +
+                                            "<tr>" +
+                                                "<td class='dynamicTable_td' colspan='2'><h2 style='width:auto; padding:0; margin:0; text-overflow:ellipsis;'>"+ val.SUBJECT +"</h2></td>" +
+                                            "</tr>" +
+                                            "<tr>" +
+                                                "<td class='dynamicTable_td'>"+ val.WRITEDATE +"</td>" +
+                                            "</tr>" +
+                                        "</table>" +
+                                    "</a>" +
+                                "</li>";
+                            }
+                        } else {
+//                          TT유무에 따른 TT이미지 삽입 >> 고장상황(완료) 페이지 이동...
+                            if(val.TT_YN == "Y") {
+                                liText +=   "<li data-icon='false'>" +
+                                 "<a href='alarmList_success_detail.html?notiseqnum="+ val.NOTISEQNUM +"'>" +
+                                        "<table id='dynamicList'>" +
+                                            "<tr>" +
+                                                "<td class='dynamicTable_td' colspan='2'><div class='test' style='text-overflow:ellipsis;'><h2 style='padding:0; margin:0;'><img src='../img/tt.png' style='width:1.5em; height:1.5em;'>"+ val.SUBJECT +"</h2></div></td>" +
+                                            "</tr>" +
+                                            "<tr>" +
+                                                "<td class='dynamicTable_td'>"+ val.WRITEDATE +"</td>" +
+                                            "</tr>" +
+                                        "</table>" +
+                                    "</a>" +
+                                "</li>";
+                            } else {
+                                liText +=   "<li data-icon='false'>" +
+                                 "<a href='alarmList_success_detail.html?notiseqnum="+ val.NOTISEQNUM +"'>" +
+                                        "<table id='dynamicList'>" +
+                                            "<tr>" +
+                                                "<td class='dynamicTable_td' colspan='2'><h2 style='width:auto; padding:0; margin:0; text-overflow:ellipsis;'>"+ val.SUBJECT +"</h2></td>" +
+                                            "</tr>" +
+                                            "<tr>" +
+                                                "<td class='dynamicTable_td'>"+ val.WRITEDATE +"</td>" +
+                                            "</tr>" +
+                                        "</table>" +
+                                    "</a>" +
+                                "</li>";
+                            }
+                        }
+                    }
+                });
+            } else {
+                liText +=   "<li data-icon='false'> "+
+                            "   <a href='#'>" +
+                            "       <center><h2>데이터가 존재하지 않습니다.</h2></center>" +
+                            "       <p></p>" +
+                            "   </a>" +
+                            "</li>";
+//              alert("데이터가 존재하지 않습니다.");
+            }
+            // 동적으로 리스트 생성 후 리스트 새로고침
+            $("#NoticeList").append(liText).listview("refresh");
+            // 화면에 리스트 출력이 완료되면 loader를 종료
+            $.mobile.hidePageLoadingMsg();
+            
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            $.mobile.hidePageLoadingMsg();
+//         
+        }
+    });
+}
+
+$(document).on("pageshow","#page_board_notice",function(event) {
+    
+    var listStatus = "1";
+    showNoticeList_noti(listStatus_notice);
+    
+    $("#btn_refresh").click(function () {
+        $("#NoticeList").empty();
+        showNoticeList_noti(listStatus_notice);
+    });
+});
+

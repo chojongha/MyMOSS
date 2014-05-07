@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">광레벨 측정</string>
+    <string name="win_title">S-OPM</string>
+    
+    <string name="title_sub">스마트 광파워미터</string>
+    <string name="title_02">for optical networks</string>
+    
+    <string name="label_work">오더번호 :</string>
+    <string name="label_cust">고객명 :</string>
+    <string name="label_tel">고객전화번호 :</string>
+    
+    <string name="label_exit">종료</string>
+    <string name="label_bat">93 %</string>
+    
+    <string name="label_null">...</string>
+    
+    <string name="label_power">측정</string>
+    <string name="label_lambda">파장</string>
+    <string name="label_select">선택</string>
+    <string name="label_send">측정값 전송</string>
+    
+    <string name="label_copy">Copyrightⓒ KTNT 2013, All rights reserved. Nov 2013</string>
+    
+    <!-- 
+    <string name="bluetooth_on">Bluetooth Device ON</string>
+    <string name="bluetooth_request">Bluetooth Device Request</string>
+    <string name="exit_msg_bt">장비가 블루투스를 지원하지 않습니다.</string>
+    <string name="exit_msg_off">블루투스 장치가 켜지지 않아 종료합니다.</string>
+    <string name="exit_msg_dev">파워미터를 발견하지 못해 종료합니다.</string>
+    <string name="exit_msg_conn">파워미터와 연결되지 않아 종료합니다.</string>
+    <string name="bluetooth_find_start">Device search..</string>
+    <string name="bluetooth_find_ok">Device find ok</string>
+    <string name="bluetooth_dev_not">Device find error!</string>
+    <string name="bluetooth_connect_start">Device connect..</string>
+    <string name="bluetooth_connect_ok">Device connect ok</string>
+    <string name="bluetooth_connect_err">Device connect error</string>
+ 	-->
+ 	
+</resources>

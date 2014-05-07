@@ -1,0 +1,11 @@
+/**
+ * 		고장상황 진행 리스트
+ */
+var alarmList_noti_map_debugPrefix = "[alarmList_noti_detail_map.js] : ";
+//$(document).on("pageshow","#page_alarmList_noti",function(event) {
+//
+//});
+
+$(document).on("pageshow","#page_alarmList_detail_map",function(event) {
+	
+});

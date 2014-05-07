@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Page Title</title>
+	<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../css/table.css" />
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+
+<style>
+
+</style>
+
+</head>
+<body>
+<div data-role="page" id="page_alarmList_TFMS">
+		<div data-theme="a" data-role="header" data-position="fixed" data-tap-toggle="false">
+			<a data-role="button" href="#menuPanel" data-icon="bars" data-iconpos="left" class="ui-btn-left">Menu</a>
+			<h3>Demo</h3>
+			<a id="btn_refresh" data-role="button" href="#" data-icon="refresh" data-iconpos="left" class="ui-btn-right">새로고침</a>
+		</div>
+ 		<div data-role="content" id="content" style="margin:0; padding:0">
+			<div class="CSS_Table_Example" style="width:100%;height:150px;">
+			<table >
+				<tr> 
+					<td>
+						Title 1
+					</td>
+					<td >
+						Title 2
+					</td>
+					<td>
+						Title 3
+					</td>
+				</tr>
+				<tr>
+					<td >
+						Row 1
+					</td>
+					<td>
+						Row 1
+					</td>
+					<td>
+						Row 1
+					</td>
+				</tr>
+				<tr>
+					<td >
+						Row 2
+					</td>
+					<td>
+						Row 2
+					</td>
+					<td>
+						Row 2
+					</td>
+				</tr>
+				<tr>
+					<td >
+						Row 2
+					</td>
+					<td>
+						Row 2
+					</td>
+					<td>
+						Row 2
+					</td>
+				</tr>
+			</table>
+		</div>
+		</div>
+		<div data-theme="a" data-role="footer" data-position="fixed" data-tap-toggle="false">
+			<div data-role="navbar">
+			    <ul>
+			        <li><a href="alarmList_noti.html">진행</a></li>
+			        <li><a href="alarmList_success.html">완료</a></li>
+			        <li><a href="#" class="ui-btn-active">TFMS TT</a></li>
+			    </ul>
+			</div><!-- /navbar end-->
+		</div>
+	</div>
+</body>
+</html>
+
+
+<!-- <div class="listContent">
+<h2>고장상황 진행</h2>
+<p style="display:inline-block; float:left">2014-10-10 10:10</p>
+<p style="display:inline-block; float:right">홍길동</p>
+</div> -->
+

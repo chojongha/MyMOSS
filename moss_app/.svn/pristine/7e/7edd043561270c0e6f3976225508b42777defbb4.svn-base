@@ -1,0 +1,48 @@
+//메뉴얼 페이지열리면 바로 실행
+$(document).on("pagebeforeshow","#page_manual_detail",function(event){
+	
+	var userId = getUserID();
+	
+	$.ajax({
+	// 	url: "http://10.217.76.186:8081/moss/Login",
+	//	url: "http://moss.kt.com/moss/WorkOdrList", //서버주소
+	// 	url: "http://192.168.0.2:8080/moss/Login",
+	//	url: "http://192.168.25.18:8080/moss/WorkOdrList",
+		url: "http://192.168.25.17:8080/moss/WorkOdrList",
+
+		
+		type: "post",
+		timeout : 10 * 1000,
+		dataType : "json",
+		data: {workerID:'91038948'}, //인풋(접속)
+		
+		success: function (result) {
+			var bodyData = result.body; //아웃풋 정보 가져오기
+			
+			$.each(bodyData, function(key, val){ //아웃풋 뿌리기
+				var address =  val.addr;
+				var title = val.odrType;
+				var writer = val.custName;
+				var writeDT = val.rsvDT;
+				
+//				$('#title').append(title);
+//				$('#writer').append(writer);
+//				$('#writeDate').append(writeDT);
+//				$('#contents').append(address);
+
+				
+				$('#title').html(title);
+				$('#writer').html(writer);
+				$('#writeDate').html(writeDT);
+				$('#contents').html(address); //html대신 text도 가능
+//				$('#contents').append(html); //append는 추가임. 원래 잇던 내용에 추가
+		    });
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			$.mobile.hidePageLoadingMsg();
+//	        alert(textStatus); // this will be "timeout"
+	        console.log(jqXHR.responseText);
+//	        location.reload();
+	    }
+	}); 
+}); 

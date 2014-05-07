@@ -1,0 +1,68 @@
+var board_open_debugPrefix = "[board_open.js] : ";
+
+function showOpenList(){
+    // 페이지가 보여지면서 로더를 보여준다.
+    $.mobile.loading( "show", {
+          text: "리스트를 읽어오는 중 입니다.",
+          textVisible: true,
+          theme: "a",
+          html: ""
+    });
+    //리스트 불러오기
+    $.ajax({
+    	url: url + "BDFreeListByRowNum",
+    	type: "post",
+    	timeout: 10*1000,
+    	dataType: "json",
+    	data:{recordCurrent:"0", recordCount:"30"},
+    	success: function(result){ 
+    		var bodyData = result.body;
+    		var headerData = result.header;
+    		var openLi = "";
+
+    		if(headerData.result != 0){
+    				openLi = "<li data-icon='false'> "+
+		    				"<a href='#'>" +
+		    				"<center><h2>정보가 없습니다.</h2></center>" +     
+		    				"</a>" +
+		    				"</li>";   						
+    		}
+    		else{
+    			$.each(bodyData, function(key, val){
+    				$.each(val, function(key, val) {
+    					console.log(board_open_debugPrefix + key + " : " + val);
+    				});    				
+    				openLi += "<li data-icon='false'>" +
+			    				"<a href='board_open_detail.html?freeSeqNum="+val.FREESEQNUM+"'>" +	
+			    				"<div class='listContent'>" + 
+			    				"<h2>"+ val.SUBJECT +"</h2>" +		//제목만
+//			    				"<h2>"+ val.SUBJECT +" [" + openCommentCount + "]</h2>" + 		//댓글갯수 표시
+			    				"<p style='display:inline-block; float:left'>"+ val.WRITEDATE +"</p>" +
+			    				"<p style='display:inline-block; float:right'>"+  val.WRITERNAME + "</p>" +
+			    				"</div>" +
+			    				"</a>" +
+			    				"</li>";													    									
+    			});
+    		}
+    		//매뉴얼 리스트 삽입
+    		$('#listview').html(openLi).listview("refresh");
+    		$.mobile.hidePageLoadingMsg();		
+    	},
+    	error: function(jqXHR, textStatus, errorThrown){
+    		console.log(board_open_debugPrefix + "자유게시판 리스트 출력 에러 : " + jqXHR.status);
+    		console.log(board_open_debugPrefix + "자유게시판 리스트 출력 에러 : " + jqXHR.responseText);
+    		console.log(board_open_debugPrefix + "자유게시판 리스트 출력 에러 : " + errorThrown);		
+    	} 
+    });
+}   
+
+$(document).on("pageshow","#page_board_open", function(event){
+    
+	showOpenList();
+    //새로고침 클릭시 다시 리스트 불러오기
+    $("#btn_refresh").click(function () {
+        $("#listview").empty();
+        
+        showOpenList(); 
+    });
+});

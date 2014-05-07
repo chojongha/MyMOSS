@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Login Page</title>
+</head>
+<body>
+	<div data-role="page" id="page_config">
+		<div data-theme="a" data-role="header" class="header">
+	        <a data-role="button" href="#menuPanel" data-mini="false" class="ui-btn-left">Menu</a>
+	        <h3>MOSS</h3>
+	    </div>
+		<!-- MenuPanel  -->
+		<div data-role="panel" id="menuPanel" data-theme="a" data-position-fixed="true">
+			<div class="panel-content">
+				<div class="ui-grid-a" id="menuPanel_header">
+					<div class="ui-block-a">
+						<a href="index.html" data-role="button" data-theme="a">
+							<img src="../img/menu_home_n.png">
+							<p>홈</p>
+						</a>
+					</div>
+					<div class="ui-block-b">
+						<a href="#" data-role="button" data-theme="a" onclick="logoutConfirm();">
+							<img src="../img/menu_logout_n.png">
+							<p>로그아웃</p>
+						</a>
+					</div>
+				</div>
+				<div data-role="collapsible-set">
+					<div data-role="collapsible" data-collapsed="false" data-theme="a" data-content-theme="d" data-iconpos="right">
+						<h4>상황공유</h4>
+						<ul data-role="listview" id="menuItemPadding">
+							<li>
+								<a href="alarmList_noti.html">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_occur_n.png"></div>
+										<div><p>고장상황 진행</p></div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href="alarmList_success.html">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_success_n.png"></div>
+										<div><p>고장상황 완료</p></div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href="alarmList_TFMS.html">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_TFMS_TT_n.png"></div>
+										<div><p>TFMS TT</p></div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href="#" onclick="setLocation();">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_location_n.png"></div>
+										<div><p>현재위치전송</p></div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href="#" onclick="callIntent('ktConsole');">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_remote_n.png"></div>
+										<div><p>원격콘솔</p></div>
+									</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div data-role="collapsible-set">
+					<div data-role="collapsible" data-collapsed="false" data-theme="a" data-content-theme="d" data-iconpos="right">
+						<h4>커뮤니티</h4>
+						<ul data-role="listview" id="menuItemPadding">
+							<li>
+								<a href="board_notice.html">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_notice_n.png"></div>
+										<div><p>공지사항</p></div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href ="#manualMenu" data-rel="popup" data-inline="true" data-transition="pop">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_manual_n.png"></div>
+										<div><p>업무매뉴얼</p></div>
+									</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<ul data-role="listview" data-inset="true" data-iconpos="right" id="menuItemPadding">
+					<li>
+						<a href="config.html" class="ui-btn-active">
+							<div id="menuPanel_collapsible">
+								<div><img src="../img/menu_config_o.png"></div>
+								<div><p>설정</p></div>
+							</div>
+						</a>
+					</li>
+				</ul>
+				<div data-role="popup" id="manualMenu" data-theme="a" style="background:#000000;">
+					<div id="popup_manual" data-role="fieldcontain">
+						<p style="text-align: center; font-size: 1.5em;" id="popup_title"><strong>서비스 분야</strong></p>  <!--  color: #ffffff; -->
+			 	 			<fieldset data-role="controlgroup" id="manualRa-controlgroup" >
+										<!-- 동적으로 라디오 버튼 생성 -->
+							</fieldset>   						
+							<fieldset class="ui-grid-a" id="btn_group">
+								<div class="ui-block-a">							
+									<a href="#" data-role="button" data-mini="true" data-theme="b" onClick="SendParameter()">확인</a>  
+								</div>
+								<div class="ui-block-b">
+									<a href="#" data-role="button" data-mini="true" data-rel="back" data-theme="b">취소</a>
+								</div>
+							</fieldset>    
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- MenuPanel  -->
+		<div data-role="content" id="content">
+			<div class='ui-grid-a'>
+			    <div class='ui-block-a'><div class='ui-bar ui-bar-f'>버전</div></div>
+			    <div class='ui-block-b'><div class='ui-bar ui-bar-f'><span id='version'></span></div></div>
+			    <div class='ui-block-a'><div class='ui-bar ui-bar-f'>자동로그인</div></div>
+			    <div class='ui-block-b' id='box_autoLogin'>
+			        <select name='flip-7' id='config_autoLogin' data-role='slider' data-mini='true' onchange='checkField(this.value);'>
+			            <option value='N'>OFF</option>
+			            <option value='Y'>ON</option>
+			        </select>
+			    </div>
+			    <div class='ui-block-solo'><div class='ui-bar ui-bar-f'>시작페이지 설정</div></div>
+			</div><!-- grid-a -->
+			<div id='box_startPage'></div>
+			<select id='config_startPage' data-icon='star' data-mini='true' onchange='checkField(this.value);'>
+				<option value='index.html'>메인화면</option>
+				<option value='alarmList_noti.html'>고장상황 진행</option>
+				<option value='alarmList_success.html'>고장상황 완료</option>
+				<option value='alarmList_TFMS.html'>TFMS TT</option>
+				<option value='board_notice.html'>공지사항</option>
+				<option value='board_manual.html'>업무매뉴얼</option>
+			</select>
+		</div>
+		<div data-theme="a" data-role="footer" data-position="fixed">
+		</div>
+	</div>
+</body>
+</html>

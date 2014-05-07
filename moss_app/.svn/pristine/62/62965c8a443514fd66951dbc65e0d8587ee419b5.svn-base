@@ -1,0 +1,120 @@
+/**
+ * 		고장상황 진행 리스트
+ */
+var alarmList_noti_debugPrefix = "[alarmList_noti.js] : ";
+//$(document).on("pageshow","#page_alarmList_noti",function(event) {
+//
+//});
+
+$(document).on("pageshow","#page_alarmList_noti",function(event) {
+	
+//	alert("alarmList_noti pageshow");
+	
+	console.log(alarmList_noti_debugPrefix + "pageshow");
+	
+	console.log(alarmList_noti_debugPrefix + "========= login info =========");
+	console.log(alarmList_noti_debugPrefix + "userName = " + userName);
+	console.log(alarmList_noti_debugPrefix + "departmentCd = " + departmentCd);
+	console.log(alarmList_noti_debugPrefix + "departmentName = " + departmentName);
+	console.log(alarmList_noti_debugPrefix + "companyCd = " + companyCd);
+	console.log(alarmList_noti_debugPrefix + "mobilePhoneNum = " + mobilePhoneNum);
+	console.log(alarmList_noti_debugPrefix + "email = " + email);
+	
+	showAlarmList_noti();
+	
+	$("#btn_refresh").click(function () {
+		$("#alarmList_noti").empty();
+		showAlarmList_noti();
+	});
+});
+
+function showAlarmList_noti () {
+	// 페이지가 보여지면서 로더를 보여준다.
+	$.mobile.loading( "show", {
+		  text: "리스트를 읽어오는 중 입니다.",
+		  textVisible: true,
+		  theme: "z",
+		  html: ""
+	});
+	
+	var userId = getUserID();
+	console.log(alarmList_noti_debugPrefix + userId);
+	
+	$.ajax({
+//		url: "http://192.168.123.145:8080/moss/WorkOdrList",
+		url:  url + "FaultNoti",
+		type: "post",
+		timeout: 10 * 1000,
+		dataType: "json",
+		data: {loginId:userId, departmentCd:"", userTypeCd:"3", status:"1"},
+		success: function (result) {
+			var bodyData = result.body;
+			var liText = "";
+			
+			if(bodyData.length > 0) {
+				$.each(bodyData, function(key, val){
+					console.log(alarmList_noti_debugPrefix + "========== 고장상황[완료] 리스트 ===========");
+					$.each(val, function(key, val){
+						console.log(alarmList_noti_debugPrefix + key + ", " + val);
+				    });
+					
+					if(val.result == "-1") {
+						alert(val.errMsg);
+					} else {
+//						TT유무에 따른 TT이미지 삽입
+						if(val.TT_YN == "Y") {
+							liText +=	"<li data-icon='false'>" +
+							 "<a href='alarmList_noti_detail.html?notiseqnum="+ val.NOTISEQNUM +"'>" +
+									"<table id='dynamicList'>" +
+										"<tr>" +
+											"<td class='dynamicTable_td' colspan='2'><h2 style='padding:0; margin:0'><img src='../img/tt.png' style='width:1.5em; height:1.5em;'>"+ val.SUBJECT +"</h2></td>" +
+										"</tr>" +
+										"<tr>" +
+											"<td class='dynamicTable_td'>"+ val.WRITEDATE +"</td>" +
+											"<td class='dynamicTable_td' style='text-align:right'>"+ val.SERVICES +"</td>" +
+										"</tr>" +
+									"</table>" +
+								"</a>" +
+						    "</li>";
+						} else {
+							liText +=	"<li data-icon='false'>" +
+							 "<a href='alarmList_noti_detail.html?notiseqnum="+ val.NOTISEQNUM +"'>" +
+									"<table id='dynamicList'>" +
+										"<tr>" +
+											"<td class='dynamicTable_td' colspan='2'><h2 style='padding:0; margin:0'>"+ val.SUBJECT +"</h2></td>" +
+										"</tr>" +
+										"<tr>" +
+											"<td class='dynamicTable_td'>"+ val.WRITEDATE +"</td>" +
+											"<td class='dynamicTable_td' style='text-align:right'>"+ val.SERVICES +"</td>" +
+										"</tr>" +
+									"</table>" +
+								"</a>" +
+						    "</li>";
+						}
+					}
+			    });
+			} else {
+				liText += 	"<li data-icon='false'> "+
+			    			"	<a href='#'>" +
+			    			"		<center><h2>데이터가 존재하지 않습니다.</h2></center>" +
+			    			"		<p></p>" +
+			    			"	</a>" +
+			    			"</li>";
+//				alert("데이터가 존재하지 않습니다.");
+			}
+			// 동적으로 리스트 생성 후 리스트 새로고침
+			$("#alarmList_noti").append(liText).listview("refresh");
+			// 화면에 리스트 출력이 완료되면 loader를 종료
+			$.mobile.hidePageLoadingMsg();
+			console.log(alarmList_noti_debugPrefix + "========== 고장상황[완료] 리스트 출력 완료 ==========");
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			$.mobile.hidePageLoadingMsg();
+//			location.reload;
+//	        alert(textStatus); // this will be "timeout"
+	        console.log(alarmList_noti_debugPrefix + "고장상황[완료] 리스트 출력 에러 status : " + jqXHR.status);
+	        console.log(alarmList_noti_debugPrefix + "고장상황[완료] 리스트 출력 에러 responseText : " + jqXHR.responseText);
+			console.log(alarmList_noti_debugPrefix + "고장상황[완료] 리스트 출력 에러 errorThrown : " + errorThrown);
+	    }
+	});
+}

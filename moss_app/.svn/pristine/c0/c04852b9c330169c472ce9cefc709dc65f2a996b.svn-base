@@ -1,0 +1,474 @@
+var transOffice_debugPrefix = "[transOffice.js] : ";
+var FirstCode="";
+var SecondCode="";
+var ThirdCode="";
+var danChecked="";
+var moChecked="";
+var officeChecked="";
+var officeCode = new Array();
+var officeName = new Array();
+var danCo = new Array();
+var danNa = new Array();
+var workplaceSN="";
+
+
+//검색창 고정을 위한 화면 맞추기
+function officeCSS(){
+	//디바이스에 따라 화면 높이 맞추기
+	var header = $("div[data-role='header']:visible");
+	var footer = $("div[data-role='footer']:visible");
+	var content = $("div[data-role='content']:visible"); 
+	var viewport_height = $(window).height();
+			
+	var content_height = viewport_height - header.outerHeight() - footer.outerHeight();	
+	
+	content_height -= (content.outerHeight() - content.height());
+	
+	$("#transOffice_content").css('height', content_height);
+	
+	var officeConH = $("#transOffice_content").height();
+	var officeSearH = $("#selectNsearch").height() + 13;	//13은 magine 준 부분
+		
+	var officeLiH = officeConH - officeSearH;
+											
+	$("#officeList").css('height', officeLiH);
+}
+
+//단 배열 생성, 셀렉트박스 완성
+function danArray(){
+	$.ajax({
+		url: url+"WorkPlaceCodeInfoByUserId",
+		type: "post",
+		timeout: 10*1000,
+		dataType: "json", 
+		data: {userid : loginId},
+		success:function(result){
+			var danorgcodeData=result.danorgcode;
+			var headerData=result.header;
+			
+			if(headerData.result != 0){
+				console.log(transOffice_debugPrefix + "운용단 데이터 없음");
+			}else{
+				$.each(danorgcodeData, function(key,val){
+					$.each(val, function(key, val) {
+	                    console.log(transOffice_debugPrefix + key + " : " + val);
+	                });	
+					danCo[key]=val.ORG_ID;
+					danNa[key]=val.ORG_NM;
+				});	
+				
+				console.log(transOffice_debugPrefix + "운용단 개수 : " + danCo.length);
+				
+				if(danCo.length == 1){
+					console.log(transOffice_debugPrefix + "자신운용단만 볼수 있는 유저");
+				}else{
+					console.log(transOffice_debugPrefix + "전국운용단 볼수 있는 유저");
+				}
+			}			
+		},
+		error : function(){
+			console.log(transOffice_debugPrefix + "운용단 배열 생성 에러");
+		}
+	}).done(function(){	//단 개수에 따라 모국불러오는 방식 달리함.
+		if(danCo.length == 1){
+			makeFirstSel();
+			makeSecondSel();
+			makeThirdSel();
+		}else{
+			makeFirstSel();
+			makeAllSecondSel(); 
+			makeThirdSel();
+		}
+	});
+}
+
+//운용단 생성
+function makeFirstSel(){
+	
+	var FirstSel="";
+	
+	//생성
+	for(var i=0; i<danCo.length; i++){
+		FirstSel += "<option value='" + danCo[i] + "'>" + danNa[i] + "</option>";
+	}
+	
+	//삽입
+	if(danCo.length == 1){
+		$('#FirstField').html(FirstSel).trigger("create").selectmenu( "refresh" );
+	}else{
+		$('#FirstField').append(FirstSel).trigger("create").selectmenu( "refresh" );
+	}
+	
+
+	//작업장 선택
+	$("#FirstField").val(danChecked).selectmenu( "refresh" );
+	
+	console.log(transOffice_debugPrefix + "=============운용단 셀렉트박스생성=============");
+}
+
+//운용단 저장
+function storeDan(){
+	danChecked = $("#FirstField > option:selected").val();
+	
+	console.log(transOffice_debugPrefix + "저장된 운용단 ==== " + danChecked);
+}
+
+//모국 생성
+function makeSecondSel(){
+
+	$.ajax({
+		url: url+"WorkPlaceCodeInfoByUserId",
+		type: "post",
+		timeout: 10*1000,
+		dataType: "json",
+		data: {userid:userID},
+		success:function(result){
+			var pofficeData=result.poffice;
+			var headerData=result.header;
+			var SecondSel="";
+
+			if(headerData.result != 0){
+				console.log(transOffice_debugPrefix + "모국 데이터 없음");
+			}else{
+				$.each(pofficeData, function(key,val){
+					$.each(val, function(key, val) {
+	                    console.log(transOffice_debugPrefix + key + " : " + val);
+	                });
+					//모국 생성
+					SecondSel += "<option value='" + val.POFFICESCODE + "'>" + val.POFFICENAMESCODE + "</option>";
+				});
+				//모국 삽입
+				$('#SecondField').append(SecondSel).trigger("create").selectmenu( "refresh" );
+			}
+			//모국 선택
+			$("#SecondField").val(moChecked).selectmenu( "refresh" );
+			
+			console.log(transOffice_debugPrefix + "=============모국 셀렉트박스생성 완료=============");
+		},
+		error : function(){
+			console.log(transOffice_debugPrefix + "모국 셀렉트박스 생성 에러");
+		}
+	});
+}
+
+//전국 모국 생성
+function makeAllSecondSel(){
+
+//	$("select[name='select-choice-second'] option").not("[value='not2']").remove();		//모국옵션이 append여서 운용단이 바뀔때마다 덧붙여지지 않게 삭제
+	
+	$.ajax({
+		url: url+"WorkPlaceCodeInfoByDanOrgCode",
+		type: "post",
+		timeout: 10*1000,
+		dataType: "json",
+		data: {danorgcode:danChecked},
+		success:function(result){
+			var pofficeData=result.poffice;
+			var headerData=result.header; 
+			var SecondSel="";
+
+			if(headerData.result != 0){
+				console.log(transOffice_debugPrefix + "전국 모국 데이터 없음");
+			}else{
+				$.each(pofficeData, function(key,val){
+					$.each(val, function(key, val) {
+	                    console.log(transOffice_debugPrefix + key + " : " + val);
+	                });
+					//전국 모국 생성
+					SecondSel += "<option value='" + val.POFFICESCODE + "'>" + val.POFFICENAMESCODE + "</option>";
+				});
+				//전국 모국 삽입				
+				$('#SecondField').append(SecondSel).trigger("create").selectmenu( "refresh" );
+			}
+			//전국 모국 선택
+			$("#SecondField").val(moChecked).selectmenu( "refresh" );
+			
+			console.log(transOffice_debugPrefix + "=============전국 모국 셀렉트박스생성 완료=============");
+		},
+		error : function(){
+			console.log(transOffice_debugPrefix + "전국모국 셀렉트박스 생성 에러");
+		}
+	});
+}
+
+//모국 저장
+function storeMo(){
+	
+	moChecked = $("#SecondField > option:selected").val();
+	
+	console.log(transOffice_debugPrefix + "저장된 모국 ==== " + moChecked );
+}
+
+//모국 리셋
+function resetMo(){
+	$("select[name='select-choice-second'] option").not("[value='not2']").remove();
+	
+	moChecked="";
+	
+	makeAllSecondSel();
+}
+
+//사업장 유형 배열 생성
+function officeArray(){
+	
+	$.ajax({
+		url: url+"MossCode",
+		type: "post",
+		timeout: 10*1000,
+		dataType: "json",
+		data: {category : 'WORKPLACETYPE'},
+		success:function(result){
+			var bodyData=result.body;
+			var headerData=result.header;
+			
+			if(headerData.result != 0){
+				console.log(commonDebugPrefix + "사업장 유형 데이터 없음");
+			}else{
+				$.each(bodyData, function(key,val){	
+					$.each(val, function(key, val) {
+	                    console.log(transOffice_debugPrefix + key + " : " + val);
+	                });
+					officeCode[key]=val.CODE;
+					officeName[key]=val.CODEVALUE;									
+				});	
+			}
+		},
+		error : function(){
+			console.log(transOffice_debugPrefix + "사업장 유형 배열 생성 에러");
+		}
+	});
+}
+
+//사업장 유형 생성
+function makeThirdSel(){
+	
+	var ThirdSel="";
+	
+	//생성
+	for(var i=0; i<officeCode.length; i++){
+		ThirdSel += "<option value='" + officeCode[i] + "'>" + officeName[i] + "</option>";
+	}
+	//삽입
+	$('#ThirdField').append(ThirdSel).trigger("create").selectmenu( "refresh" );
+
+	//사업장 선택
+	$("#ThirdField").val(officeChecked).selectmenu( "refresh" );
+	
+	console.log(transOffice_debugPrefix + "=============사업장유형 셀렉트박스생성=============");
+}
+
+//사업장 저장
+function storeOffice(){
+	officeChecked = $("#ThirdField > option:selected").val();
+	
+	console.log(transOffice_debugPrefix + "저장된 사업장 ==== " + officeChecked );
+}
+
+//사업장 리셋
+function resetOffice(){
+	$("select[name='select-choice-third'] option").not("[value='not3']").remove();
+	
+	officeChecked="";
+	
+	makeThirdSel();
+}
+
+//검색기능
+function officeFilter(){
+	var value = $('#word').val();	
+	var valueUp = $('#word').val().toUpperCase(); //toUpperCase : 검색어를 대문자로 전환
+	$('#listview > li').hide();
+	
+	var containWord =  $("#listview > li:contains('"+value+"')");
+	var containWordUp = $("#listview > li:contains('"+valueUp+"')");
+	
+	if(containWord){
+		containWord.show();
+	}else if(containWordUp){
+		containWordUp.show();
+	}else{
+		alert("결과없음");
+//		var notWord = "<li data-icon='false'>" +
+//				   	  "<a href='#'>" +
+//				      "<center><h2>검색 결과가 없습니다.</h2></center>" +     
+//				   	  "</a>" +
+//				      "</li>";
+//		$('#listview').html(notWord).listview("refresh");
+//		$('#listview').show;	
+	}	
+//	$("#listview > li:contains('"+value+"')").show();
+//	$("#listview > li:contains('"+valueUp+"')").show();	
+}
+
+//미선택 국사 리스트불러오기
+function showBeforeWorkplaceList(){
+	
+	var workplaceLi="";
+	
+	//선택된 값 얻어오기
+	FirstCode=$("#FirstField > option:selected").val();
+	SecondCode=$("#SecondField > option:selected").val();
+	ThirdCode=$("#ThirdField > option:selected").val();
+	
+	//국사리스트 생성
+	if(FirstCode == 'not1'){
+		workplaceLi = "<li data-icon='false'>" +
+				   	  "<a href='#'>" +
+				      "<center><h2>운용단을 선택하세요.</h2></center>" +     
+				   	  "</a>" +
+				      "</li>";
+	}else if(SecondCode == 'not2'){
+		workplaceLi = "<li data-icon='false'>" +
+				   	  "<a href='#'>" +
+				      "<center><h2>모국을 선택하세요.</h2></center>" +     
+				   	  "</a>" +
+				      "</li>";
+	}else if(ThirdCode == 'not3'){
+		workplaceLi = "<li data-icon='false'>" +
+				   	  "<a href='#'>" +
+				      "<center><h2>사업장 유형을 선택하세요.</h2></center>" +     
+				   	  "</a>" +
+				      "</li>";
+	}
+	//사업장 리스트 삽입
+	$('#listview').html(workplaceLi).listview("refresh");
+}
+
+//선택 국사 리스트불러오기
+function showWorkplaceList(){
+	
+	// 페이지가 보여지면서 로더를 보여준다.
+	$.mobile.loading( "show", {
+		  text: "리스트를 읽어오는 중 입니다.",
+		  textVisible: true,
+		  theme: "a",
+		  html: ""
+	});
+
+	//선택된 값 얻어오기
+	FirstCode=$("#FirstField > option:selected").val();
+	SecondCode=$("#SecondField > option:selected").val();
+	ThirdCode=$("#ThirdField > option:selected").val();
+	
+	//국사리스트 생성
+	$.ajax({
+		url: url + "MossWorkplaceList",
+		type: "post",
+		timeout: 10*1000,
+		dataType: "json",
+		data:{danorgcode:FirstCode, pofficescode:SecondCode, workplacetype:ThirdCode},
+//		data:{danorgcode:"370067", pofficescode:"R01570", workplacetype:"4"},
+		success: function(result){ 
+			var bodyData = result.body;
+			var headerData = result.header;
+			var workplaceLi="";
+
+			console.log(transOffice_debugPrefix + "리스트 생성 인풋 조건 ==== " +FirstCode+","+SecondCode+","+ThirdCode);
+
+			if(headerData.result != 0){
+				if(ThirdCode == 'not3'){
+					workplaceLi = "<li data-icon='false'> "+
+									"<a href='#'>" +
+									"<center><h2>사업장 유형을 선택하세요.</h2></center>" +     
+									"</a>" +
+									"</li>";
+				}else{
+					workplaceLi = "<li data-icon='false'> "+
+									"<a href='#'>" +
+									"<center><h2>정보가 없습니다.</h2></center>" +     
+									"</a>" +
+									"</li>";
+				}				
+			}else{
+				$.each(bodyData, function(key, val){
+					$.each(val, function(key, val) {
+						console.log(transOffice_debugPrefix + key + " : " + val);
+					});
+
+					workplaceSN = val.WORKPLACESEQNUM;
+
+					workplaceLi += "<li data-icon='false'>" +
+									"<a href='transOffice_detail.html?workplaceSeqNum="+workplaceSN+"'>" +	
+									"<div class='listContent'>" +
+									"<h2>"+ val.WORKPLACENAME +"</h2>" +
+									"<p style='display:inline-block; float:right'>"+ val.ADDR + "</p>" +
+									"</div>" +
+									"</a>" +
+									"</li>";										
+				});
+			}
+			//사업장 리스트 삽입
+			$('#listview').html(workplaceLi).listview("refresh");
+			$.mobile.hidePageLoadingMsg();
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			console.log(transOffice_debugPrefix + "사업장리스트 출력 에러 : " + jqXHR.status);
+			console.log(transOffice_debugPrefix + "사업장리스트 출력 에러 : " + jqXHR.responseText);
+			console.log(transOffice_debugPrefix + "사업장리스트 출력 에러 : " + errorThrown);		
+		} 
+	});
+}
+
+
+$(document).on("pagebeforeshow","#page_transOffice", function(event){	
+	danArray();
+	officeArray();
+});
+
+$(document).on("pageshow","#page_transOffice", function(event){
+//	officeCSS();
+
+	console.log("단, 모국, 운용단 값 == " + danChecked +", "+moChecked+", "+officeChecked);
+	
+	if(danCo.length == 1){
+		if(moChecked == "" || officeChecked == ""){
+			showBeforeWorkplaceList();
+		}else{
+			showWorkplaceList();
+		}
+	}else{
+		if(danChecked == "" || moChecked == "" || officeChecked == ""){
+			showBeforeWorkplaceList();
+		}else{
+			showWorkplaceList();
+		}
+	}
+
+	$("#btn_refresh").click(function() {
+		
+		$("#listview").empty();
+		
+		if(danCo.length == 1){
+			if(moChecked == "not2" || officeChecked == "not3"){
+				showBeforeWorkplaceList();
+			}else{
+				showWorkplaceList();
+			}
+		}else{
+			if(danChecked == "not1" || moChecked == "not2" || officeChecked == "not3"){
+				showBeforeWorkplaceList();
+			}else{
+				showWorkplaceList();
+			}
+		}
+		
+//		showWorkplaceList();
+	});
+	
+//	$("#menuPanel").panel({
+//		  beforeopen: function( event, ui ) {
+//			  $('#selectNsearch').css( "zindex" , 0 );	
+//			  $('#selectNsearch').css( "position" , relative );
+//		  } 
+//	});
+});
+
+$(document).on("pagehide","#page_transOffice", function(event){
+	if($.mobile.activePage.is('#page_transOffice_detail')){
+		
+	}else{
+		danChecked="";
+		moChecked="";
+		officeChecked="";
+	}
+});

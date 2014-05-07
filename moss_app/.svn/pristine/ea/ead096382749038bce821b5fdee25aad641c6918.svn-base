@@ -1,0 +1,86 @@
+/*
+  ✰✰✰✰✰✰✰✰✰✰✰✰✰✰ 
+
+  Simple Login Form
+  HTML5/CSS3 Coded by: $hekh@r d-Ziner, CSSJunction.com
+  PSD by:PremiumPixels.com
+  
+  Uuage: Free. You can modify, remove our links and use wherever you want ☺.
+  
+  ✰✰✰✰✰✰✰✰✰✰✰✰✰✰✰ 
+  
+*/
+body {
+	background: #eff3f6;
+}
+
+.box {
+	background: #fefefe;
+	border: 1px solid #C3D4DB;
+	border-top: 1px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: rgba(0, 0, 0, 0.15) 0 0 1px;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.15) 0 0 1px;
+	box-shadow: rgba(0, 0, 0, 0.15) 0 0 1px;
+	color: #444;
+	font: normal 12px/14px Arial, Helvetica, Sans-serif;
+	margin: 0 auto 30px;
+	overflow: hidden;
+}
+
+.box.login {
+	height: auto;
+	width: 70%;
+	position: relrative;
+	margin-top: 4.5em;
+	margin-bottom: 10em;
+}
+
+.boxBody {
+	height: auto;
+	width: auto;
+	background: #fefefe;
+	border-top: 1px solid #dde0e8;
+	border-bottom: 1px solid #dde0e8;
+}
+
+.box footer {
+	background: #eff4f6;
+	border-top: 1px solid #fff;
+	overflow: hidden;
+	height: auto;
+}
+
+footer#main {
+	position: relrative;
+	bottom: 0.8em;
+	left: 0;
+	text-align: center;
+	font: normal 11px/16px Arial, Helvetica, sans-serif;
+	width: 100%;
+}
+
+.box input[type=text],.box input[type=password],.txtField,.cjComboBox {
+	border: 6px solid #F7F9FA;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-moz-box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.06) inset, 0 0 1px #95a2a7	inset;
+	-webkit-box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.06) inset, 0 0 1px #95a2a7 inset;
+	box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.06) inset, 0 0 1px #95a2a7 inset;
+	margin:0 auto;
+	padding: 8px 6px;
+	width: 90%;
+	display: block;
+}
+
+.box input[type=text]:focus,.box input[type=password]:focus,.txtField:focus,.cjComboBox:focus
+	{
+	border: 6px solid #f0f7fc;
+	-moz-box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.04) inset, 0 0 1px #0d6db6	inset;
+	-webkit-box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.04) inset, 0 0 1px #0d6db6 inset;
+	box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.04) inset, 0 0 1px #0d6db6 inset;
+	color: #333;
+}

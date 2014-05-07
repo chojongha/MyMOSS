@@ -1,0 +1,72 @@
+var manualDetail_debugPrefix = "[board_manual_detail.js] : ";
+
+function showManualDetail(){
+	
+	$.ajax({
+		url: url+"WorkOdrList",		
+		type: "post",
+		timeout : 10 * 1000,
+		dataType : "json",
+		data: {workerID:'qtest'}, //인풋(접속)
+		
+		success: function (result) {
+			var bodyData = result.body; //아웃풋 정보 가져오기
+			
+			$.each(bodyData, function(key, val){ //아웃풋 뿌리기
+				
+				var manualDetailTB = '<table id="TBdetail">'+
+									 '<tr class="table_tr">'+ 
+									 '<th class="table_th">제 목</th>'+
+									 '<td colspan="3" class="table_td"  id="manual_title"></td>'+
+									 '</tr>'+
+									 '<tr class="table_tr">'+
+									 '<th class="table_th" >작성일시</th>'+
+									 '<td colspan="3" class="table_td"  id="manual_writeDate"></td>'+
+									 '</tr>'+							
+									 '<tr class="table_tr">'+
+									 '<th class="table_th" >분 야</th>'+
+									 '<td colspan="3" class="table_td" id="manual_services"></td>'+
+									 '</tr>'+
+									 '<tr class="table_tr">'+
+									 '<th class="table_th" >작 성 자</th>'+
+									 '<td class="table_td" width="30%" id="manual_writer"></td>'+
+									 '<th class="table_th" width="20%">조 회 수</th>'+
+									 '<td class="table_td" width="30%" id="manual_viewCount"></td>'+
+									 '</tr>'+	
+									 '<tr class="table_tr">'+
+									 '<td class="table_td" colspan="4" id="manual_content" height="400" width="100%" valign="top"></td>'+
+									 '</tr>'+
+									 '<tr class="table_tr">'+
+									 '<th class="table_th" >첨부파일</th>'+
+									 '<td colspan="3" class="table_td" id="manual_add"></td>'+
+									 '</tr>'+
+									 '</table>'; 				
+				var manualCon = '<div id="contents" style="overflow-y:auto; width:100%; height:100%; padding:4px"><div>';
+
+				//본문 테이블 넣기																 				
+				$('#manual_table').html(manualDetailTB);				
+				$('#manual_content').html(manualCon);
+				//본문 데이터 세팅				
+				$('#manual_title').text(val.odrType);
+				$('#manual_writeDate').text(val.rsvDT);
+				$('#manual_services').text(val.odrType+" > "+val.odrType+" > "+val.odrType);
+				$('#manual_writer').text(val.odrType);
+				$('#manual_viewCount').text(val.odrType);
+				$('#contents').append(val.addr + '<a href="transOffice_detail.html">눌러봐</a>');
+				$('#manual_add').text(val.custName);				
+		    });
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(manualDetail_debugPrefix + "매뉴얼 상세화면 출력 에러 : " + jqXHR.status);
+	        console.log(manualDetail_debugPrefix + "매뉴얼 상세화면 출력 에러 : " + jqXHR.responseText);
+			console.log(manualDetail_debugPrefix + "매뉴얼 상세화면 출력 에러 : " + errorThrown);
+	    }
+	}); 
+}	
+	
+$(document).on("pagebeforeshow","#page_manual_detail",function(event){
+	showManualDetail();
+}); 
+$(document).on("pageshow","#page_manual_detail",function(event){
+	showManualDetail();
+}); 

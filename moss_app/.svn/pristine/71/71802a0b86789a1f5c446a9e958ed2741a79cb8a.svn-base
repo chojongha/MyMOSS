@@ -1,0 +1,224 @@
+/**
+ * 		index.js
+ */
+
+var indexDebugPrefix = "[index.js] : ";
+var ollehMapLat = "";
+var ollehMapLng = "";
+var ollehMap = null;
+
+function getNearLocationInfoTest() {
+	console.log(alarmList_noti_detail_debugPrefix + "============ getNearLocationInfo() ============ date : " + detail_nearLocationDate);
+	console.log(alarmList_noti_detail_debugPrefix + "============ getNearLocationInfo() ============ danOrgCode : " + detail_danOrgCode);
+	
+	$.mobile.loading( "show", {
+		  text: "인접출동자를 표시합니다.",
+		  textVisible: true,
+		  theme: "a",
+		  html: ""
+	});
+	
+	$.ajax({
+		url: url + "UserNearLocationInfo",
+	    type: 'post',
+	    dataType: "json",
+		timeout: 10 * 1000,
+		data: {danorgcode:detail_danOrgCode, currentdate:detail_nearLocationDate},
+		success: function (result) {
+			var headerData = result.header;
+			// header log
+			console.log(loginDebugPrefix + "########### Header Data : UserNearLocationInfo  ###########");
+			$.each(headerData, function(key, val){
+				console.log(loginDebugPrefix + key + " : " + val);
+			});
+
+			if(headerData.result != 0) {
+				$.mobile.hidePageLoadingMsg();
+//				alert(headerData.errMsg);
+				showCommonAlert("인접 출동자", headerData.errMsg);
+			} else { 
+				console.log(alarmList_noti_detail_debugPrefix + "============ get UserNearLocationInfo success Marker RePaint============");
+				// 인접 출동자 새로 고침 시 현재 그려진 마커/인포윈도우를 제거한뒤 배열 초기화
+				if(marker.length == 0) {
+					console.log(alarmList_noti_detail_debugPrefix + "============ setMarker count ============ : " + marker.length);
+				} 
+				else {
+					console.log(alarmList_noti_detail_debugPrefix + "============ reMarker count ============ : " + marker.length);
+					for(var i=0; i < marker.length; i++) {
+						marker[i].setMap(null);
+						infowindow[i].close();
+					}
+					marker = new Array();
+					infowindow = new Array();
+				}
+				
+				var body = result.body;
+				var points = new Array();
+				//	marker icon 이미지, 사이즈, 위치 설정
+				var icon = new olleh.maps.MarkerImage(
+				  		'../img/map_worker.png',
+						new olleh.maps.Size(50,50)
+				);
+				
+				$.each(body, function(key, val) {
+					$.each(val, function(key, val) {
+						console.log(alarmList_noti_detail_debugPrefix + key + " : " + val);
+				    });
+					detail_nearLocationDate = val.CURRENTDATE;
+					//	위 경도 셋팅, 좌표계 변환 : UTM_K >> WGS84
+					var srcproj = new olleh.maps.Projection("UTM_K");
+					var destproj = new olleh.maps.Projection("WGS84");
+					var ollehMapPoint = new olleh.maps.Point(val.LONGITUDE, val.LATITUDE);
+
+					olleh.maps.Projection.transform(ollehMapPoint, destproj, srcproj);
+					var ollehMapWorkerLat = ollehMapPoint.y;
+					var ollehMapWorkerLng = ollehMapPoint.x;
+					points[key] = new olleh.maps.Coord(ollehMapWorkerLng, ollehMapWorkerLat);
+					// 마커 생성
+					marker[key] = new olleh.maps.Marker({position: points[key], icon:icon});
+					marker[key].setMap(ollehMap);
+//					// 인포 윈도우 생성
+					//	infoWindow contentString 터치 시 이벤트 발생
+					var contentString  = "<p style='margin:7px 22px 7px 12px;font:12px/1.5 sans-serif'><strong>"+ val.USERNAME +"</strong><br><a href='tel:"+ val.MOBILE_PHONE_NUM +"'>"+ val.MOBILE_PHONE_NUM +"</a></p>";
+					infowindow[key] = new olleh.maps.InfoWindow({ 
+					    content: contentString
+					});
+			    });
+				// 리스너 연결
+				for(var i = 0; i < marker.length; i++) {
+					marker[i].index = i;
+					
+					olleh.maps.event.addListener(marker[i], "click", function() {
+						for(var i = 0; i < marker.length; i++) {
+							infowindow[i].close();
+						}
+						infowindow[this.index].open(ollehMap, marker[this.index]);
+					});
+				}
+				$.mobile.hidePageLoadingMsg();
+			}
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			$.mobile.hidePageLoadingMsg();
+	        console.log(alarmList_noti_detail_debugPrefix + "============ get UserNearLocationInfo error ============ : " + jqXHR.status);
+	        console.log(alarmList_noti_detail_debugPrefix + "============ get UserNearLocationInfo error ============ : " + jqXHR.responseText);
+			console.log(alarmList_noti_detail_debugPrefix + "============ get UserNearLocationInfo error ============ : " + errorThrown);
+	    }
+	}).done(function() {
+		console.log(alarmList_noti_detail_debugPrefix + "============ Marker success ============ marker size : " + marker.length);
+	});
+}
+
+
+// 사업장 상세 정보 페이지로 이동 시킨다.
+function changePageOfficeDetail(workPlaceSeqNum) {
+	$.mobile.changePage("map_transOffice_detail.html?workplaceSeqNum=" + workPlaceSeqNum);
+}
+
+// 올레맵용 좌표 변환 UTM_K >> WGS84
+function transformLatLng(){
+	var srcproj = new olleh.maps.Projection("UTM_K");
+	var destproj = new olleh.maps.Projection("WGS84");
+
+	var ollehMapPoint = new olleh.maps.Point(geocodeLng, geocodeLat);
+//	alert("WGS84 : "+ollehMapPoint.x+"::"+ollehMapPoint.y);
+	
+	//	좌표계 변환 : UTM_K >> WGS84
+	olleh.maps.Projection.transform(ollehMapPoint, destproj, srcproj);
+	
+//	alert("UTM-K : "+ollehMapPoint.x+"::"+ollehMapPoint.y);
+	
+	ollehMapLat = ollehMapPoint.y;
+	ollehMapLng = ollehMapPoint.x;
+}
+
+// 맵이 들어갈 div의 사이즈를 계산한다.
+function setDynamicMapSize() {
+//	지도가 들어갈 div 사이즈를 계산하여 설정한다.
+	var header = $("div[data-role='header']:visible");
+	var footer = $("div[data-role='footer']:visible");
+	var content = $("div[data-role='content']:visible");
+	var viewport_height = $(window).height();
+	var viewport_width = $(window).width();
+	
+	var content_height = viewport_height - header.outerHeight() - footer.outerHeight();
+	/* Trim margin/border/padding height */
+	content_height -= (content.outerHeight() - content.height());
+	// 디바이스 사이즈 따라 동적으로 map height를 설정
+	$("#map_canvas").css('min-height', content_height);
+	// 디바이스 사이즈에 따라 동적으로 map width를 설정
+	$("#map_canvas").css('width', viewport_width);
+	// 지도를 header 사이즈 만큼 아래에 위치한다.
+	$("#map_canvas").css('top', header.outerHeight());
+	// 지도를 footer 사이즈 만큼 위에 위치한다.
+	$("#map_canvas").css('bottom', footer.outerHeight());
+}
+
+// 올레맵을 화면에 그린다.
+function showOllehMap() {
+	// 디바이스 크기를 계산하여 맵 크기를 셋팅한다.
+	setDynamicMapSize();
+	
+	// 올레맵용 좌표 변환 UTM_K >> WGS84
+	transformLatLng();
+	//	맵 옵션 설정
+	var mapOptions = {  		
+     	center : new olleh.maps.Coord(ollehMapLng, ollehMapLat),
+     	zoom : 10,
+		panControl : false,
+		zoomControl : true,
+		scaleControl : true,
+     	mapTypeId : olleh.maps.MapTypeId.BASEMAP
+  	};
+	//	맵을 해당 div에 그린다.
+  	ollehMap = new olleh.maps.Map(document.getElementById("map_canvas"), mapOptions);
+  	//	infoWindow contentString 터치 시 이벤트 발생
+  	var contentString  = "<p style='font:12px/1.5 sans-serif; color:blue; text-decoration:underline;' onclick='changePageOfficeDetail("+detail_workPlaceSeqNum+");'>" + setOfficeName + "</p>";
+	var infowindow = new olleh.maps.InfoWindow({ 
+	    content: contentString
+	});
+	//	marker icon 이미지, 사이즈, 위치 설정
+	var icon = new olleh.maps.MarkerImage(
+	  		'../img/map_location.png',
+			new olleh.maps.Size(50,50),
+			new olleh.maps.Pixel(0,0),
+			new olleh.maps.Pixel(0,50)
+	);
+	//	map에 마커를 셋팅
+	var marker = new olleh.maps.Marker({ 
+	    position: new olleh.maps.Coord(ollehMapLng, ollehMapLat),
+	    icon:icon,
+	    map: ollehMap
+	}); 
+	//	마커에 클릭 이벤트 할당
+	olleh.maps.event.addListener(marker, 'click', function() { 
+	  infowindow.open(ollehMap,marker); 
+	});
+}
+
+$(document).on("pagebeforecreate", "#page_index" , function(event) {
+	//	단 코드, 단 이름 배열 생성
+	if(danConfigFlag) {
+		commonDanInfo();
+	}
+});
+
+$(document).on("pageshow", "#page_index" , function(event) {
+	//	menuPanel event Controller
+	commonMenuPanelControl();
+	//	페이지가 생성된 후 상황에 단설정 상태에 따른 팝업창을 호출
+	$('#page_index').trigger('pagecreate');
+	if(danConfigFlag) {
+		$("#danConfigPopup").popup("open", "slidedown");
+		$("#btn_danConfig").click(function () {
+			console.log(indexDebugPrefix + "================== set DanOrgCode ==================");
+			setDeviceInfo($(":input:radio[name=danChoice]:checked").val());
+			$("#danConfigPopup").popup("close", "slideup");
+		});
+	}
+});
+
+$(document).on("pageshow", "#page_alarmList_detail_ollehMap" , function(event) {
+	//	지도 출력
+	showOllehMap();
+});

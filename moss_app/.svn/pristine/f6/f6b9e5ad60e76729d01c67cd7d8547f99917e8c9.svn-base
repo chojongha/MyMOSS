@@ -1,0 +1,96 @@
+var manualDetail_debugPrefix = "[board_manual_detail.js] : ";
+var manualSeqNum="";
+
+function showManualDetail(){
+
+	$.mobile.loading( "show", {
+		  text: "로딩중...",
+		  textVisible: true,
+		  theme: "a",
+		  html: ""
+	}); 
+	
+	manualSN=Request("manualSeqNum");
+	
+	console.log(manualDetail_debugPrefix + "넘어온 시퀀스넘버 = " + manualSN);
+	
+	$.ajax({
+		url: url+"ManualDetail",		
+		type: "post",
+		timeout : 10 * 1000,
+		dataType : "json",
+		data: {manualSeqNum:manualSN}, //인풋(접속)
+		
+		success: function (result) {
+			var bodyData = result.body; //아웃풋 정보 가져오기
+			
+			$.each(bodyData, function(key, val){ //아웃풋 뿌리기
+				
+				var manualDetailTB = "<table id='table_detail'>"+
+									 "<tr class='table_tr'>"+ 
+									 "<th class='table_th'>제 목</th>"+
+									 "<td colspan='3' class='table_td' id='manual_title'></td>"+
+									 "</tr>"+
+									 "<tr class='table_tr'>"+
+									 "<th class='table_th'>작성일시</th>"+
+									 "<td colspan='3' class='table_td' id='manual_writeDate'></td>"+
+									 "</tr>"+							
+									 "<tr class='table_tr'>"+
+									 "<th class='table_th' >분 야</th>"+
+									 "<td colspan='3' class='table_td' id='manual_services'></td>"+
+									 "</tr>"+
+									 "<tr class='table_tr'>"+
+									 "<th class='table_th' width='20%'>작 성 자</th>"+
+									 "<td class='table_td' width='30%' id='manual_writer'></td>"+
+									 "<th class='table_th' width='20%'>조 회 수</th>"+
+									 "<td class='table_td' width='30%' id='manual_viewCount'></td>"+
+									 "</tr>"+	
+									 "<tr class='table_tr'>"+
+									 "<td class='table_td' colspan='4' id='manual_content' width='100%' height='400' valign='top'></td>"+  //컨텐츠부분 크기고정
+									 "</tr>"+
+									 "<tr class='table_tr'>"+
+									 "<th class='table_th' width='20%'>첨부파일</th>"+
+									 "<td colspan='3' class='table_td' id='manual_file'>"+	
+									 "</tr>"+
+									 "</table>"; 				
+				var manualCon = "<div id='contents' style='overflow-y:auto; width:100%; height:100%; padding:4px'><div>"; //화면범위 넘어가면 스크롤 생성				
+				
+				console.log(manualDetail_debugPrefix + "첨부파일 일련번호 : " + val.ATTACHSEQNUM);
+				
+				//본문 테이블 넣기													 			 				
+				$('#manual_table').html(manualDetailTB);				
+				$('#manual_content').html(manualCon);
+				//본문 데이터 세팅				
+				$('#manual_title').text(val.SUBJECT);
+				$('#manual_writeDate').text(val.WRITEDATE);
+				$('#manual_services').text(val.SERVICEIDNAME+" > "+val.SERVICESUBIDNAME);
+				$('#manual_writer').text(val.WRITERNAME);
+				$('#manual_viewCount').text(val.READCNT);
+				$('#contents').append(val.CONTENT + "<a href='transOffice_detail.html'>눌러봐</a>");				
+				if(val.FILENAME==null){
+					$('#manual_file').text("없음");
+				}else{
+					if(val.FILENAME.length > 20){
+						$('#manual_file').append(val.FILENAME.substr(0,20)+ "..." + "<a href='" + url + "filedownload?attachSeqNum="+ val.ATTACHSEQNUM +"' id='manual_file'><img class='fileDown' src='../img/download.png' style='width:1.5em; height:1.5em;'></a>");
+					}else{
+						$('#manual_file').append(val.FILENAME + "<a href='" + url + "filedownload?attachSeqNum="+ val.ATTACHSEQNUM +"' id='manual_file'><img class='fileDown' src='../img/download.png' style='width:1.5em; height:1.5em;'></a>");
+					}	
+				}				
+				$('#beforeManualList').attr('href','board_manual.html?checked='+ val.SERVICEID);
+				$.mobile.hidePageLoadingMsg();
+		    });
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(manualDetail_debugPrefix + "매뉴얼 상세화면 출력 에러 : " + jqXHR.status);
+	        console.log(manualDetail_debugPrefix + "매뉴얼 상세화면 출력 에러 : " + jqXHR.responseText);
+			console.log(manualDetail_debugPrefix + "매뉴얼 상세화면 출력 에러 : " + errorThrown);
+	    }
+	}); 
+}
+
+$(document).on("pagebeforeshow","#page_manual_detail",function(event){
+	//showManualDetail();	
+}); 
+$(document).on("pageshow","#page_manual_detail",function(event){
+	showManualDetail();
+}); 

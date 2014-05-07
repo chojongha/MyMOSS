@@ -1,0 +1,164 @@
+var manualDetail_debugPrefix = "[board_manual_detail.js] : ";
+var manualSeqNum="";
+var beforeChecked="";
+
+//상세 페이지 출력
+function showManualDetail(){
+	
+	//디바이스에 따라 화면 높이 맞추기
+	var header = $("div[data-role='header']:visible");
+	var footer = $("div[data-role='footer']:visible");
+	var content = $("div[data-role='content']:visible"); 
+	var viewport_height = $(window).height();
+					
+	var content_height = viewport_height - header.outerHeight() - footer.outerHeight();	
+	
+	content_height -= (content.outerHeight() - content.height());
+	
+	$("#manual_table").css('min-height', content_height);
+				
+	//상세화면 불러오기
+	$.mobile.loading( "show", {
+		  text: "로딩중...",
+		  textVisible: true,
+		  theme: "a",
+		  html: ""
+	}); 
+	
+	//매뉴얼 시퀀스넘버 받기
+	manualSN=Request("manualSeqNum");
+	
+	console.log(manualDetail_debugPrefix + "넘어온 시퀀스넘버 = " + manualSN);
+	
+	$.ajax({
+		url: url+"ManualDetail",		
+		type: "post",
+		timeout : 10 * 1000,
+		dataType : "json",
+		data: {manualSeqNum:manualSN}, //인풋(접속)		
+		success: function (result) {
+			var bodyData = result.body; //아웃풋 정보 가져오기
+			var headerData = result.header;
+			var manualDetailTB = "";
+			
+			if(headerData.result != 0){
+				manualDetailTB = "<li data-icon='false'> "+
+								 "<a href='#'>" +
+								 "<center><h2>정보가 없습니다</h2></center>" +     
+								 "</a>" +
+								 "</li>";				
+				$.mobile.hidePageLoadingMsg();
+			}else{
+				$.each(bodyData, function(key, val){ //아웃풋 뿌리기
+					//매뉴얼 상세테이블 생성
+					
+					manualDetailTB = "<table id='table_detail'>"+
+										 "<tr>"+ 
+										 "<td width='25%'>제 목</td>"+
+										 "<td colspan='3' id='manual_title'></td>"+
+										 "</tr>"+
+										 "<tr>"+
+										 "<td>작성일시</td>"+
+										 "<td colspan='3' id='manual_writeDate'></td>"+
+										 "</tr>"+							
+										 "<tr>"+
+										 "<td>분   야</td>"+
+										 "<td colspan='3' id='manual_services'></td>"+
+										 "</tr>"+
+										 "<tr>"+
+										 "<td width='25%'>작 성 자</td>"+
+										 "<td width='25%' id='manual_writer'></td>"+
+										 "<td width='25%'>조 회 수</td>"+
+										 "<td width='25%' id='manual_viewCount'></td>"+
+										 "</tr>"+	
+										 "<tr>"+
+										 "<td colspan='4' id='manual_content' valign='top'></td>"+  //컨텐츠부분 크기고정
+										 "</tr>"+
+										 "<tr>"+
+										 "<td width='20%'>첨부파일</td>"+
+										 "<td colspan='3' id='manual_file'></td>"+	
+										 "</tr>"+
+										 "</table>"; 				
+										
+					var manualCon = "<div id='maContents' style='overflow-y:auto; width:100%; height:100%; padding:8px'><div>"; //화면범위 넘어가면 스크롤 생성				
+					
+					console.log(manualDetail_debugPrefix + "첨부파일 일련번호 : " + val.ATTACHSEQNUM);
+							
+					//본문 테이블 넣기													 			 				
+					$('#manual_table').html(manualDetailTB);				
+					$('#manual_content').html(manualCon);
+					//본문 데이터 세팅				
+					$('#manual_title').text(val.SUBJECT);
+					$('#manual_writeDate').text(val.WRITEDATE);
+					$('#manual_services').text(val.SERVICEIDNAME+" >> "+val.SERVICESUBIDNAME);
+					$('#manual_writer').text(val.WRITERNAME);
+					$('#manual_viewCount').text(val.READCNT);
+					$('#maContents').text(val.CONTENT);
+					
+					if(val.FILENAME==null){
+						$('#manual_file').text("  없음");
+					}else{ 
+						if(val.FILENAME.length > 20){		//첨부파일명이 너무 길경우 문자열자름.
+							$('#manual_file').append("  " + val.FILENAME.substr(0,20)+ "..." + "  <img class='fileDown' src='../img/floppy.png' onclick=testURL('filedownload?attachSeqNum="+ val.ATTACHSEQNUM +"');>");
+						}else{
+							$('#manual_file').append("  " + val.FILENAME + "  <img class='fileDown' src='../img/floppy.png' onclick=testURL('filedownload?attachSeqNum="+ val.ATTACHSEQNUM +"');>");		
+						}	
+					}
+					
+					var div_TB = $("#manual_table").height();
+					var TB_all = $("#table_detail").height();
+//					var TB_title = $("#manual_title").height();
+//					var TB_writeDate = $("#manual_writeDate").height();
+//					var TB_services = $("#manual_services").height();
+//					var TB_writer = $("#manual_writer").height();
+//					var TB_viewCount = $("#manual_viewCount").height();
+//					var TB_file = $("#manual_file").height();
+					
+					console.log("div 길이 ::::: " + div_TB);
+					console.log("테이블 길이 ::::: " + TB_all);
+//					console.log("테이블 제목길이 ::::: " + TB_title);
+//					console.log("테이블 작성날짜길이 ::::: " + TB_writeDate);
+//					console.log("테이블 분야길이 ::::: " + TB_services);
+//					console.log("테이블 작성자길이 ::::: " + TB_writer);
+//					console.log("테이블 조회수길이 ::::: " + TB_viewCount);
+//					console.log("테이블 첨부파일길이 ::::: " + TB_file);
+					
+//					var TB_content = div_TB - (TB_title + TB_writeDate + TB_services + TB_writer + TB_file);	//컨텐츠길이가 길어서 테이블전체길이가 늘어남					
+//					var TB_content = div_TB - ((TB_title + TB_writeDate + TB_services + TB_writer + TB_file)*2);	//컨텐츠길이가 유동적으로 변함. 길어질때도 짧아질때도..
+					
+					var TB_content = div_TB - TB_all + 16;
+				
+									
+					console.log("테이블 내용길이 ::::: " + TB_content);
+															
+					$("#manual_content").css('height', TB_content);
+					
+					//화면상 백버튼 링크 추가
+					if($.mobile.activePage.attr('id') != 'page_manual_detail'){					
+						$('#alarm_beforeManualList').attr('href','alarmList_noti_detail_manual.html?checked='+ val.SERVICEID);
+					}else{
+						$('#beforeManualList').attr('href','board_manual.html?checked='+ val.SERVICEID);
+					}
+					
+					beforeChecked = val.SERVICEID;	//안드로이드 백버튼 링크 걸때 쓰일 파라미터
+					$.mobile.hidePageLoadingMsg();
+			    });	
+			}					
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(manualDetail_debugPrefix + "매뉴얼 상세화면 출력 에러 : " + jqXHR.status);
+	        console.log(manualDetail_debugPrefix + "매뉴얼 상세화면 출력 에러 : " + jqXHR.responseText);
+			console.log(manualDetail_debugPrefix + "매뉴얼 상세화면 출력 에러 : " + errorThrown);
+	    }
+	}); 
+}
+
+$(document).on("pagebeforeshow","#page_manual_detail",function(event){
+	//showManualDetail();	
+}); 
+$(document).on("pageshow","#page_manual_detail",function(event){
+	showManualDetail();
+}); 
+$(document).on("pageshow","#page_alarmManual_detail",function(event){
+	showManualDetail();
+}); 

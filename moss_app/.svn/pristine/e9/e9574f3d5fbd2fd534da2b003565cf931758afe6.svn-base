@@ -1,0 +1,72 @@
+var debugPrefix = "[config.js] : ";
+var db = 0;
+
+var getStartPage = "";
+var getAutoLogin = "";
+var getVersion = "";
+
+//조회
+function getSqlResultSet() {
+	db.transaction(querySelectDB, errorCB);
+}
+
+function querySelectDB(tx) {
+	tx.executeSql('SELECT startPage, autoLoginYN, version FROM MOSS_USERINFO', [], selectDbSuccess, errorCB);
+}
+
+function selectDbSuccess(tx, results) {
+	getStartPage = results.rows.item(0).startPage;
+	getAutoLogin = results.rows.item(0).autoLoginYN;
+	getVersion = results.rows.item(0).version;
+	
+	$("#version").text(getVersion);
+	$("#login_auto").val(getAutoLogin);
+	$("#config_startPage").val(getStartPage);
+	
+	$("#login_auto").slider( "refresh" );
+	$("#config_startPage").selectmenu( "refresh" );
+	
+	var msg = "시작페이지 : " + getStartPage + "\n" + "AutoLogin : " + getAutoLogin + "\n" + "버전 : " + getVersion;
+	console.log(debugPrefix + msg);
+}
+
+function errorCB(err) {
+	console.log(debugPrefix + "db error");
+}
+
+function checkField(value) {
+	updateUserInfo();
+	console.log(debugPrefix + value );
+}
+
+//업데이트
+function updateUserInfo() {
+	db.transaction(queryUpdateDB, errorCB);
+}
+
+function queryUpdateDB(tx) {
+	var userStartPage = $("#config_startPage").val();
+	var userAutoLogin = $("#login_auto").val();
+	console.log(debugPrefix + userStartPage + ", " + userAutoLogin);
+//	DB field
+//	(userID, userPW, startPage, autoLoginYN, locationYN, pushYN, version)
+	var sql = "UPDATE MOSS_USERINFO SET startPage='"+ userStartPage +"', autoLoginYN='"+ userAutoLogin +"' where version = '1.0';";
+	console.log(debugPrefix + sql);
+	
+	tx.executeSql(sql, [], updateSuccess, errorCB);
+}
+
+function updateSuccess(tx, results) {
+	console.log(debugPrefix + "update Success");
+}
+
+$(document).on("pagebeforecreate","#page_config",function(event) {
+	if (!db) {
+	db = window.openDatabase("Database", "1.0", "myDb", 200000);
+	window.onload = getSqlResultSet();
+}
+});
+
+$(document).on("pageshow","#page_config",function(event) {
+
+});

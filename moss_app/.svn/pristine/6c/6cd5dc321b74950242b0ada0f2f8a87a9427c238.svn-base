@@ -1,0 +1,171 @@
+/*
+ * Copyright 2012 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.kt.moss;
+
+import static com.kt.moss.CommonUtilities.SENDER_ID;
+import static com.kt.moss.CommonUtilities.displayMessage;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
+import android.app.KeyguardManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+
+import com.google.android.gcm.GCMBaseIntentService;
+
+/**
+ * IntentService responsible for handling GCM messages.
+ */
+public class GCMIntentService extends GCMBaseIntentService {
+
+    @SuppressWarnings("hiding")
+    private static final String TAG = "GCMIntentService";
+
+    public GCMIntentService() {
+        super(SENDER_ID);
+    }
+
+    @Override
+    protected void onRegistered(Context context, String registrationId) {
+        Log.i(TAG, "Device registered: regId = " + registrationId);
+        displayMessage(context, getString(R.string.gcm_registered, registrationId));
+        ServerUtilities.register(context, registrationId);
+// 		regId 파일 저장
+        setRegId(registrationId);
+    }
+
+    @Override
+    protected void onUnregistered(Context context, String registrationId) {
+        Log.i(TAG, "Device unregistered");
+        displayMessage(context, getString(R.string.gcm_unregistered));
+        ServerUtilities.unregister(context, registrationId);
+    }
+
+    @Override
+    protected void onMessage(Context context, Intent intent) {
+        Log.i(TAG, "Received message. Extras: " + intent.getExtras());
+//        String message = getString(R.string.gcm_message);
+        String message = intent.getExtras().getString("message");
+        // noti 발생 시 상수로 사용할 변수
+        int notiId = (int)System.currentTimeMillis();
+//        try {
+//			message = URLDecoder.decode(message, "UTF-8");
+//		} catch (UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+        
+        try {
+			message = new String(message.getBytes(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        displayMessage(context, message);
+        // notifies user
+        generateNotification(context, message, notiId);
+        // 화면 잠금 상태 확인
+		KeyguardManager keyguardManager = (KeyguardManager)getSystemService(Context.KEYGUARD_SERVICE);
+		boolean bScreenLock = keyguardManager.inKeyguardRestrictedInputMode();
+		Log.i(TAG, "Device Sleep : " + bScreenLock);
+		
+		if(bScreenLock) {
+	        // 팝업으로 사용할 액티비티를 호출할 인텐트를 작성.
+	        Intent popupIntent = new Intent(context, PushPopupActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	        popupIntent.putExtra("message", message);
+	        popupIntent.putExtra("notiId", notiId);
+//	        context.startActivity(popupIntent);
+	        startActivity(popupIntent);
+		}
+    }
+
+    @Override
+    protected void onDeletedMessages(Context context, int total) {
+        Log.i(TAG, "Received deleted messages notification");
+        String message = getString(R.string.gcm_deleted, total);
+        // noti 발생 시 상수로 사용할 변수
+        int notiId = (int)System.currentTimeMillis();
+        displayMessage(context, message);
+        // notifies user
+        generateNotification(context, message, notiId);
+    }
+
+    @Override
+    public void onError(Context context, String errorId) {
+        Log.i(TAG, "Received error: " + errorId);
+        displayMessage(context, getString(R.string.gcm_error, errorId));
+    }
+
+    @Override
+    protected boolean onRecoverableError(Context context, String errorId) {
+        // log message
+        Log.i(TAG, "Received recoverable error: " + errorId);
+        displayMessage(context, getString(R.string.gcm_recoverable_error, errorId));
+        return super.onRecoverableError(context, errorId);
+    }
+
+    /**
+     * Issues a notification to inform the user that server has sent a message.
+     */
+    private static void generateNotification(Context context, String message, int notiId) {
+        int icon = R.drawable.ic_ktmoss;
+        long when = System.currentTimeMillis();
+        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notification = new Notification(icon, message, when);
+        String title = context.getString(R.string.app_name);
+        Intent notificationIntent = new Intent(context, IntroActivity.class);
+        // set intent so it does not start a new activity
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+        notification.setLatestEventInfo(context, title, message, intent);
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;		//	상태바에서 푸시 선택시 알림 해제
+        notification.defaults |= (Notification.DEFAULT_SOUND ) ;	//	기본 알림음 발생
+        notification.defaults |= ( Notification.DEFAULT_VIBRATE) ;	//	기본 진동 발생
+        notificationManager.notify(notiId, notification);				//	다중 noti 현재 시간을 상수로 사용
+        
+        Log.i(TAG, String.valueOf(notiId));
+    }
+    
+    private void setRegId(String regId) {
+		String dirPath = "/storage/sdcard0";
+		Log.i(TAG, "moss_regId.txt path : " + dirPath);
+		File file = new File(dirPath); 
+		// 일치하는 폴더가 없으면 생성
+		if( !file.exists() ) {
+			file.mkdirs();
+		}
+		// txt 파일 생성
+		File savefile = new File(dirPath+"/moss_regId.txt");
+		try{
+			FileOutputStream fos = new FileOutputStream(savefile);
+			fos.write(regId.getBytes());
+			fos.close();
+			Log.i(TAG, "moss_regId.txt : create!");
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+
+}

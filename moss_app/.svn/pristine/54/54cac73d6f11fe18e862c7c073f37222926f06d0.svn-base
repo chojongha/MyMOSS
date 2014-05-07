@@ -1,0 +1,381 @@
+/**
+ * login.js
+ */
+var loginDebugPrefix = "[login.js] : ";
+var userID = null;
+var userPW = null;
+var userStartPage = "index.html";
+var userAutoLogin = "N";
+var userLocation = "Y";
+var userPush = "Y";
+//	버전관리용 변수 
+var fileName = "moss_app.apk";
+var userVersion = "1.0.0";
+var deviceId = "";
+var deviceType = "";
+var loginFlag = 1; // 인증 시 0값
+//로그인 유저 정보
+var loginId = "";
+var userName = "";
+var departmentCd = "";
+var departmentName = "";
+var companyCd = "";
+var mobilePhoneNum = "";
+var email = "";
+//Reguar Expression
+var re_id = /^[a-z0-9_-]{8,20}$/;
+var re_pw = /^[a-z0-9_-].*[!,@,#,$,%,^,&,*,?,_,~]$/;
+//db
+var db = 0;
+
+function encode_utf8(s) {
+	return unescape(encodeURIComponent(s));
+}
+
+function decode_utf8(s) {
+	return decodeURIComponent(escape(s));
+}
+
+var showConfirm = function() {
+	function onConfirm(button) {
+//		alert('You selected button ' + button);
+		if (button == 2) {
+			navigator.app.exitApp();
+		}
+	}
+	navigator.notification.confirm(
+		'KT MOSS 앱을 종료하시겠습니까?', // message
+		onConfirm, // callback to invoke with index of button pressed
+		'종료', // title
+		'취소,확인' // buttonLabels
+	);
+};
+// 테이블 생성 sql
+function populateDB(tx) {
+	// tx.executeSql('DROP TABLE IF EXISTS MOSS_USERINFO');
+	tx.executeSql("CREATE TABLE IF NOT EXISTS MOSS_USERINFO (userID, userPW, startPage, autoLoginYN, locationYN, pushYN, fileName, version)");
+	tx.executeSql("INSERT INTO MOSS_USERINFO (userID, userPW, startPage, autoLoginYN, locationYN, pushYN, fileName, version) VALUES ('"+ userID +"','"+ userPW +"','"+ userStartPage +"','"+ userAutoLogin +"','"+ userLocation +"','"+ userPush +"','"+ fileName +"','" + userVersion +"')");
+}
+
+function errorCB(err) {
+	console.log(loginDebugPrefix + "db error");
+}
+
+function successCreateCB() {
+	console.log(loginDebugPrefix + "db create");
+	// table 생성이 완료 되면user 정보 읽기
+	getSqlResultSet();
+}
+
+function createDB() {
+	db.transaction(populateDB, errorCB, successCreateCB);
+}
+
+// 로그인 유저 테이블 조회
+function selectDbSuccess(tx, results) {
+	userID = results.rows.item(0).userID;
+	userPW = results.rows.item(0).userPW;
+	userStartPage = results.rows.item(0).startPage;
+	userAutoLogin = results.rows.item(0).autoLoginYN;
+	userLocation = results.rows.item(0).locationYN;
+	userPush = results.rows.item(0).pushYN;
+	fileName = results.rows.item(0).fileName;
+	userVersion = results.rows.item(0).version;
+	
+	var msg = "아이디 : " + userID + "\n" + "패스워드 : " + userPW + "\n" + "시작페이지 : " + userStartPage + "\n" + "AutoLogin : " + userAutoLogin + "\n" + "위치정보 : " + userLocation + "\n" + "푸시알림 : " + userPush + "\n" + "푸시알림 : " + fileName + "\n" + "버전 : " + userVersion;
+	console.log(loginDebugPrefix + msg);
+	
+	// 로그인 시 사번 입력
+	if("null" != userID) {
+		$("#login_id").val(userID);
+	}
+	// DB 정보에 따른 자동로그인 슬라이더 값 할당
+	$("#login_auto").val(userAutoLogin).slider( "refresh" );
+	// 자동로그인 여부에 따른 패스워드 입력
+	if("Y" == userAutoLogin) {
+		$("#login_pw").val(userPW);
+		doLogin();
+	}
+}
+
+// 업데이트
+function updateSuccess(tx, results) {
+	console.log(loginDebugPrefix + "update Success");
+	// 로그인 인증 완료 후 업데이트까지 완료 한 뒤 메인 페이지로 이동
+//	location.assign(userStartPage);
+	$.mobile.changePage(userStartPage);
+}
+
+// 조회
+function querySelectDB(tx) {
+	tx.executeSql('SELECT * FROM MOSS_USERINFO', [], selectDbSuccess, errorCB);
+}
+
+function getSqlResultSet() {
+	db.transaction(querySelectDB, errorCB);
+}
+
+//업데이트 sql
+function queryUpdateDB(tx) {
+//	(userID, userPW, startPage, autoLoginYN, locationYN, pushYN, version)
+	var sql = "UPDATE MOSS_USERINFO SET userID = '"+ userID +"', userPW = '"+ userPW +"', startPage='"+ userStartPage +"', autoLoginYN='"+ userAutoLogin +"', locationYN='Y', pushYN='Y', version='" + userVersion + "' where version = '" + userVersion + "';";
+	console.log(loginDebugPrefix + sql);
+	tx.executeSql(sql, [], updateSuccess, errorCB);
+}
+
+function updateUserInfo() {
+	db.transaction(queryUpdateDB, errorCB);
+}
+
+function doLogin () {
+	
+	// 페이지가 보여지면서 로더를 보여준다.
+	$.mobile.loading( "show", {
+		  text: "로그인 요청 중...",
+		  textVisible: true,
+		  theme: "a",
+		  html: ""
+	});
+	
+	// 아이디 검사
+	if (re_id.test($("#login_id").val()) != true) { 
+		alert("사번이 또는 비밀번호가 잘못 입력되었습니다.");
+		return location.reload();
+	}
+// 비밀번호 검사
+//	else if(re_pw.test($("#login_pw").val()) != true) { 
+//		alert("사번이 또는 비밀번호가 잘못 입력되었습니다.");
+//		return location.reload();
+//	}
+	
+	if(!true == check_network()) {
+		alert("네트워크 연결 장애");
+		location.reload();
+	} else {
+		userID = $("#login_id").val();
+		userPW = $("#login_pw").val();
+		userAutoLogin = $("#login_auto").val();
+	    
+		// 암호화 key
+		var key = "1234567890abcdef";
+		// aes 인코딩
+		var encryptionPW = AES_Encode(userPW);
+		console.log(loginDebugPrefix + "encryption Password =" + encryptionPW);
+		
+		function AES_Encode(plain_text)
+		{
+			GibberishAES.size(128);
+			return GibberishAES.aesEncrypt(plain_text, key);
+		}
+		
+		console.log(loginDebugPrefix + "ID : " + userID + ", Pw : " + userPW + ", AutoLoginFlag : " + userAutoLogin);
+		var deviceType = getDeviceInfo();
+		console.log(loginDebugPrefix + "userID=" + userID + "\n deviceId=" + deviceId + " \ndeviceType=" + deviceType);
+	    // 로그인
+		$.ajax({
+			url: url + "Login",
+			type: "post",
+			timeout: 10*1000,
+			dataType: "json",
+			//파라미터 swname 추가. 추가 데이터는  앱 파일 명.
+			data: {userID:userID, userPW:encryptionPW},
+			success: function (result) {
+				var bodyData = result.body;
+				var errMsg = "";
+
+				$.each(bodyData, function(key, val){
+					
+					$.each(val, function(key, val){
+						console.log(loginDebugPrefix + key + ", " + val);
+				    });
+					
+//					body
+					loginFlag = val.result;
+					errMsg = val.errMsg;
+					if(loginFlag == 0) {
+						loginId = val.loginId;
+						userName = val.userName;
+						departmentCd = val.departmentCD;
+						departmentName = val.departmentName;
+						companyCd = val.companyCD;
+						mobilePhoneNum = val.mobilePhoneNum;
+						email = val.email;
+						
+						console.log(loginDebugPrefix + "========= Response Data =========");
+						console.log(loginDebugPrefix + "userName = " + userName);
+						console.log(loginDebugPrefix + "departmentCd = " + departmentCd);
+						console.log(loginDebugPrefix + "departmentName = " + departmentName);
+						console.log(loginDebugPrefix + "companyCd = " + companyCd);
+						console.log(loginDebugPrefix + "mobilePhoneNum = " + mobilePhoneNum);
+						console.log(loginDebugPrefix + "email = " + email);
+					}
+			    });
+
+				if(loginFlag == 0) {
+//					alert("로그인 인증 성공");
+				} else {
+					$.mobile.hidePageLoadingMsg();
+					alert("로그인 인증 실패 \n" + errMsg);
+//					location.reload();						// 로그인 페이지 리로드		
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				$.mobile.hidePageLoadingMsg();
+		        alert("로그인" + textStatus); // this will be "timeout"
+		        console.log(loginDebugPrefix + jqXHR.responseText);
+		        console.log(loginDebugPrefix + jqXHR.status);
+		        console.log(loginDebugPrefix + errorThrown);
+//		        location.reload();
+		    }
+		}).done(function() {
+			if(loginFlag != 0) {
+				console.log(loginDebugPrefix + "======= 로그인 인증 실패 : 디바이스 등록 프로세스 중지 =======");
+			} else {
+				// 사용자 기기 등록
+				$.ajax({
+					url: url + "Register",
+					type: "post",
+					timeout: 10*1000,
+					dataType: "json",
+					data: {workerId:userID, deviceId:deviceId, deviceType:deviceType},
+					success: function (result) {
+						var bodyData = result.body;
+						$.each(bodyData, function(key, val){
+							if(val.result == 0) {
+								$.mobile.hidePageLoadingMsg();
+							} else {
+								$.mobile.hidePageLoadingMsg();
+								alert("디바이스 인증 실패");
+							}
+							console.log(loginDebugPrefix + "result = " + val.result);
+							console.log(loginDebugPrefix + "errMsg = " + val.errMsg);
+					    });
+						updateUserInfo();						// 로그인 및 디바이스 인증 완료 후 로그인 정보 업데이트하고 페이지 이동
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						$.mobile.hidePageLoadingMsg();
+//						updateUserInfo();
+				        alert(textStatus); // this will be "timeout"
+				        console.log(loginDebugPrefix + jqXHR.responseText);
+				        console.log(loginDebugPrefix + jqXHR.status);
+				    }
+				});
+			}
+		});
+		
+	}
+}
+
+// 파일 읽기
+function gotFS(fileSystem) {
+    fileSystem.root.getFile("moss_regId.txt", null, gotFileEntry, fail);
+}
+
+function gotFileEntry(fileEntry) {
+    fileEntry.file(gotFile, fail);
+}
+
+function gotFile(file){
+    readDataUrl(file);
+    readAsText(file);
+}
+
+function readDataUrl(file) {
+    var reader = new FileReader();
+    reader.onloadend = function(evt) {
+        console.log(loginDebugPrefix + "Read as data URL");
+        console.log(loginDebugPrefix + evt.target.result);
+    };
+    reader.readAsDataURL(file);
+}
+
+function readAsText(file) {
+    var reader = new FileReader();
+    reader.onloadend = function(evt) {
+        console.log(loginDebugPrefix + "Read as text");
+        console.log(loginDebugPrefix + evt.target.result);
+        
+        deviceId = evt.target.result;
+    };
+    reader.readAsText(file);
+}
+
+function fail(error) {
+    console.log(loginDebugPrefix + "file error code = " + error.code);
+}
+
+// 버전 관리 
+function compareToVersion() {
+	$.ajax({
+		url: url + "SwVersion",
+		type: "post",
+		timeout: 10*1000,
+		dataType: "json",
+		//파라미터 swname 추가. 추가 데이터는  앱 파일 명.
+		data: {swname:fileName},
+		success: function (result) {
+			var bodyData = result.body;
+			$.each(bodyData, function(key, val){
+				console.log(loginDebugPrefix + "=========== compareToVersion ===========");
+				$.each(val, function(key, val){
+					console.log(loginDebugPrefix + key + " : " + val);
+			    });
+				
+				var currentVer = userVersion.split(".").join("");
+				var newVer = val.SWVERSION.split(".").join("");
+				
+				console.log(loginDebugPrefix + "=========== currentVersion =========== : " + currentVer);
+				console.log(loginDebugPrefix + "=========== NewVersion =============== : " + newVer);
+				
+				if(parseInt(currentVer) < parseInt(newVer)) {
+					var showConfirm = function() {
+						function onConfirm(button) {
+//							alert('You selected button ' + button);
+							if (button == 2) {
+//								window.open("http://moss.kt.com/moss/index");
+								callDownloadPage();
+							} else {
+								navigator.app.exitApp();
+							}
+						}
+						navigator.notification.confirm(
+							'최신버전 버전으로 업데이트 하세요.\n확인 버튼을 누르면 설치 페이지로 이동합니다.\n취소 시 KT MOSS 앱을 종료합니다.', // message
+							onConfirm, // callback to invoke with index of button pressed
+							'업데이트 안내', // title
+							'취소,확인' // buttonLabels
+						);
+					};
+					
+					showConfirm();
+					
+				} else {
+					console.log(loginDebugPrefix + "=========== compareToVersion ========= : 현재 최신 버전 입니다.");
+				}
+		    });
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			$.mobile.hidePageLoadingMsg();
+	        alert("버전관리" + textStatus); // this will be "timeout"
+	        console.log(loginDebugPrefix + jqXHR.responseText);
+	        console.log(loginDebugPrefix + jqXHR.status);
+	        console.log(loginDebugPrefix + errorThrown);
+	    }
+	});
+}
+$( document ).on( "pageshow", "#page_login", function( event ) {
+	//로그인 액션
+	$("#btn_submit").click(function() {
+		doLogin();
+	});
+	$("#btn_cancel").click(function() {
+		showConfirm();
+	});
+	compareToVersion();
+});
+$( document ).on( "pagebeforecreate", "#page_login", function( event ) {
+	if (!db) {
+		db = window.openDatabase("Database", "1.0", "myDb", 200000);
+	}
+	// user 정보 생성
+	createDB();
+});

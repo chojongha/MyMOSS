@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>자유게시판 글쓰기</title>
+</head>
+<body>
+	<div data-role="page" id="page_board_open_write">
+		<div data-theme="a" data-role="header" data-position="fixed" data-tap-toggle="false" id="beforeList" class="header">	
+			<a href="board_open.html" data-role="button" data-mini="false" class="ui-btn-left"><img src="../img/detail_back.png"></a>
+			<h3>글쓰기</h3>
+		</div>
+		<div data-role="content" id="content">
+			<div class="CSSTableGenerator">		
+				<div id="open_write_table">
+					<form id="board_write_BDfree" enctype="multipart/form-data" method="post">
+					<table id="writer_table">
+						<tr></tr>
+						<tr></tr>
+						<tr>
+							<td width='25%'  style="-moz-border-radius-topleft:5px; -webkit-border-top-left-radius:5px; border-top-left-radius:5px;"><strong>제  목</strong></td>
+							<td id='openWrite_title' style="padding:0px 5px 0px 5px; -moz-border-radius-topright:5px; -webkit-border-top-right-radius:5px; border-top-right-radius:5px;" ><input type="text" placeholder="최대 50자 입력 가능" id="board_writeSubject" name="subject" value=""/></td>
+						</tr>					
+						<tr>
+							<td colspan='2' id='openWrite_content' valign='top'style="padding:0px 5px 0px 5px;"><textarea name="content" placeholder="최대 1000자 입력 가능" id="board_writeContent"></textarea></td>
+						</tr>
+						<tr>
+							<td width='25%'><strong>첨부파일</strong></td>
+							<td id='openWrite_file' style="padding:0px;"><input type="file" onclick="BDFileCheck();" name="BDFile" id="openFileButton" data-mini="true" data-inline="true" data-role="button" data-theme="b" value="파일선택"/></td>
+						</tr>
+					</table>
+					<div style="width:0;height:0;overflow:hidden;">
+						<input type="text" id="writerid" name="userId"/><br/>
+						<input type="text" id="writername" name="userName"/><br/>
+					</div>
+					</form>
+					<!-- 텍스트 전송 전용 폼 -->
+					<form id="board_write_BDfree_onlyText" enctype="multipart/form-data" method="post">
+			    	<div style="width:0;height:0;overflow:hidden;">
+						<input type="text" id="writerid_onlyText" name="userId"/><br/>
+						<input type="text" id="writername_onlyText" name="userName"/><br/>
+						<input type="text" id="board_writeSubject_onlyText" name="subject" value=""/>
+						<textarea name="content" id="board_writeContent_onlyText" style="height:350px; overflow-x:hidden; overflow-y:auto;"></textarea>
+					</div>
+				</form>
+				</div>
+			</div>
+			
+		</div>
+		<div data-theme="a" data-role="footer" id="add" data-position="fixed" data-tap-toggle="false">
+		<div class="ui-grid-solo">
+		<a href="#" data-mini ='false' data-role="button" id="btn_boardSubmit" data-theme="c" >작성</a>
+		</div>
+		
+		</div> 
+		
+			
+	</div>
+</body>
+</html>

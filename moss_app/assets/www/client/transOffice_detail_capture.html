@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>사업장 상세보기</title>
+
+<link rel="stylesheet" href="../jquery.mobile/jquery.mobile-1.3.2.min.css" />
+<link rel="stylesheet" href="../css/common.css" />
+<script src="../jquery.mobile/jquery-1.7.2.min"></script>
+<script src="../jquery.mobile/jquery.mobile-1.3.2.min.js"></script>
+</head>
+<body>
+	<div data-role="page" id="page_transOffice_detail_capture">
+		<div data-theme="a" data-role="header" data-position="fixed" data-tap-toggle="false" class="header">
+			<a href="transOffice_detail.html" data-mini="false" data-role="button" class="ui-btn-left" id="btn_back"><img src="../img/detail_back.png"></a>
+			<h3>사업장 사진 첨부</h3>
+		</div>
+		<div data-role="content" id=content>
+			<!-- img 미리보기 -->
+			<div id="preview_img">
+			    <p align="center"><img style="display:table-cell; width:300px;" id="smallImage" src="" /></p>
+			</div>
+			<!-- img 미리보기 -->
+
+		</div>
+		<div data-theme="a" data-role="footer" data-position="fixed" data-tap-toggle="false">
+			<!-- 사진 전송 버튼 --> 				   							
+			<div class="ui-grid-solo">
+				<a href="#" data-role="button" id="btn_sandOfficePic" data-mini ='false' data-theme="c">전 송</a>
+			</div>		   				   				
+			<!-- 사진 전송 버튼 -->
+
+			<!-- 하단 navi bar-->
+			<div data-role="navbar" id="detail_navbar">
+			    <ul>
+			        <li><a href="#" data-role="button" id="btn_captureImg"><img src="../img/detail_cam_n.png"><p>사진촬영</p></a></li>
+			        <li><a href="#" data-role="button" id="btn_loadImg"><img src="../img/detail_album_n.png"><p>앨범</p></a></li>
+			    </ul>
+			</div>
+			<!-- 하단 navi bar-->
+		</div>
+	</div>
+
+</body>
+</html>

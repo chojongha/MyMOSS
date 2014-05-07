@@ -1,0 +1,109 @@
+var board_notice_debugPrefix = "[board_notice.js] : ";
+
+function showNoticeList(){
+    // 페이지가 보여지면서 로더를 보여준다.
+    $.mobile.loading( "show", {
+          text: "리스트를 읽어오는 중 입니다.",
+          textVisible: true,
+          theme: "a",
+          html: ""
+    });
+    
+    $.ajax({
+        url: url + "NoticeList",
+        type: "post",
+        timeout: 10*1000,
+        dataType: "json",
+        
+        success: function(result){
+            var bodyData = result.body;
+            var manualLi = "";
+            var headerData = result.header;
+
+            
+            if(headerData.result != 0){
+                manualLi = "<li data-icon='false'> "+
+                "    <a href='#'>" +
+                "        <center><h2>데이터가 존재하지 않습니다.</h2></center>" +
+                "    </a>" +
+                "</li>";
+                
+                console.log(board_notice_debugPrefix + "분야데이터없음");
+            }else{
+           
+            
+            if(bodyData.length > 0){
+                $.each(bodyData, function(key, val){
+                    
+                    $.each(val, function(key, val) {
+                        console.log(board_notice_debugPrefix + key + " : " + val);
+                    });
+                    //최상위 공지사항 여부
+                    if(val.TOPYN == "Y"){
+                   
+                        manualLi += "<li data-icon='false'>" +
+                                         "<a href='board_notice_detail.html?noticeSeqNum="+val.NOTICESEQNUM+"'>" +
+                                          "<table id='dynamicList_topyn'>" +
+                                                "<tr>" +
+                                                "<td class='dynamicTable_td'><h1 style='width:300px; padding:0; margin:0; text-overflow:ellipsis; display:inline-block;'>"+ val.SUBJECT +"</h1></td>" +
+                                                "</tr>" +
+                                                "<tr>" +
+                                                    "<td class='dynamicTable_td'>"+ val.WRITEDATE +"</td>" +
+                                                "</tr>" +
+                                                "<tr>" +
+                                                    "<td class='dynamicTable_td' align='right'>"+ val.WRITERNAME +"</td>" +
+                                                "</tr>" +
+                                            "</table>" +
+                                        "</a>" +
+                                    "</li>";
+                        
+
+                    }else{
+                        
+                            manualLi += "<li data-icon='false'>" +
+                                             "<a href='board_notice_detail.html?noticeSeqNum="+val.NOTICESEQNUM+"'>" +
+                                              "<table id='dynamicList'>" +
+                                                    "<tr>" +
+                                                        "<td class='dynamicTable_td'><h1 style='width:300px; padding:0; margin:0; text-overflow:ellipsis; display:inline-block;'>"+ val.SUBJECT +"</h1></td>" +
+                                                    "</tr>" +
+                                                    "<tr>" +
+                                                        "<td class='dynamicTable_td'>"+ val.WRITEDATE +"</td>" +
+                                                    "</tr>" +
+                                                    "<tr>" +
+                                                        "<td class='dynamicTable_td' align='right'>"+ val.WRITERNAME +"</td>" +
+                                                    "</tr>" +
+                                                "</table>" +
+                                            "</a>" +
+                                        "</li>";
+                        
+                        
+                    }});
+            }else{
+                manualLi = "<li data-icon='false'> "+
+                           "    <a href='#'>" +
+                           "        <center><h2>데이터가 존재하지 않습니다.</h2></center>" +
+                           "    </a>" +
+                           "</li>";
+            }
+            }
+            $('#noticeList').append(manualLi).listview("refresh");
+            $.mobile.hidePageLoadingMsg();
+             
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log(manualList_debugPrefix + "매뉴얼리스트 출력 에러 : " + jqXHR.status);
+            console.log(manualList_debugPrefix + "매뉴얼리스트 출력 에러 : " + jqXHR.responseText);
+            console.log(manualList_debugPrefix + "매뉴얼리스트 출력 에러 : " + errorThrown);
+        } 
+    });
+}   
+
+$(document).on("pageshow","#page_notice_list", function(event){
+    
+    showNoticeList();
+});
+
+$(document).on("pageshow","#page_notice_list", function(event){
+//  showNoticeList();
+});
+

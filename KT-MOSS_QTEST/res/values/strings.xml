@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- app_name -->
+    <string name="app_name">KT 품질측정</string>
+    <!-- titles -->
+    <string name="title_home">KT 품질측정</string>
+
+    <!-- 다이얼로그 -->
+    <string name="dialog_exit">품질측정 앱을 종료하시겠습니까?</string>
+    <string name="dialog_ok">확인</string>
+    <string name="dialog_login">로그인</string>
+    <string name="dialog_yes">예</string>
+    <string name="dialog_no">아니오</string>
+    <string name="dialog_set">설정</string>
+    <string name="dialog_cancel">취소</string>
+
+    <!-- 로그인 -->
+    <string name="login_id_missingvalue">운용자 아이디를 입력해주세요.</string>
+    <string name="login_password_missingvalue">비밀번호를 입력해주세요.</string>
+    <string name="login_title">로그인</string>
+    <string name="login_id_label">아이디</string>
+    <string name="login_password_label">비밀번호</string>
+    <string name="state_combo">상태필터</string>
+    <string name="order_type_combo">오더 타입</string>
+    <string name="internet_test">광레벨 측정</string>
+    <string name="internet_line">회선 인증</string>
+    <string name="internet_speed">인터넷속도측정</string>
+    <string name="vc_test">VC 측정</string>
+    <string name="vc_test_type_combo">방식</string>
+    <string name="vc_test_time_combo">응답시간(초)</string>
+    <string name="vc_test_01">방식</string>
+    <string name="vc_test_02">측정시간(초)</string>
+    <string name="vc_test_03">경과시간</string>
+    <string name="vc_test_04">상태</string>
+
+    <!-- 인터넷 개통 -->
+
+    <string name="detail_title_summary">요약정보</string>
+    <string name="detail_title_customer">고객정보</string>
+    <string name="detail_title_facilities">시설정보</string>
+    <string name="detail_title_result">측정결과</string>
+
+    <!-- 요약정보 -->
+    <string name="i_summary_01">작업의뢰번호</string>
+    <string name="i_summary_02">진행상태</string>
+    <string name="i_summary_03">수용국</string>
+    <string name="i_summary_04">오더내역</string>
+    <string name="i_summary_05">상품종류</string>
+    <string name="i_summary_06">가설 접수시간</string>
+    <string name="i_summary_07">고객 희망시간</string>
+    <string name="i_summary_08">방문 예정시간</string>
+    <string name="i_summary_09">고객명</string>
+    <string name="i_summary_10">대표전화번호</string>
+    <string name="i_summary_11">주소</string>
+
+    <!-- 고객정보 -->
+    <string name="i_customer_01">고객명</string>
+    <string name="i_customer_02">Kornet ID</string>
+    <string name="i_customer_03">상품종류</string>
+    <string name="i_customer_04">ADSL 모뎀</string>
+    <string name="i_customer_05">SAID</string>
+    <string name="i_customer_06">주소</string>
+    <string name="i_customer_07">대표전화번호</string>
+    <string name="i_customer_08">전화번호1</string>
+    <string name="i_customer_09">전화번호2</string>
+    <string name="i_customer_10">고객요구사항</string>
+
+    <!-- 시설정보 -->
+    <string name="i_facilities_01">ADSL/FLC 포트</string>
+    <string name="i_facilities_02">ADSL 타이번호</string>
+    <string name="i_facilities_03">FLC 타이번호</string>
+    <string name="i_facilities_04">INET 타이번호</string>
+    <string name="i_facilities_05">LC 타이번호</string>
+    <string name="i_facilities_06">심선번호</string>
+    <string name="i_facilities_07">MDF LEN</string>
+    <string name="i_facilities_08">가설단자함 위치</string>
+    <string name="i_facilities_09">LLU 사업자</string>
+    <string name="i_facilities_10">LLU KT 전화번호</string>
+
+    <!-- 인터넷 측정결과 -->
+    <string name="i_test_01">측정일시</string>
+    <string name="i_test_02">파장</string>
+    <string name="i_test_03">파워</string>
+    <string name="i_test_04">Reference</string>
+    <string name="i_test_05">회선 인증 결과</string>
+    <string name="i_test_06">FTTH-Real</string>
+    <string name="i_test_07">다운로드</string>
+    <string name="i_test_08">업로드</string>
+    <string name="i_test_09">지연(최소)</string>
+    <string name="i_test_10">지연(표준편차)</string>
+    <string name="i_test_11">지연(최대)</string>
+    <string name="i_test_12">손실율</string>
+    <string name="i_test_13">지연(평균)</string>
+    <string name="i_test_14">CPU부하율</string>
+    <string name="i_test_15">메모리점유율</string>
+    <string name="i_test_16">사용자 IP</string>
+    <string name="i_test_17">Memory</string>
+    <string name="i_test_18">운영체제</string>
+    <string name="i_test_19">브라우저</string>
+    <string name="i_test_20">CPU</string>
+    <string name="i_test_21">항목</string>
+    <string name="i_test_22">상태</string>
+    <string name="i_test_23">Download</string>
+    <string name="i_test_24">Upload</string>
+    <string name="i_test_25">Ping</string>
+    <string name="i_test_26">UDP</string>
+
+    <!-- 인터넷 수리 -->
+
+
+    <!-- 요약정보 -->
+    <string name="r_summary_01">작업의뢰번호</string>
+    <string name="r_summary_02">진행상태</string>
+    <string name="r_summary_03">수용국</string>
+    <string name="r_summary_04">오더내역</string>
+    <string name="r_summary_05">상품종류</string>
+    <string name="r_summary_06">고장접수번호</string>
+    <string name="r_summary_07">수리의뢰일련번호</string>
+    <string name="r_summary_08">가설 개통일시</string>
+    <string name="r_summary_09">고객 접수시간</string>
+    <string name="r_summary_10">방문 예정시간</string>
+    <string name="r_summary_11">고객명</string>
+    <string name="r_summary_12">대표전화번호</string>
+    <string name="r_summary_13">주소</string>
+
+    <!-- 고객정보 -->
+    <string name="r_customer_01">고객명</string>
+    <string name="r_customer_02">Kornet ID</string>
+    <string name="r_customer_03">대표전화번호</string>
+    <string name="r_customer_04">전화번호1</string>
+    <string name="r_customer_05">전화번호2</string>
+    <string name="r_customer_06">주소</string>
+    <string name="r_customer_07">고장서비스시설</string>
+    <string name="r_customer_08">고객의견</string>
+    <string name="r_customer_09">수리의뢰자</string>
+    <string name="r_customer_10">수리의뢰자연락처</string>
+    <string name="r_customer_11">수리의뢰자 의견</string>
+    <string name="r_customer_12">독촉성 여부</string>
+    <string name="r_customer_13">당일중복고장횟수</string>
+    <string name="r_customer_14">처리중 신고횟수</string>
+    <string name="r_customer_15">30일이내고장여부</string>
+    <string name="r_customer_16">작업자명</string>
+
+    <!-- 시설정보 -->
+    <string name="r_facilities_01">포트정보</string>
+    <string name="r_facilities_02">포트정보2</string>
+    <string name="r_facilities_03">심선번호</string>
+    <string name="r_facilities_04">LLU 사업자</string>
+    <string name="r_facilities_05">LLU KT 전화번호</string>
+
+    <!-- 인터넷 측정결과 -->
+    <string name="r_test_01">측정일시</string>
+    <string name="r_test_02">파장</string>
+    <string name="r_test_03">파워</string>
+    <string name="r_test_04">Reference</string>
+
+    <!-- 인터넷 전화 측정결과 -->
+    <string name="p_test_01">미디어 방향</string>
+    <string name="p_test_02">콜 방향</string>
+    <string name="p_test_03">로그시각</string>
+    <string name="p_test_04">발신번호</string>
+    <string name="p_test_05">고객 번호</string>
+    <string name="p_test_06">코덱 종류</string>
+    <string name="p_test_07">시작시간</string>
+    <string name="p_test_08">종료시간</string>
+    <string name="p_test_09">원격Rtp IP</string>
+    <string name="p_test_10">원격Rtp 포트</string>
+    <string name="p_test_11">송신 패킷수</string>
+    <string name="p_test_12">수신 패킷수</string>
+    <string name="p_test_13">손실 패킷수</string>
+    <string name="p_test_14">손실률(평균)</string>
+    <string name="p_test_15">손실률(최대)</string>
+    <string name="p_test_16">에러코드</string>
+    <string name="p_test_17">지터(최대)</string>
+    <string name="p_test_18">지터(평균)</string>
+    <string name="p_test_19">지터손실</string>
+    <string name="p_test_20">지연(최대)</string>
+    <string name="p_test_21">지연(평균)</string>
+    <string name="p_test_22">R(평균)</string>
+    <string name="p_test_23">R(최소)</string>
+    <string name="p_test_24">Pesq(평균)</string>
+    <string name="p_test_25">Pesq(최소)</string>
+    <string name="p_test_26">Mos(평균)</string>
+    <string name="p_test_27">Mos(최소)</string>
+
+    <!-- 인터넷TV 측정결과 -->
+    <string name="test_prompt">테스트 시간</string>
+    <string name="t_test_01">지연시간 최대</string>
+    <string name="t_test_02">지연시간 최소</string>
+    <string name="t_test_03">지연시간 평균</string>
+    <string name="t_test_04">손실율</string>
+    <string name="t_test_05">다운로드속도(평균)</string>
+    <string name="t_test_06">다운로드속도(최대)</string>
+    <string name="t_test_07">다운로드속도(최소)</string>
+    <string name="title_activity_mains">Mains</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+</resources>

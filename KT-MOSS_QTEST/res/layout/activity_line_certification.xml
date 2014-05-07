@@ -1,0 +1,612 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_background"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <!-- 요약정보 시작 -->
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="left|center_vertical"
+                android:text="단말 정보"
+                android:textColor="#424243"
+                android:textSize="13dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:orientation="vertical" >
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="#d0cdbd" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dp"
+                        android:background="@drawable/groupbox_bg_middle"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="fill_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:gravity="left|center_vertical"
+                            android:text="서비스 계약 아이디"
+                            android:textColor="#424243"
+                            android:textSize="13dp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="fill_parent"
+                            android:layout_marginRight="5dp"
+                            android:background="#d0cdbd" />
+
+                        <TextView
+                            android:id="@+id/said"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_marginRight="5dp"
+                            android:gravity="left|center_vertical"
+                            android:textColor="#424243"
+                            android:textSize="13dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dp"
+                        android:background="@drawable/groupbox_bg_middle"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:gravity="left|center_vertical"
+                            android:text="공인 IP 주소"
+                            android:textColor="#424243"
+                            android:textSize="13dp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="fill_parent"
+                            android:layout_marginRight="5dp"
+                            android:background="#d0cdbd" />
+
+                        <TextView
+                            android:id="@+id/publicIp"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:gravity="left|center_vertical"
+                            android:textColor="#424243"
+                            android:textSize="13dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dp"
+                        android:background="@drawable/groupbox_bg_middle"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:gravity="left|center_vertical"
+                            android:text="단말 IP 주소"
+                            android:textColor="#424243"
+                            android:textSize="13dp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="fill_parent"
+                            android:layout_marginRight="5dp"
+                            android:background="#d0cdbd" />
+
+                        <TextView
+                            android:id="@+id/deviceIp"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:gravity="left|center_vertical"
+                            android:textColor="#424243"
+                            android:textSize="13dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="30dp"
+                        android:background="@drawable/groupbox_bg_down"
+                        android:gravity="left|center_vertical"
+                        android:orientation="horizontal" >
+
+                        <TextView
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:gravity="left|center_vertical"
+                            android:text="단말 MAC 주소"
+                            android:textColor="#424243"
+                            android:textSize="13dp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="fill_parent"
+                            android:layout_marginRight="5dp"
+                            android:background="#d0cdbd" />
+
+                        <TextView
+                            android:id="@+id/deviceMac"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:gravity="left|center_vertical"
+                            android:textColor="#424243"
+                            android:textSize="13dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <!-- 요약정보 끝 -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical" >
+
+                <!-- 요약정보 시작 -->
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left|center_vertical"
+                    android:text="회선 인증"
+                    android:textColor="#424243"
+                    android:textSize="13dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible" >
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="2dp"
+                        android:gravity="center"
+                        android:orientation="vertical" >
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1dp"
+                            android:background="#d0cdbd" />
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="30dp"
+                            android:background="@drawable/groupbox_bg_middle"
+                            android:gravity="left|center_vertical"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:layout_width="120dp"
+                                android:layout_height="fill_parent"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:gravity="left|center_vertical"
+                                android:text="회선 인증 결과"
+                                android:textColor="#424243"
+                                android:textSize="13dp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="fill_parent"
+                                android:layout_marginRight="5dp"
+                                android:background="#d0cdbd" />
+
+                            <TextView
+                                android:id="@+id/su"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:layout_marginRight="5dp"
+                                android:gravity="left|center_vertical"
+                                android:textColor="#424243"
+                                android:textSize="13dp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="30dp"
+                            android:background="@drawable/groupbox_bg_down"
+                            android:gravity="left|center_vertical"
+                            android:orientation="horizontal" >
+
+                            <TextView
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:gravity="left|center_vertical"
+                                android:text="FTTH-Real"
+                                android:textColor="#424243"
+                                android:textSize="13dp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="fill_parent"
+                                android:layout_marginRight="5dp"
+                                android:background="#d0cdbd" />
+
+                            <TextView
+                                android:id="@+id/ftthFlag"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:gravity="left|center_vertical"
+                                android:textColor="#424243"
+                                android:textSize="13dp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- 요약정보 끝 -->
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical" >
+
+                    <!-- 요약정보 시작 -->
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="left|center_vertical"
+                        android:text="장비 정보"
+                        android:textColor="#424243"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="visible" >
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginTop="2dp"
+                            android:gravity="center"
+                            android:orientation="vertical" >
+
+                            <View
+                                android:layout_width="fill_parent"
+                                android:layout_height="1dp"
+                                android:background="#d0cdbd" />
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="30dp"
+                                android:background="@drawable/groupbox_bg_middle"
+                                android:gravity="left|center_vertical"
+                                android:orientation="horizontal" >
+
+                                <TextView
+                                    android:layout_width="120dp"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:gravity="left|center_vertical"
+                                    android:text=""
+                                    android:textColor="#424243"
+                                    android:textSize="13dp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginRight="5dp"
+                                    android:background="#d0cdbd" />
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="작업 오더"
+                                    android:textColor="#424243"
+                                    android:textSize="13dp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginRight="5dp"
+                                    android:background="#d0cdbd" />
+
+                                <TextView
+                                    android:layout_width="0dip"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="회선 확인"
+                                    android:textColor="#424243"
+                                    android:textSize="13dp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="30dp"
+                                android:background="@drawable/groupbox_bg_middle"
+                                android:gravity="left|center_vertical"
+                                android:orientation="horizontal" >
+
+                                <TextView
+                                    android:layout_width="120dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:gravity="left|center_vertical"
+                                    android:text="수용 L2"
+                                    android:textColor="#424243"
+                                    android:textSize="13dp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginRight="5dp"
+                                    android:background="#d0cdbd" />
+
+                                <TextView
+                                    android:id="@+id/orderNescodes"
+                                    android:layout_width="0dip"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text=""
+                                    android:textColor="#424243"
+                                    android:textSize="13dp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginRight="5dp"
+                                    android:background="#d0cdbd" />
+
+                                <TextView
+                                    android:id="@+id/networkNescodes"
+                                    android:layout_width="0dip"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text=""
+                                    android:textColor="#424243"
+                                    android:textSize="13dp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="30dp"
+                                android:background="@drawable/groupbox_bg_middle"
+                                android:gravity="left|center_vertical"
+                                android:orientation="horizontal" >
+
+                                <TextView
+                                    android:layout_width="120dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:gravity="left|center_vertical"
+                                    android:text="수용 포트"
+                                    android:textColor="#424243"
+                                    android:textSize="13dp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginRight="5dp"
+                                    android:background="#d0cdbd" />
+
+                                <TextView
+                                    android:id="@+id/orderPorts"
+                                    android:layout_width="0dip"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text=""
+                                    android:textColor="#424243"
+                                    android:textSize="13dp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginRight="5dp"
+                                    android:background="#d0cdbd" />
+
+                                <TextView
+                                    android:id="@+id/networkPorts"
+                                    android:layout_width="0dip"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text=""
+                                    android:textColor="#424243"
+                                    android:textSize="13dp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="30dp"
+                                android:background="@drawable/groupbox_bg_down"
+                                android:gravity="left|center_vertical"
+                                android:orientation="horizontal" >
+
+                                <TextView
+                                    android:layout_width="120dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:gravity="left|center_vertical"
+                                    android:text="ONT MAC"
+                                    android:textColor="#424243"
+                                    android:textSize="13dp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginRight="5dp"
+                                    android:background="#d0cdbd" />
+
+                                <TextView
+                                    android:id="@+id/orderOntmacs"
+                                    android:layout_width="0dip"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text=""
+                                    android:textColor="#424243"
+                                    android:textSize="13dp"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginRight="5dp"
+                                    android:background="#d0cdbd" />
+
+                                <TextView
+                                    android:id="@+id/networkOntmacs"
+                                    android:layout_width="0dip"
+                                    android:layout_height="fill_parent"
+                                    android:layout_marginRight="5dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text=""
+                                    android:textColor="#424243"
+                                    android:textSize="13dp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/bottom"
+            android:layout_width="fill_parent"
+            android:layout_height="54dp"
+            android:background="#000000"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="horizontal"
+            android:paddingBottom="1dp"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="1dp" >
+
+            <Button
+                android:id="@+id/inBtn"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/command_btn"
+                android:gravity="center"
+                android:text="@string/vc_test"
+                android:textColor="#ffffff"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

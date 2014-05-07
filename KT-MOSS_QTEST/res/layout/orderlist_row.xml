@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/row_selector"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp" >
+
+        <TextView
+            android:id="@+id/workOdrKind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:gravity="left|center_vertical"
+            android:text="[개통]"
+            android:textColor="#424243"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/addr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="6dp"
+            android:layout_toRightOf="@id/workOdrKind"
+            android:gravity="left|center_vertical"
+            android:text="대전 유성구 탑립동"
+            android:textColor="#424243"
+            android:textSize="13dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp" >
+
+        <TextView
+            android:id="@+id/custName"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="이름"
+            android:textColor="#424243"
+            android:textSize="14dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/telNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6dp"
+            android:gravity="right|center_vertical"
+            android:text="123456789012"
+            android:textColor="#424243"
+            android:textSize="14dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp" >
+
+        <ImageView
+            android:id="@+id/icon_image"
+             android:layout_marginLeft="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_tv" />
+
+        <TextView
+            android:id="@+id/odrType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="6dp"
+            android:layout_toRightOf="@id/icon_image"
+            android:gravity="right|center_vertical"
+            android:text="인터넷"
+            android:textColor="#424243"
+            android:textSize="14dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/rsvDT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6dp"
+            android:text="2013-10-13 00:00"
+            android:textColor="#424243"
+            android:textSize="14dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+</LinearLayout>

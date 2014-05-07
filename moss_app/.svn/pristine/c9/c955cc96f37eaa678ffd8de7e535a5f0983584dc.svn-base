@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0, width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>고장상황 진행 상세보기</title>
+
+</head>
+<body>
+	<div data-role="page" id="page_alarmList_detail">
+		<div data-theme="a" data-role="header" data-position="fixed" data-tap-toggle="false" id="detail_header">
+			<a data-role="button" href="alarmList_noti.html" data-iconpos="notext" data-icon="back" data-iconpos="left" class="ui-btn-left">back</a>
+			<h3>고장 상황 [진행]</h3>
+		</div>
+		<div data-role="content" id="content">
+			<div id="contentWrapper">
+				<div id="scroller">
+					<div class="CSSTableGenerator">
+						<div id="table_faultDetail">
+							<!-- 고장상황 상세 테이블 -->
+							<!-- 테이블을 스크립트로 생성하여 append -->
+						</div>
+					</div>
+					<fieldset class="ui-grid-a">
+					    <div class="ui-block-a" style="text-align:right; margin-top:10px; padding-right:10px;">테이블 보기</div>
+					    <div class="ui-block-b">							        
+					    	<select name="flip-7" id="table_visible" data-role="slider" data-mini="true" onchange='checkTableVisible(this.value);'>
+					            <option value="Y">On</option>
+					            <option value="N">Off</option>
+					        </select>
+					    </div>
+					</fieldset>
+					<!-- 고장상황 출동 타임라인 -->
+					<div id="alarmList_detail_timeLine">
+						<ul id="Detail_commentList" data-role="listview" data-inset="true" data-icon="false">
+							<!-- 고장상황 출동 타임라인 -->
+							<!-- 다이나믹 타인라인 -->
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div data-theme="a" data-role="footer" data-position="fixed" data-tap-toggle="false" id="detail_footer">
+			<!-- 사진 및 텍스트 입력 bar -->
+			<div class="ui-grid-b" id="detail_box_input">
+			    <div class="ui-block-a" style="width:12%; display: table-cell; text-align: center; vertical-align: middle;"><a href="alarmList_noti_detail_capture.html"><img src="../img/detail_cam.png" style="width:2em; margin-bottom:-1.5em;"></a></div>
+		    	<div class="ui-block-b" style="width:73%; display: table-cell; text-align: center; vertical-align: middle;"><input type="text" id="setContent" placeholder="최대 100자 입력 가능" data-mini="true" data-theme="b"></div>
+		    	<div class="ui-block-c" style="width:15%; display: table-cell; text-align: center; vertical-align: middle;"><a href="#" id="btn_setComment_text" data-theme="c" data-role="button" data-mini="true" data-inline="true">전송</a></div>
+			    <form id="myForm_onlyComment" enctype="multipart/form-data" method="post" data-ajax="false">
+			    	<div style="width:0;height:0;overflow:hidden;">
+						<input type="text" id="notiseqnum" name="notiseqnum"/><br/>
+						<input type="text" id="writerid" name="writerid"/><br/>
+						<input type="text" id="writername" name="writername"/><br/>
+						<input type="text" id="usertype" name="usertype"/><br/>
+						<input type="text" id="userstate" name="userstate"/> <br/>
+						<input type="text" id="form_content" name="content"/> <br/>
+					</div>
+				</form>
+			</div><!-- /grid-b -->
+			<!-- 사진 및 텍스트 입력 bar -->
+			<!-- 하단 navi bar-->
+			<div data-role="navbar" id="detail_navbar">
+			    <ul>
+			        <li><a id="btn_setLocation" data-role="button"><img src="../img/detail_nav1.png"><p>현재위치전송</p></a></li>
+			        <li><a href="#popupNested" id="popup_report"data-rel="popup" data-transition="pop" data-position-to="window">
+			        	<img src="../img/detail_nav2.png"><p>상황보고</p></a>
+			        </li>
+			        <li><a href="alarmList_noti_detail_map.html"><img src="../img/detail_nav3.png"><p>지도보기</p></a></li>
+			        <li><a href="alarmList_noti_detail_manual.html"><img src="../img/detail_nav4.png"><p>업무매뉴얼</p></a></li>
+			        <li><a href="alarmList_noti_detail_contact.html"><img src="../img/detail_nav5.png"><p>연락처조회</p></a></li>
+			    </ul>
+			</div>
+			<!-- 하단 navi bar-->
+			<div data-role="popup" id="popupNested" data-theme="a" data-overlay-theme="a">
+				<div id="popup_report">
+					<fieldset data-role="controlgroup">
+					    <p style="text-align:center;">상황보고</p>
+					    <input type="radio" name="detail_report" data-theme="d" data-iconpos="right" id="radio-choice-v-2a" value="1" checked="checked">
+					    <label for="radio-choice-v-2a">메세지 접수</label>
+					    <input type="radio" name="detail_report" data-theme="d" data-iconpos="right" id="radio-choice-v-2b" value="2">
+					    <label for="radio-choice-v-2b">현장 출동</label>
+					    <input type="radio" name="detail_report" data-theme="d" data-iconpos="right" id="radio-choice-v-2c" value="3">
+					    <label for="radio-choice-v-2c">현장 도착</label>
+					    <input type="radio" name="detail_report" data-theme="d" data-iconpos="right" id="radio-choice-v-2d" value="4">
+					    <label for="radio-choice-v-2d">고장 회복</label>
+					    <input type="radio" name="detail_report" data-theme="d" data-iconpos="right" id="radio-choice-v-2e" value="5">
+					    <label for="radio-choice-v-2e">출동 취소</label>
+					</fieldset>
+					<fieldset class="ui-grid-a" id="btn_group">
+					    <div class="ui-block-a"><a href="#" id="btn_setReport" data-role="button" data-theme="b" data-mini="true" data-rel="back">확인</a></div>
+					    <div class="ui-block-b"><a href="#" data-role="button" data-theme="b" data-mini="true" data-rel="back">취소</a></div>
+					</fieldset>
+				</div>
+			</div><!-- /popup -->
+		</div>
+	</div>
+</body>
+</html>

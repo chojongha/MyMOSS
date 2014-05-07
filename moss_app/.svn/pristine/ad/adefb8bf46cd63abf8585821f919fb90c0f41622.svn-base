@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>자유게시판 글쓰기</title>
+</head>
+<body>
+	<div data-role="page" id="page_board_open_write">
+		<div data-theme="a" data-role="header" data-position="fixed" data-tap-toggle="false" id="beforeList" class="header">	
+			<a href="board_open.html" data-role="button" data-mini="false" class="ui-btn-left"><img src="../img/detail_back.png"></a>
+			<h3>글쓰기</h3>
+		</div>
+		<div data-role="content" id="content">
+			<div class="CSSTableGenerator">		
+				<div id="open_write_table" style="width:100%; table-layout:fixed;">
+					<table>
+						<tr></tr>
+						<tr></tr>
+						<tr>
+							<td width='25%'><strong>제 목</strong></td>
+							<td id='openWrite_title' style="padding:0px 5px 0px 5px;"><input type="text" id="anna" value=""/></td>
+						</tr>					
+						<tr>
+							<td colspan='2' id='openWrite_content' valign='top' style="padding:0px 5px 0px 5px;"><textarea id="addinfo" style="height:350px; overflow-x:hidden; overflow-y:auto;"></textarea></td>
+						</tr>
+						<tr>
+							<td width='25%'><strong>첨부파일</strong></td>
+							<td id='openWrite_file' style="padding:0px;"><input type="button" id="openFileButton" data-mini="true" data-inline="true" data-role="button" data-theme="b" value="파일선택"/></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div id="writeCompliteButton" style="margin:5px 0px 5px 0px;"><a href="board_open.html" data-role="button" id="boardwriteCompliteButton" data-theme="b" style="margin:0px;">작성</a></div>			
+		</div>
+		<div data-theme="c" data-role="footer" id="add" data-position="fixed" data-tap-toggle="false">
+		</div> 
+	</div>
+</body>
+</html>

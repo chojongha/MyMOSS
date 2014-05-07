@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>고장 상황 [완료] 리스트</title>
+</head>
+<body>
+	<div data-role="page" id="page_alarmList_success">
+		<div data-theme="a" data-role="header">
+			<a data-role="button" href="#menuPanel" data-icon="bars" data-iconpos="left" class="ui-btn-left">Menu</a>
+			<h3>고장 상황 [완료]</h3>
+			<a id="btn_refresh" data-role="button" href="#" data-icon="refresh" data-iconpos="left" class="ui-btn-right">새로고침</a>
+		</div>
+		<!-- MenuPanel  -->
+		<div data-role="panel" id="menuPanel" data-theme="a" data-display="overlay">
+			<div class="panel-content">
+				<div class="ui-grid-a" id="menuPanel_header">
+					<div class="ui-block-a">
+						<a href="index.html" data-role="button" data-theme="a">
+							<img src="../img/menu_home.png">
+							<p>홈</p>
+						</a>
+					</div>
+					<div class="ui-block-b">
+						<a href="index.html" data-role="button" data-theme="a">
+							<img src="../img/menu_logout.png">
+							<p>로그아웃</p>
+						</a>
+					</div>
+				</div>
+				<div data-role="collapsible-set">
+					<div data-role="collapsible" data-collapsed="false" data-theme="a" data-content-theme="d" data-iconpos="right">
+						<h4>상황공유</h4>
+						<ul data-role="listview">
+							<li>
+								<a href="alarmList_noti.html">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_oucur.png"></div>
+										<div><p>고장상황 진행</p></div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href="alarmList_success.html">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_success.png"></div>
+										<div><p>고장상황 완료</p></div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href="alarmList_TFMS.html">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_qtest.png"></div>
+										<div><p>TFMS TT</p></div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href="#" onclick="setLocation();">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_location.png"></div>
+										<div><p>현재위치전송</p></div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href="demo.html">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_remote.png"></div>
+										<div><p>원격콘솔</p></div>
+									</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div data-role="collapsible-set">
+					<div data-role="collapsible" data-collapsed="false" data-theme="a" data-content-theme="d" data-iconpos="right">
+						<h4>커뮤니티</h4>
+						<ul data-role="listview">
+							<li>
+								<a href="board_notice.html">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_notice.png"></div>
+										<div><p>공지사항</p></div>
+									</div>
+								</a>
+							</li>
+							<li>
+								<a href ="#manualMenu" data-rel="popup" data-inline="true" data-transition="pop">
+									<div id="menuPanel_collapsible">
+										<div><img src="../img/menu_manual.png"></div>
+										<div><p>업무매뉴얼</p></div>
+									</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<ul data-role="listview" data-inset="true" data-iconpos="right">
+					<li>
+						<a href="config.html">
+							<div id="menuPanel_collapsible">
+								<div><img src="../img/menu_config.png"></div>
+								<div><p>설정</p></div>
+							</div>
+						</a>
+					</li>
+				</ul>
+				<div data-role="popup" id="manualMenu" data-theme="a">
+					<div id="popup_manual" data-role="fieldcontain">
+						<p style="text-align: center; font-size: 1.5em;" id="popup_title"><strong>서비스 분야</strong></p>
+			 	 			<fieldset data-role="controlgroup" id="manualRa-controlgroup" >
+										<!--  동적으로 라디오 버튼 생성 -->
+							</fieldset>   						
+							<fieldset class="ui-grid-a" id="btn_group">
+								<div class="ui-block-a">
+									<input type="button" id="selectManual" data-theme="b" data-mini="true" value="확인" onClick="SendParameter()">   
+								</div>
+								<div class="ui-block-b">
+									<a href="#" data-role="button" data-theme="b" data-mini="true" data-rel="back">취소</a>
+								</div>
+							</fieldset>    
+					</div>
+				</div> 
+			</div>
+		</div>
+		<!-- MenuPanel  -->
+		<div data-role="content">
+			<ul id="alarmList" data-role="listview" data-inset="false">
+				<!-- 동적으로 리스트 추가 -->
+			</ul>
+		</div>	
+		<div data-theme="a" data-role="footer" data-position="fixed">
+			<div data-role="navbar">
+			    <ul>
+			        <li><a href="alarmList_noti.html">진행</a></li>
+			        <li><a href="#" class="ui-btn-active">완료</a></li>
+			        <li><a href="alarmList_TFMS.html">TFMS TT</a></li>
+			    </ul>
+			</div><!-- /navbar end-->
+		</div>
+	</div>
+
+</body>
+</html>

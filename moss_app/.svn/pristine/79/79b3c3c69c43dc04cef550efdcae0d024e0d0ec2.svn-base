@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>고장상황 진행 상세보기</title>
+</head>
+<body>
+	<div data-role="page" id="page_alarmList_detail_TFMS">
+		<div data-theme="a" data-role="header" data-position="fixed" id="detail_header">
+			<a data-role="button" href="alarmList_TFMS.html" data-iconpos="notext" data-icon="back" data-iconpos="left" class="ui-btn-left">back</a>
+			<h3>TT 상세보기</h3>
+		</div>
+		<div data-role="content" id="content">
+			<div class="CSSTableGenerator">
+				<table >
+					<tr> 
+						<td></td>
+						<td>경보시설</td>
+						<td>고장시설</td>
+					</tr>
+					<tr>
+						<td>국사</td>
+						<td>용전국사</td>
+						<td>용전국사</td>
+					</tr>
+					<tr>
+						<td>분야1</td>
+						<td>4 교환</td>
+						<td>4 교환</td>
+					</tr>
+					<tr>
+						<td>분야2</td>
+						<td>교환기</td>
+						<td>교환기</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div data-theme="a" data-role="footer" data-position="fixed" data-tap-toggle="false" id="detail_footer">
+			<!-- 고장상황 완료 페이지는 footer 없음 -->
+		</div>
+	</div>
+</body>
+</html>

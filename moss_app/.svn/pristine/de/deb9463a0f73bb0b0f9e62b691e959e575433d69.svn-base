@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>자유게시판 상세</title>
+</head>
+<body>
+	<div data-role="page" id="page_board_open_detail">
+		<div data-theme="a" data-role="header" data-position="fixed" data-tap-toggle="false" id="beforeList" class="header">	
+			<a href="board_open.html" data-role="button" data-mini="false" class="ui-btn-left"><img src="../img/detail_back.png"></a>
+			<h3>자유게시판 상세</h3>
+		</div>
+		<div data-role="content" id="content">
+			
+			<div class="CSSTableGenerator">		
+				<div id="open_detail_table" style="width:100%; table-layout:fixed;">
+					<table>
+						<tr>
+							<td width='25%'>제 목</td>
+							<td colspan='3' id='open_title'>MOSS문제</td>
+						</tr>
+						<tr>
+							<td>작성일시</td>
+							<td colspan='3' id='open_writeDate'>2014-02-20 00:00:00</td>
+						</tr>						
+						<tr>
+							<td width='25%'>작 성 자</td>
+							<td width='25%' id='open_writer'>김안나</td>
+							<td width='25%'>조 회 수</td>
+							<td width='25%' id='open_viewCount'>35</td>
+						</tr>
+						<tr>
+							<td colspan='4' id='open_content' valign='top'>어쩌구저쩌구</td>
+						</tr>
+						<tr>
+							<td width='20%'>첨부파일</td>
+							<td colspan='3' id='open_file'></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div id="alarmList_detail_timeLine">
+				<ul id="Detail_commentList" data-role="listview" data-inset="true"
+					data-icon="false">
+					<!-- 고장상황 출동 타임라인 -->
+					<!-- 다이나믹 타인라인 -->
+				</ul>
+			</div>
+		</div>
+		<div data-theme="a" data-role="footer" id="add" data-position="fixed" data-tap-toggle="false">
+			<div class="ui-grid-b" id="detail_box_input">
+			    <div class="ui-block-a" style="width:12%; display: table-cell; text-align: center; vertical-align: middle;"><a href="alarmList_noti_detail_capture.html"><img src="../img/detail_cam_n.png" style="width:2em; margin-bottom:-1.5em;"></a></div>
+		    	<div class="ui-block-b" style="width:73%; display: table-cell; text-align: center; vertical-align: middle;"><input type="text" id="setContent" placeholder="최대 100자 입력 가능" data-mini="true" data-theme="b"></div>
+		    	<div class="ui-block-c" style="width:15%; display: table-cell; text-align: center; vertical-align: middle;"><a href="#" id="btn_setComment_text" data-theme="c" data-role="button" data-mini="true" data-inline="true">전송</a></div>
+			    <form id="myForm_onlyComment" enctype="multipart/form-data" method="post">
+			    	<div style="width:0;height:0;overflow:hidden;">
+						<input type="text" id="notiseqnum" name="notiseqnum"/><br/>
+						<input type="text" id="writerid" name="writerid"/><br/>
+						<input type="text" id="writername" name="writername"/><br/>
+						<input type="text" id="usertype" name="usertype"/><br/>
+						<input type="text" id="userstate" name="userstate"/> <br/>
+						<input type="text" id="form_content" name="content"/> <br/>
+					</div>
+				</form>
+			</div>
+	<!-- 	<div class="ui-grid-b" id="detail_box_input">
+			    <div class="ui-block-a" style="width:33.3%; display: table-cell; text-align: center; vertical-align: middle;"><a href="board_open.html" data-role="button" data-theme="b">목록</a></div>
+		    	<div class="ui-block-b" style="width:33.3%; display: table-cell; text-align: center; vertical-align: middle;"><a href="board_open_write.html" data-role="button" data-theme="b">수정</a></div>
+		    	<div class="ui-block-c" style="width:33.3%; display: table-cell; text-align: center; vertical-align: middle;"><a href="#" id="open_delete" data-role="button" data-theme="b">삭제</a></div>			    
+			</div>   -->	
+			<div data-role="navbar" id="detail_navbar">
+			    <ul>
+			        <li><a id="btn_setLocation" data-role="button">목록</a></li>		        
+			        <li><a href="alarmList_noti_detail_map.html">수정</a></li>
+			        <li><a href="alarmList_noti_detail_manual.html">삭제</a></li>			        
+			    </ul>
+			</div>
+		</div> 
+		
+		
+	</div>
+</body>
+</html>

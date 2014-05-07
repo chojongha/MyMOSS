@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <ScrollView
+	android:id="@+id/widget35"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:stackFromBottom="true"
+	android:layout_weight="1">
+	
+        <TextView android:id="@+id/in"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="13sp"
+        android:background="#0000ff"
+        android:text = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"     
+        />
+    </ScrollView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"        
+        >
+        <EditText android:id="@+id/edit_text_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:textSize="13sp"
+            android:layout_weight="1"
+        />
+    </LinearLayout>
+</LinearLayout>

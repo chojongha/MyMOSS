@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<!-- <meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,maximum-scale=1.0, target-densityDpi=high-dpi"> -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>MainPage</title>
+</head>
+<body>
+	<div data-role="page" id="page_index">
+		<div data-theme="a" data-role="header">
+			<a data-role="button" href="#menuPanel" data-icon="bars" data-iconpos="left" class="ui-btn-left">Menu</a>
+			<h3>MOSS</h3>
+		</div>
+		<!-- MenuPanel  -->
+		<div data-role="panel" id="menuPanel" data-theme="b" data-display="overlay">
+			<div class="panel-content">
+				<div class="ui-grid-a">
+					<div class="ui-block-a">
+						<a href="index.html" data-role="button" data-theme="c" data-icon="home" data-iconpos="top">홈</a>
+					</div>
+					<div class="ui-block-b">
+						<button type="button" data-theme="c" data-icon="delete" data-iconpos="top">로그아웃</button>
+					</div>
+				</div>
+				<div data-role="collapsible-set">
+					<div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-iconpos="right">
+						<h4>상황공유</h4>
+						<ul data-role="listview">
+							<li><a href="alarmList_noti.html">고장상황 진행</a></li>
+							<li><a href="alarmList_success.html">고장상황 완료</a></li>
+							<li><a href="#" onclick="setLocation();">현재위치 전송</a></li>
+							<li><a href="remoteConsole.html">원격콘솔</a></li>
+						</ul>
+					</div>
+				</div>
+				<div data-role="collapsible-set">
+					<div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-iconpos="right">
+						<h4>커뮤니티</h4>
+						<ul data-role="listview">
+							<li><a href="board_notice.html">공지사항</a></li>
+							<li><a href ="#manualMenu" data-rel="popup" data-inline="true" data-transition="pop">업무매뉴얼</a></li>
+						</ul>
+					</div>
+				</div>
+				
+				<form name="manualForm" id="manualForm" method="POST" action="board_manual.html">
+				<div data-role="popup" id="manualMenu" data-overlay-theme="a">
+					<div id="popup_manual">
+						<fieldset data-role="controlgroup">
+							<p style="text-align: center;">업무매뉴얼 분야</p>
+							<input type="radio" name="manual" data-theme="d" data-iconpos="right" id="customerSend" value="고객전송" checked="checked"> 
+							<label for="customerSend">고객전송</label>
+							<input type="radio" name="manual" data-theme="d" data-iconpos="right" id="dateSend" value="기간전송"> 
+							<label for="dateSend">기간전송</label> 
+							<input type="radio" name="manual" data-theme="d" data-iconpos="right" id="internet" value="인터넷">
+							<label for="internet">인터넷</label> 
+							<input type="radio" name="manual" data-theme="d" data-iconpos="right" id="switch" value="전원"> 
+							<label for="switch">전원</label> 
+							<input type="radio" name="manual" data-theme="d" data-iconpos="right" id="change" value="교환"> 
+							<label for="change">교환</label> 
+							<input type="radio" name="manual" data-theme="d" data-iconpos="right" id="speed" value="초고속"> 
+							<label for="speed">초고속</label> 
+							<input type="radio" name="manual" data-theme="d" data-iconpos="right" id="customerNet" value="고객망">
+							<label for="customerNet">고객망</label>
+						</fieldset>
+						<fieldset class="ui-grid-a" id="btn_group">
+							<div class="ui-block-a">
+								<input type="button" id="selectManual" data-theme="b" data-mini="true" value="확인" onClick="SendParameter()">
+							</div>
+							<div class="ui-block-b">
+								<a href="#" data-role="button" data-theme="b" data-mini="true" data-rel="back">취소</a>
+							</div>
+						</fieldset>
+					</div>
+				</div>
+			</form>
+				
+				<ul data-role="listview" data-inset="true" data-icon="gear" data-iconpos="right">
+					<li><a href="config.html">설정</a></li>
+				</ul>
+				<!-- <a href="#demo-links" data-rel="close" data-role="button" data-theme="c" data-icon="delete" data-inline="true">닫기</a> -->
+			</div>
+		</div>
+		<!-- MenuPanel  -->
+		
+
+		<div data-role="content">
+			<div id="wrap">
+			<!--logo1-->
+				<div id="main_logo01"><img alt="KT MOSS" src="../img/mainimg01.png" width="80%"></div>
+			<!--//logo1-->
+			
+				<div id="container">
+					<div id="mainmenu">
+
+					<ul>
+					<li><a href="alarmList_noti.html"><img alt="상황공유" src="../img/mainimg02.png"/></a></li>
+					<li><a href="board_notice.html"><img alt="커뮤니티" src="../img/mainimg03.png"></a></li>
+					<li><a href="demo.html"><img alt="원격콘솔" src="../img/mainimg04.png"></a></li>
+					<li><a href="#"><img alt="품질측정" src="../img/mainimg05.png" onclick="callIntent();"></a></li>
+					</ul>
+					</div>
+				</div>
+			
+			<!--logo2-->
+				<div id="main_logo02"><img alt="O" src="../img/mainimg06.png" width="40em"></div>
+			<!--//logo2-->
+			
+			<!--footer-->
+				<div id="footer"></div>
+			<!--footer//-->
+			</div>
+		</div>
+		<div data-theme="a" data-role="footer" data-position="fixed">
+		</div>
+	</div>
+</body>
+</html>

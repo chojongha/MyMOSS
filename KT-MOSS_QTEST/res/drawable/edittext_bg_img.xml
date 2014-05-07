@@ -1,0 +1,35 @@
+<selector
+	xmlns:android="http://schemas.android.com/apk/res/android">
+		
+		
+		<item 
+		    android:state_window_focused="false" 
+		    android:state_enabled="true"      
+ 			android:drawable="@drawable/inputbox_normal" /> 
+	
+		<item 
+		    android:state_window_focused="false" 
+		    android:state_enabled="false"        
+			android:drawable="@drawable/inputbox_disable" /> 
+			
+   		<item 
+   		    android:state_pressed="true" 
+   		    android:drawable="@drawable/inputbox_press" /> 
+
+		<item 
+	    	android:state_enabled="true" 
+	    	android:state_focused="true" 
+	    	android:drawable="@drawable/inputbox_focus" />
+		 
+  		<item 
+  		    android:state_enabled="true" 
+  		    android:drawable="@drawable/inputbox_normal" />
+  		  								﻿﻿
+  		<item 
+  		    android:state_focused="true" 
+  		    android:drawable="@drawable/inputbox_focus" />
+  		 
+ 		<item 
+ 		    android:drawable="@drawable/inputbox_disable" /> 
+		
+</selector>

@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>사업장 상세정보</title>
+</head>
+<body>
+	<div data-role="page" id="page_transOffice_detail">
+		<div data-theme="a" data-role="header" data-position="fixed" id="detail_header" class="header">
+			<a data-role="button" href="transOffice.html" data-mini="false" class="ui-btn-left"><img src="../img/detail_back.png"></a>
+			<h3>사업장 상세정보</h3>
+		</div>
+		<div data-role="content" id=content>
+			<div id="contentWrapper">
+				<div id="scroller">					
+					<div class="CSSTableGenerator">					
+						<div id="table_transOfficeDetail">				
+							<!--  사업장 정보 상세 테이블 동적 생성  -->
+							<table>
+								<tr>
+								</tr>
+								<tr>
+									<td align="left" colspan="2" bgcolor="#5d5d5d" style='width:5.5em; -moz-border-radius-topleft:5px; -webkit-border-top-left-radius:5px; border-top-left-radius:5px; -moz-border-radius-topright:5px; -webkit-border-top-right-radius:5px; border-top-right-radius:5px;'><font color="#ffffff"><b>사업장 정보</b></font></td>					 	
+								</tr>
+								<tr>
+									<td align="left" width="30%">모국명</td>
+									<td align="left" id="TO_pOfficeName"></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">사업장유형</td>
+									<td align="left" id="TO_workPlaceType"></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">사업장명</td>
+									<td align="left" id="TO_workPlaceName"></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">사진정보</td>
+								 	<td id="TO_pic" style="display:table-cell; vertical-align:middle;"><div id="pictureYN" style="float:left; padding:5px 0px 0px 0px;"><a href="#TO_img" data-rel="popup" data-position-to="window"
+										data-transition="fade" style="text-decoration:none;">&nbsp;&nbsp;사진보기&nbsp;</a></div><div style="float:right;"><a href="transOffice_detail_capture.html"><img src="../img/detail_cam_n.png"></a></div></td>																	 	
+								</tr>
+										
+								<div data-role="popup" id="TO_img" data-overlay-theme="a" data-theme="d" data-corners="false">
+									<a href="#" data-rel="back" data-role="button" data-theme="a"
+										data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a><img
+										id="imgSrc" class="popphoto" style="width:300px; alt="사업장사진">
+								</div>
+		
+								<tr>
+									<td align="left" colspan="2" bgcolor="#5d5d5d"><font color="#ffffff"><b>위치 정보</b></font><div style="float:right;"><a href="transOffice_detail_map.html" data-role="button" id="officeMapButton" data-inline="true" data-mini="true" data-theme="c">지도보기</a></div></td>  
+								</tr>
+								<tr>
+									<td align="left" width="30%">주소</td>
+									<td align="left" id="TO_addr"></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">상세정보</td>
+									<td align="left" id="TO_addInfo"></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">위도</td>
+									<td align="left" id="TO_lati"></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">경도</td>
+									<td align="left" id="TO_longi"></td>
+								</tr>
+								<tr>									
+									<td align="left" colspan="2" bgcolor="#5d5d5d"><font color="#ffffff"><b>출입 정보</b></font><div style="float:right"><a href="#" data-role="button" id="btn_officeModify1" data-inline="true" data-mini="true" data-theme="c">수정</a></div></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">출입제한시간</td>
+							 		<td align="left" id="TO_timeLimit"><input type="text" id="inputTimeLimit" placeholder="최대 15자 입력 가능" style="font-size:14px" value="" /></td>  																																						
+								</tr>
+								<tr>
+									<td align="left" width="30%">출입방법</td>
+							<!-- 		<td align="left" id="TO_visitRule"><input type="text" id="inputVisitRule" style="font-size:14px" value=""/></td>  -->
+									
+									
+									<td align="left" id="TO_visitRule"><textarea id="inputVisitRule" placeholder="최대 100자 입력 가능" style="font-size:14px" value=""></textarea></td>
+									
+									
+								</tr>
+								<tr>
+									<td align="left" width="30%">건물관리자</td>
+									<td align="left" id="TO_manager"><input type="text" id="inputManager" placeholder="최대 15자 입력 가능" style="font-size:14px" value=""/></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">건물전화</td>
+									<td align="left" id="TO_tel"><input type="text" id="inputTel" placeholder="최대 15자 입력 가능" style="font-size:14px" value=""/></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">건물휴대폰</td>
+									<td align="left" id="TO_manaPhone"><input type="text" id="inputManaPhone" placeholder="최대 15자 입력 가능" style="font-size:14px" value=""/></td>
+								</tr>
+								<tr>
+									<td align="left" colspan="2" bgcolor="#5d5d5d"><font color="#ffffff"><b>시설 정보</b></font><div style="float:right"><a href="#" data-role="button" id="btn_officeModify2" data-inline="true" data-mini="true" data-theme="c">수정</a></div></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">장비내역1</td>
+									<td align="left" id="TO_equiHistory1"><textarea id="inputEquiHistory1" placeholder="최대 100자 입력 가능" style="font-size:14px" value=""></textarea></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">장비내역2</td>
+									<td align="left" id="TO_equiHistory2"><textarea id="inputEquiHistory2" placeholder="최대 100자 입력 가능" style="font-size:14px" value=""></textarea></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">장비내역3</td>
+									<td align="left" id="TO_equiHistory3"><textarea id="inputEquiHistory3" placeholder="최대 100자 입력 가능" style="font-size:14px" value=""></textarea></td>
+								</tr>
+								<tr>
+									<td align="left" colspan="2" bgcolor="#5d5d5d"><font
+										color="#ffffff"><b>관리 정보</b></font></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">시설운용단</td>
+									<td align="left" id="TO_manageCenter"></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">시설운용팀</td>
+									<td align="left" id="TO_manageTeam"></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">유지보수사</td>
+									<td align="left" id="TO_manageCompany"></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">유지 보수<br>담당 (정)</td>
+									<td align="left" id="TO_managerName1"></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">담당연락처</td>
+									<td align="left" id="TO_managerTel1"></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">유지 보수<br>담당 (부)</td>
+									<td align="left" id="TO_managerName2"></td>
+								</tr>
+								<tr>
+									<td align="left" width="30%">담당연락처</td>
+									<td align="left" id="TO_managerTel2"></td>
+								</tr>
+							</table>
+							
+							<form id="myForm_officeUpdate" enctype="multipart/form-data" method="post">
+						    	<div style="width:0;height:0;overflow:hidden;">
+									<input type="text" id="workplaceSeqNum" name="workplaceSeqNum"/><br/>
+									<input type="text" id="enterLimitedTime" name="enterLimitedTime"/><br/>
+									<input type="text" id="enterMethod" name="enterMethod"/><br/>
+									<input type="text" id="enterManager" name="enterManager"/> <br/>
+									<input type="text" id="enterTel1" name="enterTel1"/><br/>
+									<input type="text" id="enterTel2" name="enterTel2"/><br/>
+									<input type="text" id="equipMentmem01" name="equipMentmem01"/><br/>
+									<input type="text" id="equipMentmem02" name="equipMentmem02"/> <br/>
+									<input type="text" id="equipMentmem03" name="equipMentmem03"/> <br/>
+								</div>
+							</form>
+		
+						</div>
+					</div> 
+				</div>
+			</div>
+		</div>	
+		<div data-theme="f" data-role="footer" data-position="fixed" id="detail_footer">
+		</div>	
+	</div>
+</body>
+</html>

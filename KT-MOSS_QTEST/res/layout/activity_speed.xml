@@ -1,0 +1,867 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f5f7ea"
+    android:orientation="vertical" >
+
+    <!-- 상단 레이어 시작 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <!-- 속도 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <LinearLayout
+                android:id="@+id/downloadimg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/top_info_gray"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Download"
+                        android:textColor="#282828"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal" >
+
+                    <TextView
+                        android:id="@+id/main_tv_downloadValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="- . -"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/t1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dip"
+                        android:gravity="left"
+                        android:text="최대 "
+                        android:textColor="#282828"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/main_tv_downloadMax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="- . -"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/t2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dip"
+                        android:gravity="left"
+                        android:text="최소 "
+                        android:textColor="#282828"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/main_tv_downloadMin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="- . -"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/uploadimg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/top_info_gray"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Upload"
+                        android:textColor="#282828"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal" >
+
+                    <TextView
+                        android:id="@+id/main_tv_uploadValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="- . -"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/t3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dip"
+                        android:gravity="left"
+                        android:text="최대 "
+                        android:textColor="#282828"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/main_tv_uploadMax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="- . -"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/t4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dip"
+                        android:gravity="left"
+                        android:text="최소 "
+                        android:textColor="#282828"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/main_tv_upMin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="- . -"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/pingimg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/top_info_gray"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ping"
+                        android:textColor="#282828"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal" >
+
+                    <TextView
+                        android:id="@+id/main_tv_pingValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="- . -"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/t5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dip"
+                        android:gravity="left"
+                        android:text="최대 "
+                        android:textColor="#282828"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/main_tv_pingmax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="- . -"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/t6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dip"
+                        android:gravity="left"
+                        android:text="최소 "
+                        android:textColor="#282828"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/main_tv_pingmin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="- . -"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/udpimg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/top_info_gray"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="UDP"
+                        android:textColor="#282828"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal" >
+
+                    <TextView
+                        android:id="@+id/main_tv_udpValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="- . -"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/t7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dip"
+                        android:gravity="left"
+                        android:text="최대 "
+                        android:textColor="#282828"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/main_tv_udpmax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="- . -"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/t8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="14dip"
+                        android:gravity="left"
+                        android:text="최소 "
+                        android:textColor="#282828"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/main_tv_udpmin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="- . -"
+                        android:textColor="#000000"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 디바이스 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_device_status"
+                android:gravity="center" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dip"
+                        android:gravity="center"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CPU(%)"
+                            android:textColor="#282828"
+                            android:textSize="9sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/cputext"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="#282828"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <com.kt.moss.qtest.speedtest.Capsule
+                        android:id="@+id/main_ll_cpuGraph"
+                        android:layout_width="98dip"
+                        android:layout_height="33dip"
+                        android:orientation="horizontal" >
+                    </com.kt.moss.qtest.speedtest.Capsule>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_device_status"
+                android:gravity="center" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="3dip"
+                        android:gravity="center"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="MEM(%)"
+                            android:textColor="#282828"
+                            android:textSize="9sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/memorytext"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="#282828"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <com.kt.moss.qtest.speedtest.Capsule
+                        android:id="@+id/main_ll_memoryGraph"
+                        android:layout_width="98dip"
+                        android:layout_height="33dip"
+                        android:orientation="horizontal" >
+                    </com.kt.moss.qtest.speedtest.Capsule>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 상단 레이어 종료 -->
+
+
+    <!-- 탭 레이어 시작 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/main_bt_tabUpDown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_radio_normal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/main_bt_tabPingUdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_radio_normal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/main_bt_tabTraceRoute"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_radio_normal" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 탭 뷰 레이어 종료 -->
+
+
+    <!-- 중앙 뷰 레이어 시작 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <ViewFlipper
+            android:id="@+id/main_vf_tab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:id="@+id/main_ll_upDown"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:visibility="visible" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Download[Mbps]"
+                            android:textColor="#282828"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                            <com.kt.moss.qtest.speedtest.BarChart
+                                android:id="@+id/main_ll_downloadGraph"
+                                android:layout_width="120dip"
+                                android:layout_height="60dip"
+                                android:background="@drawable/bg_chart_up_graph_left"
+                                android:orientation="horizontal"
+                                android:paddingBottom="5dip"
+                                android:paddingTop="5dip" >
+                            </com.kt.moss.qtest.speedtest.BarChart>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="60dip"
+                                android:background="@drawable/bg_chart_down_graph_right"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical"
+                                android:paddingBottom="5dip"
+                                android:paddingTop="5dip" >
+
+                                <TextView
+                                    android:id="@+id/mindownloadmax"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="top"
+                                    android:text=""
+                                    android:textColor="#000000"
+                                    android:textSize="9sp" >
+                                </TextView>
+
+                                <TextView
+                                    android:id="@+id/main_tv_downloadCurr"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="- . -"
+                                    android:textColor="#ffffff"
+                                    android:textSize="9sp" >
+                                </TextView>
+
+                                <TextView
+                                    android:id="@+id/minidownloadmin"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="bottom"
+                                    android:text=""
+                                    android:textColor="#000000"
+                                    android:textSize="9sp" >
+                                </TextView>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Upload[Mbps]"
+                            android:textColor="#282828"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" >
+
+                            <com.kt.moss.qtest.speedtest.BarChart
+                                android:id="@+id/main_ll_uploadGraph"
+                                android:layout_width="120dip"
+                                android:layout_height="60dip"
+                                android:background="@drawable/bg_chart_up_graph_left"
+                                android:orientation="horizontal"
+                                android:paddingBottom="5dip"
+                                android:paddingTop="5dip" >
+                            </com.kt.moss.qtest.speedtest.BarChart>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="60dip"
+                                android:background="@drawable/bg_chart_up_graph_right"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical"
+                                android:paddingBottom="5dip"
+                                android:paddingTop="5dip" >
+
+                                <TextView
+                                    android:id="@+id/miniuploadmax"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="top"
+                                    android:text=""
+                                    android:textColor="#000000"
+                                    android:textSize="9sp" >
+                                </TextView>
+
+                                <TextView
+                                    android:id="@+id/main_tv_uploadCurr"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:text="- . -"
+                                    android:textColor="#ffffff"
+                                    android:textSize="9sp" >
+                                </TextView>
+
+                                <TextView
+                                    android:id="@+id/miniuploadmin"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="bottom"
+                                    android:text=""
+                                    android:textColor="#000000"
+                                    android:textSize="9sp" >
+                                </TextView>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <com.kt.moss.qtest.speedtest.Pin
+                    android:id="@+id/main_ll_speedGraph"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_speedometer"
+                    android:orientation="horizontal" >
+                </com.kt.moss.qtest.speedtest.Pin>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/main_ll_pingUdp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible" >
+
+                <com.kt.moss.qtest.speedtest.LineChart
+                    android:id="@+id/linechartping"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_ping_test" >
+                </com.kt.moss.qtest.speedtest.LineChart>
+
+                <com.kt.moss.qtest.speedtest.LineChart
+                    android:id="@+id/linechartudp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_udp_test" >
+                </com.kt.moss.qtest.speedtest.LineChart>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/main_ll_traceRoute"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="visible" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
+
+                    <LinearLayout
+                        android:id="@+id/main_ll_progressBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center" >
+
+                        <ProgressBar
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <ScrollView
+                        android:id="@+id/main_sv_traceRoute"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone" >
+
+                        <LinearLayout
+                            android:id="@+id/main_ll_traceRT"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical" >
+                        </LinearLayout>
+                    </ScrollView>
+
+                    <LinearLayout
+                        android:id="@+id/main_ll_traceRouteError"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:visibility="gone" >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TraceRoute Timeout"
+                            android:textColor="#000000"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ViewFlipper>
+    </LinearLayout>
+
+    <!-- 중앙 뷰 레이어 종료 -->
+
+
+    <!-- 하단 버튼 레이어 시작 -->
+
+    <LinearLayout
+        android:id="@+id/bottom1"
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"
+        android:background="#000000"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingBottom="1dp"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
+        android:paddingTop="1dp" >
+
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/command_btn"
+            android:gravity="center"
+            android:text="@string/vc_test"
+            android:textColor="#ffffff"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom2"
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"
+        android:background="#000000"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingBottom="1dp"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
+        android:paddingTop="1dp"
+        android:visibility="gone" >
+
+        <Button
+            android:id="@+id/btn1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@drawable/command_btn"
+            android:gravity="center"
+            android:text="@string/vc_test"
+            android:textColor="#ffffff"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@drawable/command_btn"
+            android:gravity="center"
+            android:text="@string/vc_test"
+            android:textColor="#ffffff"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <!-- 하단 버튼 레이어 종료 -->
+
+</LinearLayout>

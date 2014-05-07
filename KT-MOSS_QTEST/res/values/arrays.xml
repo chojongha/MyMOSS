@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="state_array_input">
+        <item>전체</item>
+        <item>개통</item>
+        <item>수리</item>      
+    </string-array>    
+    
+    <string-array name="type_array_input">
+        
+        <item>전체</item>
+        <item>인터넷</item>    
+         <item>TV</item>     
+          <item>인터넷전화</item>       
+    </string-array>    
+    
+   
+    <string-array name="test_type">
+        <item>일반</item>
+        <item>LOOPBACK</item>     
+    </string-array>
+    
+    
+     <string-array name="test_time">
+       <item>15초</item>
+       <item>20초</item>
+       <item>25초</item>
+       <item>30초</item> 
+    </string-array>
+    
+    <string-array name="datanull">
+         <item>데이터가 존재하지않습니다.     </item>
+         
+     </string-array>
+    
+
+</resources>

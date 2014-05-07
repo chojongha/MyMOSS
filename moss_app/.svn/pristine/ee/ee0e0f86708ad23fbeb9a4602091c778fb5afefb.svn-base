@@ -1,0 +1,20 @@
+package com.kt.moss;
+
+import org.apache.cordova.DroidGap;
+
+import android.os.Bundle;
+import android.webkit.WebSettings;
+
+public class MainActivity extends DroidGap {
+  
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		super.loadUrl("file:///android_asset/www/client/login.html");
+		
+		//Enable zoom in WebView
+		WebSettings ws = super.appView.getSettings();
+	    ws.setSupportZoom(true);
+	    ws.setBuiltInZoomControls(true);
+	}
+}

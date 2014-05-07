@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>고장상황 진행 상세보기</title>
+</head>
+<body>
+	<div data-role="page" id="page_alarmList">
+		<div data-theme="a" data-role="header" data-position="fixed">
+			<a data-role="button" data-iconpos="notext" data-icon="back" data-iconpos="left" class="ui-btn-left" data-rel="back">back</a>
+			<h3>고장 상황 [완료]</h3>
+		</div>
+		<div data-role="content" id=content>
+			<!-- 고장상황 상세 테이블 -->
+				<table id="table_detail">
+					<tr>
+						<td class="table_td_subject">제목</td>
+						<td class="table_td" colspan="3" id="detail_subject"></td>
+					</tr>
+					<tr>
+						<td class="table_td_subject">일시</td>
+						<td class="table_td" id="detail_writeDate"></td>
+						<td class="table_td_subject">담당자</td>
+						<td class="table_td" id="detail_writerName"></td>
+					</tr>
+					<tr>
+						<td class="table_td_subject">분야</td>
+						<td class="table_td" colspan="3" id="detail_services"></td>
+					</tr>
+					<tr>
+						<td class="table_td_subject">상세<br>주소</td>
+						<td class="table_td" colspan="3" id="detail_addr"></td>
+					</tr>
+					<tr>
+						<td class="table_td_subject">VOC</td>
+						<td class="table_td" id="detail_vocCnt"></td>
+						<td class="table_td_subject">국사</td>
+						<td class="table_td" id="detail_officeName">대전</td>
+					</tr>
+					<tr>
+						<td class="table_td" colspan="4" id="detail_content"></td>
+					</tr>
+				</table>
+			<!-- 고장상황 출동 타임라인 -->
+			<div id="alarmList_detail_timeLine">
+				<ul id="Detail_commentList" data-role="listview" data-inset="true" data-icon="false">
+				
+					<!-- 다이나믹 타인라인 -->
+					
+				</ul>
+			</div>
+			<!-- 고장상황 출동 타임라인 -->
+		</div>
+		<div data-theme="a" data-role="footer" data-position="fixed" data-tap-toggle="false">
+			<!-- 고장상황 완료 페이지는 footer 없음 -->
+		</div>
+	</div>
+</body>
+</html>

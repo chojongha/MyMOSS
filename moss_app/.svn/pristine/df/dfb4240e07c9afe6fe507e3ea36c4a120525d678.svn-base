@@ -1,0 +1,563 @@
+var transOfficeDetail_debugPrefix = "[transOffice_detail.js] : "; 
+var workplaceSN="";
+var officeAddr="";
+var mapOfficeName="";
+var transScroll;
+var imageSeqNum="";
+
+//데이터가 Null일 경우 다른 문자로 대체
+function ifNull(data) {	
+	//	문자열로 변환하여 비교
+	data = String(data);
+	
+	if(data == null || data == "" || data == "null") {
+		return "";
+	} else {
+		return data;
+	}
+}
+
+//var showTransCnt = 0;		//페이지 보여주는 순서 알아내기 위한 변수
+//국사 상세 페이지 출력
+function showTransOffice_detail(){
+//	$.mobile.loading( "show", {
+//        text: "로딩중...",
+//        textVisible: true,
+//        theme: "a",
+//        html: "" 
+//	}); 
+	
+	//국사 시퀀스 넘버 받기
+	workplaceSN=Request("workplaceSeqNum");
+	
+	console.log(transOfficeDetail_debugPrefix + "넘어온 시퀀스넘버 = " + workplaceSN);
+	
+	$.ajax({ 
+		url: url + "MossWorkplaceDetail",
+		type: "post",
+		timeout: 10*1000,
+		dataType: "json",
+		data: {workplaceSeqNum:workplaceSN},		
+		success: function(result){
+			var bodyData = result.body;
+			var headerData = result.header;
+			var transOfficeTB = "";
+			
+			if(headerData.result != 0){
+				transOfficeTB = "<li data-icon='false'> "+
+								"<a href='#'>" +
+								"<center><h2>정보가 없습니다</h2></center>" +     
+								"</a>" +
+								"</li>";
+//				$.mobile.hidePageLoadingMsg();
+			}else{
+				$.each(bodyData, function(key, val){
+					$.each(val, function(key, val) {
+	                    console.log(transOfficeDetail_debugPrefix + key + " : " + val);
+	                });	
+								
+					//데이터 세팅																					
+					if(val.ADDR != null && val.ADDRDTL != null){
+						officeAddr = ifNull(val.ADDR) + " " + ifNull(val.ADDRDTL);
+					}else{
+						officeAddr = ifNull(val.ADDR) + ifNull(val.ADDRDTL);
+					}
+					
+					//사업장명 저장
+					mapOfficeName = val.WORKPLACENAME;
+					
+					//테이블 생성
+					transOfficeTB = '<table>'+
+									'<tr>'+									
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" colspan="2" bgcolor="#5d5d5d"><font color="#ffffff"><b>사업장 정보</b></font></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">모국명</td>'+
+									'<td align="left" id="TO_pOfficeName">'+ val.POFFICENAMESCODE +'</td>'+					
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">사업장유형</td>'+
+									'<td align="left" id="TO_workPlaceType">'+ val.WORKPLACETYPE_NM +'</td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">사업장명</td>'+
+									'<td align="left" id="TO_workPlaceName">'+ val.WORKPLACENAME +'</td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">사진정보</td>'+
+									'<td align="left" id="TO_pic">&nbsp;&nbsp;사진보기&nbsp;<a href="#TO_img" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="../img/pictures.png"></a></td>'+
+									'</tr>'+
+									
+									//국사 사진 첨부(따로 첨부함. 화면이 깨지기 때문: 사진이미리떠버림. 클릭없이)
+//									'<div data-role="popup" id="TO_img" data-overlay-theme="a" data-theme="d" data-corners="false">'+
+//									'<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a><img id="imgSrc" class="popphoto" src="../img/transOfficePhoto.png" style="max-height:512px;" alt="국사사진">'+
+//									'</div>'+
+									
+									'<tr>'+
+//									'<td id="spaceTheme" colspan="2" bgcolor="#5d5d5d">'+
+//									'<p style="display:inline-block; float:left; vertical-align:middle;"><font color="#ffffff"><b>위치 정보</b></font></p>'+
+//									'<p style="display:inline-block; float:right">'+
+//									'<a href="transOffice_detail_map.html" data-role="button" id="officeMapButton" data-inline="true" data-mini="true" data-theme="b">지도보기</a>'+
+//									'</p>'+
+//									'</td>'+
+//									'<td id="spaceTheme" colspan="2" bgcolor="#5d5d5d"><p style="display:inline-block; float:left; vertical-align:middle;"><font color="#ffffff"><b>위치 정보</b></font></p><p style="display:inline-block; float:right"><input type="button" value="지도보기" id="officeMapButton" data-inline="true" data-mini="true" data-theme="b" onClick=mapClick();></a></p></td>'+
+//									'<td align="left" colspan="2" bgcolor="#5d5d5d"><font color="#ffffff"><b>위치 정보</b></font></td>'+
+//									'<td align="left" colspan="2" bgcolor="#5d5d5d"><font color="#ffffff"><b>위치 정보</b></font><div style="float:right;"><a href="transOffice_detail_map.html" data-role="button" id="officeMapButton" data-inline="true" data-mini="true" data-theme="c">지도보기</a></div></td>'+
+//									'<td align="left" colspan="2" bgcolor="#5d5d5d"><font color="#ffffff"><b>위치 정보</b></font><div style="float:right;"><button id="officeMapButton" data-role="button" data-theme="c" data-inline="true" data-mini="true">지도보기</button></div></td>'+								
+									'</tr>'+																												
+									'<tr>'+
+									'<td align="left" width="30%">주소</td>'+
+									'<td align="left" id="TO_addr">'+ officeAddr + '</td>'+
+									'</tr>'+ 
+									'<tr>'+
+									'<td align="left" width="30%">상세정보</td>'+
+									'<td align="left" id="TO_addInfo">'+nullCheck(val.ADDINFO)+'</td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">위도</td>'+
+									'<td align="left" id="TO_lati">'+nullCheck(val.LATITUDE)+'</td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">경도</td>'+
+									'<td align="left" id="TO_longi">'+nullCheck(val.LONGITUDE)+'</td>'+
+									'</tr>'+
+									'<tr>'+
+//									'<td align="left" colspan="2" bgcolor="#5d5d5d"><p style="display:inline-block; float:left; vertical-align:middle;"><font color="#ffffff"><b>출입 정보</b></font></p><p style="display:inline-block; float:right"><a href="#" data-role="button" id="officeModify" data-inline="true" data-mini="true" data-theme="b" onClick=officeModify();>수정</a></p></td>'+
+									'<td align="left" colspan="2" bgcolor="#5d5d5d"><font color="#ffffff"><b>출입 정보</b></font></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">출입제한시간</td>'+
+									'<td align="left" id="TO_timeLimit">' + nullCheck(val.ENTERLIMITEDTIME) +'</td>'+
+//									'<td align="left" id="TO_timeLimit"><input type="text" id="anna" value="' + ifNull(val.ENTERLIMITEDTIME) +'" /></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">출입방법</td>'+
+//									'<td align="left" id="TO_visitRule"><input type="text" id="anna" value="'+ ifNull(val.ENTERMETHOD) +'"></td>'+
+									'<td align="left" id="TO_visitRule">'+ nullCheck(val.ENTERMETHOD) +'</td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">건물관리자</td>'+
+//									'<td align="left" id="TO_manager"><input type="text" id="anna" value="'+ ifNull(val.ENTERMANAGER) +'"></td>'+
+									'<td align="left" id="TO_manager">'+ nullCheck(val.ENTERMANAGER) +'</td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">건물전화</td>'+
+//									'<td align="left" id="TO_tel"><input type="text" id="anna" value="'+ ifNull(val.ENTERTEL1) +'"></td>'+
+									'<td align="left" id="TO_tel">'+ nullCheck(val.ENTERTEL1) +'</td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">건물휴대폰</td>'+
+//									'<td align="left" id="TO_manaPhone"><input type="text" id="anna" value="'+ ifNull(val.ENTERTEL2) +'"></td>'+
+									'<td align="left" id="TO_manaPhone">'+ nullCheck(val.ENTERTEL2) +'</td>'+
+									'</tr>'+
+									'<tr>'+
+//									'<td align="left" colspan="2" bgcolor="#5d5d5d"><p style="display:inline-block; float:left; vertical-align:middle;"><font color="#ffffff"><b>시설 정보</b></font></p><p style="display:inline-block; float:right"><a href="#" data-role="button" id="officeModify" data-inline="true" data-mini="true" data-theme="b" onClick=officeModify();>수정</a></p></td>'+
+									'<td align="left" colspan="2" bgcolor="#5d5d5d"><font color="#ffffff"><b>시설 정보</b></font></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">장비내역1</td>'+
+									'<td align="left" id="TO_equiHistory1">'+ nullCheck(val.EQUIPMENTMEMO1) +'</td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">장비내역2</td>'+
+									'<td align="left" id="TO_equiHistory2">'+ nullCheck(val.EQUIPMENTMEMO2) +'</td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">장비내역3</td>'+
+									'<td align="left" id="TO_equiHistory3">'+ nullCheck(val.EQUIPMENTMEMO3) +'</td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" colspan="2" bgcolor="#5d5d5d"><font color="#ffffff"><b>관리 정보</b></font></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">시설운용단</td>'+
+									'<td align="left" id="TO_manageCenter">'+nullCheck(val.MANAGENSC)+'</td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">시설운용팀</td>'+
+									'<td align="left" id="TO_manageTeam">'+nullCheck(val.MANAGETEAM)+'</td>'+
+									'</tr>'+
+									'<td align="left" width="30%">유지보수사</td>'+
+									'<td align="left" id="TO_manageCompany">'+nullCheck(val.MANAGENSC)+'</td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">유지 보수<br>담당 (정)</td>'+
+									'<td align="left" id="TO_managerName1">'+nullCheck(val.MANAGETEAM)+'</td>'+
+									'</tr>'+
+									'<td align="left" width="30%">담당연락처</td>'+
+									'<td align="left" id="TO_managerTel1">'+nullCheck(val.MANAGENSC)+'</td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td align="left" width="30%">유지 보수<br>담당 (부)</td>'+
+									'<td align="left" id="TO_managerName2">'+nullCheck(val.MANAGETEAM)+'</td>'+
+									'</tr>'+
+									'<td align="left" width="30%">담당연락처</td>'+
+									'<td align="left" id="TO_managerTel2">'+nullCheck(val.MANAGENSC)+'</td>'+
+									'</tr>'+
+									'</table>';
+
+					//테이블 삽입								
+//					$("#table_transOfficeDetail").append(transOfficeTB);
+//					$("#table_transOfficeDetail").html(transOfficeTB);
+										
+					//데이터 세팅					
+					$('#TO_pOfficeName').text(nullCheck(val.POFFICENAMESCODE));
+					$('#TO_workPlaceType').text(nullCheck(val.WORKPLACETYPE_NM));					
+					$('#TO_workPlaceName').text(nullCheck(val.WORKPLACENAME));
+	
+					$('#TO_addr').text(nullCheck(officeAddr));
+					$('#TO_addInfo').text(nullCheck(val.ADDINFO));
+					$('#TO_lati').text(nullCheck(val.LATITUDE));
+					$('#TO_longi').text(nullCheck(val.LONGITUDE));				
+										
+					$('#inputTimeLimit').val(ifNull(val.ENTERLIMITEDTIME));
+					$('#inputVisitRule').val(ifNull(val.ENTERMETHOD));
+					$('#inputManager').val(ifNull(val.ENTERMANAGER));
+					$('#inputTel').val(ifNull(val.ENTERTEL1));
+					$('#inputManaPhone').val(ifNull(val.ENTERTEL2));
+					$('#inputEquiHistory1').val(ifNull(val.EQUIPMENTMEMO1));
+					$('#inputEquiHistory2').val(ifNull(val.EQUIPMENTMEMO2));
+					$('#inputEquiHistory3').val(ifNull(val.EQUIPMENTMEMO3));
+					
+					$('#TO_manageCenter').text(nullCheck(val.MANAGECENTER));	
+					$('#TO_manageTeam').text(nullCheck(val.MANAGETEAM));	
+					$('#TO_manageCompany').text(nullCheck(val.MANAGECOMPANY));	
+					$('#TO_managerName1').text(nullCheck(val.MANAGERNAME1));	
+					$('#TO_managerTel1').text(nullCheck(val.MANAGERTEL1));	
+					$('#TO_managerName2').text(nullCheck(val.MANAGERNAME2));	
+					$('#TO_managerTel2').text(nullCheck(val.MANAGERTEL2));	
+				
+					if(val.FILEBINARY == null){
+						$("#pictureYN").text("  사진없음");
+					}else{
+						$("#imgSrc").attr('src', 'data:image/jpeg;base64,' + val.FILEBINARY);
+					}
+
+					mapOfficeName = val.WORKPLACENAME;
+					imageSeqNum = ifNull(val.IMAGESEQNUM);
+					
+//					$.mobile.hidePageLoadingMsg();
+				});
+			}	
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(transOfficeDetail_debugPrefix + "국사상세정보 출력 에러 : " + jqXHR.status);
+	        console.log(transOfficeDetail_debugPrefix + "국사상세정보 출력 에러 : " + jqXHR.responseText);
+			console.log(transOfficeDetail_debugPrefix + "국사상세정보 출력 에러 : " + errorThrown);
+	    }
+//	}).done(function(){
+//		showTransCnt++;
+//		alert("showTransOffice_detail" + showTransCnt);
+	});
+}
+
+
+//국사 사진보기
+function showTransOfficeImg(){
+	$.ajax({
+		url: url + "MossWorkplaceDetail",
+		type: "post",
+		timeout: 10*1000,
+		dataType: "json",
+		data: {workplaceSeqNum:workplaceSN},
+		
+		success: function(result){
+			var bodyData = result.body;
+			var headerData = result.header;
+			var imgPop="";
+			
+			if(headerData.result != 0){
+				console.log(transOfficeDetail_debugPrefix + "사진 데이터 없음");
+			}
+			
+			$.each(bodyData, function(key, val){								 
+				imgPop = '<div data-role="popup" id="TO_img" data-overlay-theme="a" data-theme="d" data-corners="false">'+
+					     '<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a><img id="imgSrc" class="popphoto" src="../img/transOfficePhoto.png" style="max-height:512px;" alt="국사사진">'+		
+					     '</div>';
+				
+						//$("#imgSrc").attr('src', 'srcImage.jpg');
+				
+				console.log("사진파일 :::::: " +val.FILEBINARY);
+							
+//				if(val.FILEBINARY == null){
+//					$("#TO_pic").text("  사진없음 ");
+//				}else{
+//					$("#table_transOfficeDetail").append(imgPop).trigger("create");	
+//				}									
+			});
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(transOfficeDetail_debugPrefix + "국사사진 출력 에러 : " + jqXHR.status);
+	        console.log(transOfficeDetail_debugPrefix + "국사사진 출력 에러 : " + jqXHR.responseText);
+			console.log(transOfficeDetail_debugPrefix + "국사사진 출력 에러 : " + errorThrown);
+	    }
+	});
+}
+
+//수정 사항 입력
+function transInfoUpdate() {
+		
+	$("#workplaceSeqNum").val(workplaceSN);
+	$("#enterLimitedTime").val($("#inputTimeLimit").val());
+	$("#enterMethod").val($("#inputVisitRule").val());
+	$("#enterManager").val($("#inputManager").val());
+	$("#enterTel1").val($("#inputTel").val());
+	$("#enterTel2").val($("#inputManaPhone").val());
+	$("#equipMentmem01").val($("#inputEquiHistory1").val());
+	$("#equipMentmem02").val($("#inputEquiHistory2").val());
+	$("#equipMentmem03").val($("#inputEquiHistory3").val());
+
+	console.log(transOfficeDetail_debugPrefix + "============= 수정 정보 입력 파라미터 ==========");
+	console.log(transOfficeDetail_debugPrefix + "workplaceSeqNum = " + $("#workplaceSeqNum").val());
+	console.log(transOfficeDetail_debugPrefix + "enterLimitedTime = " + $("#enterLimitedTime").val());
+	console.log(transOfficeDetail_debugPrefix + "enterMethod = " + $("#enterMethod").val());
+	console.log(transOfficeDetail_debugPrefix + "enterManager = " + $("#enterManager").val());
+	console.log(transOfficeDetail_debugPrefix + "enterTel1 = " + $("#enterTel1").val());
+	console.log(transOfficeDetail_debugPrefix + "enterTel2 = " + $("#enterTel2").val());
+	console.log(transOfficeDetail_debugPrefix + "equipMentmem01 = " + $("#equipMentmem01").val());
+	console.log(transOfficeDetail_debugPrefix + "equipMentmem02 = " + $("#equipMentmem02").val());
+	console.log(transOfficeDetail_debugPrefix + "equipMentmem03 = " + $("#equipMentmem03").val());
+
+	$( "#myForm_officeUpdate" ).submit();	
+}
+
+//수정요청
+function showOfficeRequest(formData, jqForm, options) {
+	$.mobile.loading( "show", {
+		  text: "수정중...",
+		  textVisible: true,
+		  theme: "a",
+		  html: ""
+	});
+	
+    var queryString = $.param(formData); 
+    console.log(transOfficeDetail_debugPrefix + 'About to submit: \n\n' + queryString);
+
+    return true; 
+} 
+
+//수정완료
+function showOfficeResponse(responseText, statusText, xhr, $form)  { 
+	
+    var headerData = responseText.header;      
+	// header log
+	console.log(transOfficeDetail_debugPrefix + "============= showOfficeUpdateResponse =============");
+	$.each(headerData, function(key, val){
+		console.log(transOfficeDetail_debugPrefix + key + " : " + val);
+	});
+	
+	if(headerData.result != 0) {
+		showCommonAlert("사업장정보", headerData.errMsg);
+		$.mobile.hidePageLoadingMsg();		
+	} else { 				
+		// 화면에 리스트 출력이 완료되면 loader를 종료
+		showCommonAlert("사업장정보", "수정 완료");
+		$.mobile.hidePageLoadingMsg();									    
+	}
+          
+	showTransOffice_detail();
+} 
+
+//수정하기
+var officeOptions = { 
+        beforeSubmit:  showOfficeRequest,  	// pre-submit callback 
+        success:       showOfficeResponse,  	// post-submit callback
+        url : url + "UpdateMossWorkplace",
+        dataType:  "json",        		// 'xml', 'script', or 'json' (expected server response type)
+        clearForm: true,        		// clear all form fields after successful submit 
+        resetForm: true,        		// reset the form after successful submit 
+        timeout:   10*1000
+};
+
+//수정 확인창
+var officeUpdateConfirm = function() {
+	function officeUpdateConfirmCallback(button) {
+//		alert('You selected button ' + button);
+		if (button == 2) {
+			transInfoUpdate();
+		}
+		confirmFlag = true;
+	}
+	if(confirmFlag) {
+		confirmFlag = false;
+		navigator.notification.confirm(
+				'수정 하시겠습니까?', // message
+				officeUpdateConfirmCallback, // callback to invoke with index of button pressed
+				'사업장정보', // title
+				'취소,확인' // buttonLabels
+			);
+	}
+};
+
+//사업장 사진 업로드 cordova api fileUploader
+function officeFileUpload() {
+		
+		$.mobile.loading( "show", {
+			  text: "업로드 중...",
+			  textVisible: true,
+			  theme: "a",
+			  html: ""
+		});
+			
+	    var options = new FileUploadOptions();
+	    options.fileKey="BDFile";
+	    options.fileName=imgUrl.substr(imgUrl.lastIndexOf('/')+1);
+	    options.mimeType="image/jpeg";
+	    
+	    var params = new Object();
+	    params.workplaceSeqNum = workplaceSN;
+	    params.imageSeqNum = imageSeqNum;
+	    params.filename = options.fileName;	    
+	    options.params = params;
+	    
+	    var ft = new FileTransfer();
+	    ft.upload(imgUrl, encodeURI(url + "WorkplaceImage"), winUpload, failUpload, options);
+}
+
+//지도보기 주소 nullCheck
+function officeAddressCheck(){
+	if(nullCheck(officeAddr) == "-"){
+		showCommonAlert("사업장상세정보", "주소가 없습니다.");
+	}else{
+		$.mobile.changePage('transOffice_detail_map.html');
+	}
+}
+
+//상세 페이지 보이기 전 
+$(document).on("pagebeforeshow","#page_transOffice_detail",function(event){
+	showTransOffice_detail();
+//	showTransOfficeImg();
+	
+	//스크롤 될때마다 리프레시됨
+	$(window).on('scrollstart', function () {
+		if($.mobile.activePage.is('#page_transOffice_detail')){
+//			console.log(transOfficeDetail_debugPrefix + "========= transScroll refresh =========");
+			transScroll.refresh();
+		}
+	});
+	
+	// 상단 하단 margin 적용(줌과 스크롤 주기 위함)
+	$( '#contentWrapper' ).css( "top", 55 );
+	$( '#contentWrapper' ).css( "bottom", 5 );
+	
+	// zoom enable
+	transScroll = new iScroll('contentWrapper', { zoom: true });
+	
+	//	$('#page_transOffice_detail').trigger('pagecreate');	
+});
+
+//상세 페이지 보임
+$(document).on("pageshow","#page_transOffice_detail",function(event){
+	
+	$('#btn_officeModify1').click(function(){
+		officeUpdateConfirm();
+	});
+	
+	$('#btn_officeModify2').click(function(){
+		officeUpdateConfirm();
+	});
+
+	//	하위버전 OS에서 해당 폼 안에 아래 속성이 존재할 경우 
+	//	페이지 로딩이 되지 않아 페이지 로딩 후 스크립트로 속성 추가
+	$("#myForm_officeUpdate").attr("data-ajax", false);
+
+	$('#myForm_officeUpdate').ajaxForm(officeOptions);		// ajax 폼 전송	 
+});
+
+//맵에서온 상세페이지 보이기 전 
+$(document).on("pagebeforeshow","#page_map_transOffice_detail",function(event){		
+	showTransOffice_detail();
+//	showTransOfficeImg();
+	$(window).on('scrollstart', function () {
+		if($.mobile.activePage.is('#page_map_transOffice_detail')){
+//			console.log(transOfficeDetail_debugPrefix + "========= transScroll refresh =========");
+			transScroll.refresh();
+		}
+	});
+	
+	// 상단 하단 margin 적용
+	$( '#contentWrapper' ).css( "top", 55 );
+	$( '#contentWrapper' ).css( "bottom", 5 );
+	
+	// zoom enable
+	transScroll = new iScroll('contentWrapper', { zoom: true });
+});
+
+//맵에서온 상세페이지 보임
+$(document).on("pageshow","#page_map_transOffice_detail",function(event){
+	$('#btn_officeModify3').click(function(){
+		officeUpdateConfirm();
+	});
+	
+	$('#btn_officeModify4').click(function(){
+		officeUpdateConfirm();
+	});
+
+	//	하위버전 OS에서 해당 폼 안에 아래 속성이 존재할 경우 
+	//	페이지 로딩이 되지 않아 페이지 로딩 후 스크립트로 속성 추가
+	$("#myForm_officeUpdate").attr("data-ajax", false);
+
+	$('#myForm_officeUpdate').ajaxForm(officeOptions);		// ajax 폼 전송	 
+});
+
+//지도 보기
+$(document).on("pageshow","#page_transOffice_detail_map",function(event) {
+	
+	$("#btn_back").attr("href", $("#btn_back").attr("href") + "?workplaceSeqNum=" + workplaceSN);
+	
+	// 올레맵 호출 
+	$("#btn_callNavi").click(function() {
+		
+		$.mobile.loading( "show", {
+			  text: "올레네비를 실행합니다.",
+			  textVisible: true,
+			  theme: "a",
+			  html: ""
+		});
+		// 현재 위치 정보를 수집 한 뒤 목적지까지 길찾기 시작
+		navigator.geolocation.getCurrentPosition(onCurrentPosSuccess, onCurrentPosError);
+	});
+	getGeocode(officeAddr, "map_canvas");
+});
+
+//사업장 사진 입력
+$(document).on("pagebeforeshow","#page_transOffice_detail_capture",function(event) {
+	//	Navbar의 클릭 이벤트 시 버튼 토글 상태를 해제
+	$("div:jqmData(role='navbar')").click(function () {
+		$("a").removeClass("ui-btn-active");
+	});
+	// header의 back 버튼 클릭 시 이동할 상세 페이지 셋팅
+	$("#btn_back").attr("href", $("#btn_back").attr("href") + "?workplaceSeqNum=" + workplaceSN);
+	
+	$('#btn_captureImg').click(function() {
+		take_pic();
+	});
+	$('#btn_loadImg').click(function() {
+		album_pic();
+	});
+	$('#btn_sandOfficePic').click(function() {
+		officeFileUpload();
+	});
+});
+
+//지도 사업장 사진 입력
+$(document).on("pagebeforeshow","#page_map_transOffice_detail_capture",function(event) {
+	//	Navbar의 클릭 이벤트 시 버튼 토글 상태를 해제
+	$("div:jqmData(role='navbar')").click(function () {
+		$("a").removeClass("ui-btn-active");
+	});
+	// header의 back 버튼 클릭 시 이동할 상세 페이지 셋팅
+	$("#btn_back").attr("href", $("#btn_back").attr("href") + "?workplaceSeqNum=" + workplaceSN);
+	
+	$('#btn_captureImg').click(function() {
+		take_pic();
+	});
+	$('#btn_loadImg').click(function() {
+		album_pic();
+	});
+	$('#btn_sandOfficePic').click(function() {
+		officeFileUpload();
+	});
+});

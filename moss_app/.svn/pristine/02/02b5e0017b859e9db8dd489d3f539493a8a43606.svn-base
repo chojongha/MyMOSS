@@ -1,0 +1,91 @@
+/**
+ * 		index.js
+ */
+
+var indexDebugPrefix = "[index.js] : ";
+var ollehMapLat = "";
+var ollehMapLng = "";
+
+function transformLatLng(){
+	var srcproj = new olleh.maps.Projection("UTM_K");
+	var destproj = new olleh.maps.Projection("WGS84"); 
+
+	var ollehMapPoint = new olleh.maps.Point(currentLng, currentLat);
+	alert("WGS84 : "+ollehMapPoint.x+"::"+ollehMapPoint.y);
+	//	좌표계 변환 : UTM_K >> WGS84
+	olleh.maps.Projection.transform(ollehMapPoint, destproj, srcproj);
+	
+	alert("UTM-K : "+ollehMapPoint.x+"::"+ollehMapPoint.y);
+	
+	ollehMapLat = ollehMapPoint.y;
+	ollehMapLng = ollehMapPoint.x;
+}
+
+function showOllehMap() {
+	
+	transformLatLng();
+	
+	var mapOptions = {  		
+	     	center : new olleh.maps.Coord(ollehMapLng, ollehMapLat),
+	     	zoom : 10,
+			panControl : false,
+			zoomControl : true,
+			scaleControl : true,
+	     	mapTypeId : olleh.maps.MapTypeId.BASEMAP
+	  	}; 
+	  	var map = new olleh.maps.Map(document.getElementById("map_div"), mapOptions);   	
+	  	
+		var contentString  = '<div>Hello World</div>';
+			 
+		var infowindow = new olleh.maps.InfoWindow({ 
+		    content: contentString 
+		}); 
+		 
+		var marker = new olleh.maps.Marker({ 
+		    position: new olleh.maps.Coord(ollehMapLng, ollehMapLat),
+		    map: map
+		}); 
+		 
+		olleh.maps.event.addListener(marker, 'click', function() { 
+		  infowindow.open(map,marker); 
+		});
+}
+
+$(document).on("pagebeforecreate", "#page_index" , function(event) {
+	//	단 코드, 단 이름 배열 생성
+	if(danConfigFlag) {
+		commonDanInfo();
+	}
+});
+
+$(document).on("pageshow", "#page_index" , function(event) {
+	//	menuPanel event Controller
+	commonMenuPanelControl();
+	//	페이지가 생성된 후 상황에 단설정 상태에 따른 팝업창을 호출
+	$('#page_index').trigger('pagecreate');
+	if(danConfigFlag) {
+		$("#danConfigPopup").popup("open", "slidedown");
+		$("#btn_danConfig").click(function () {
+			console.log(indexDebugPrefix + "================== set DanOrgCode ==================");
+			setDeviceInfo($(":input:radio[name=danChoice]:checked").val());
+			$("#danConfigPopup").popup("close", "slideup");
+		});
+	}
+});
+
+$(document).on("pageshow", "#page_alarmList_detail_ollehMap" , function(event) {
+	//	지도가 들어갈 div 사이즈를 계산하여 설정한다.
+	var header = $("div[data-role='header']:visible");
+	var footer = $("div[data-role='footer']:visible");
+	var content = $("div[data-role='content']:visible");
+	var viewport_height = $(window).height();
+	
+	var content_height = viewport_height - header.outerHeight() - footer.outerHeight();
+	/* Trim margin/border/padding height */
+	content_height -= (content.outerHeight() - content.height());
+	// 디바이스에 사이즈에 동적으로 map height를 설정
+	$("#map_div").css('min-height', content_height);
+	
+	//	지도 출력
+	showOllehMap();
+});

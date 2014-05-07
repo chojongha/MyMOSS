@@ -1,0 +1,135 @@
+/**
+ * common.js
+ */
+var commonDebugPrefix = "[common.js] : ";
+var deviceInfo = "";
+var userID = "";
+var db = 0;
+
+//var url = "http://10.217.76.186:8081/moss/";
+var url = "http://192.168.25.7:8080/moss/";
+//var url = "http://192.168.25.18:8080/moss/";
+
+function getUserID() {
+	return userID;
+}
+
+function callIntent() {
+	CDV.WEBINTENT.startActivity({
+	    action: CDV.WEBINTENT.ACTION_VIEW,
+//	    url: 'geo:0,0?q='}, 
+	    url: 'qtest://moss'}, 
+	    function() {}, 
+	    function() {
+	    	alert('Failed to open URL via Android Intent');
+	    }
+	);
+}
+
+function onPause() {
+	console.log(commonDebugPrefix + "========= Pause test =========");
+}
+
+function onResume() {
+	console.log(commonDebugPrefix + "========= Resume test =========");
+}
+
+var onDeviceReady = function() {
+	pictureSource = navigator.camera.PictureSourceType; 	// api-camera Photo URI
+	destinationType = navigator.camera.DestinationType;
+	deviceInfo = device.platform;							// device Info load
+	document.addEventListener("pause", onPause, false);		// device pause, resume events
+	document.addEventListener("resume", onResume, false);
+	// 안드로이드 backButton 예외처리
+	if(deviceInfo == "Android") {
+		document.addEventListener("backbutton", function(e){
+		    if($.mobile.activePage.is('#page_index')){
+		        e.preventDefault();
+		        showConfirm();
+		    }
+		    else {
+		        navigator.app.backHistory();
+		    }
+		}, false);
+	}
+	
+    if($.mobile.activePage.is('#page_login')){
+    	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);	// file api
+    }
+};
+// api load
+function init() {
+	document.addEventListener("deviceready", onDeviceReady, true);
+}
+
+//api-connection
+function check_network() {
+    var networkState = navigator.network.connection.type;
+
+    var states = {};
+    states[Connection.UNKNOWN]  = false;	//'Unknown connection';
+    states[Connection.ETHERNET] = true;		//'Ethernet connection';
+    states[Connection.WIFI]     = true;		//'WiFi connection';
+    states[Connection.CELL_2G]  = true;		//'Cell 2G connection';
+    states[Connection.CELL_3G]  = true;		//'Cell 3G connection';
+    states[Connection.CELL_4G]  = true;		//'Cell 4G connection';
+    states[Connection.NONE]     = false;	//'No network connection';
+    
+    return states[networkState];
+}
+
+function getDeviceInfo() {
+	return deviceInfo.toLowerCase();
+}
+
+var showConfirm = function() {
+	function onConfirm(button) {
+//		alert('You selected button ' + button);
+		if (button == 2) {
+			navigator.app.exitApp();
+		}
+	}
+	navigator.notification.confirm(
+		'종료할꺼?!', // message
+		onConfirm, // callback to invoke with index of button pressed
+		'종료', // title
+		'취소,확인' // buttonLabels
+	);
+};
+
+var commonShowConfirm = function() {
+	function onConfirm(button) {
+		alert('You selected button ' + button);
+	}
+	navigator.notification.confirm(
+		'종료할꺼?!', // message
+		onConfirm, // callback to invoke with index of button pressed
+		'종료', // title
+		'확인'
+	);
+};
+
+//조회
+function getUserIDResult() {
+	db.transaction(querySelectUserID, errorGetUserID);
+}
+function querySelectUserID(tx) {
+	tx.executeSql('SELECT userID FROM MOSS_USERINFO', [], selectUserIDSuccess, errorGetUserID);
+}
+function selectUserIDSuccess(tx, results) {
+	userID = results.rows.item(0).userID;
+	console.log(commonDebugPrefix + "select success userID = " + userID);
+}
+function errorGetUserID(err) {
+	console.log(commonDebugPrefix + "db error");
+}
+
+$(document).ready(function() {
+//	alert(commonDebugPrefix + "load");
+
+	// 로그인이 완료되면 로컬DB 에서 사번을 읽어온다.
+	if (!db) {
+		db = window.openDatabase("Database", "1.0", "myDb", 200000);
+	}
+	getUserIDResult();
+});

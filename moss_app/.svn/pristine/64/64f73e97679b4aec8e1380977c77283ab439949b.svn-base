@@ -1,0 +1,27 @@
+/**
+ * 		index.js
+ */
+
+var indexDebugPrefix = "[index.js] : ";
+
+$(document).on("pagebeforecreate", "#page_index" , function(event) {
+
+});
+
+$(document).on("pageshow", "#page_index" , function(event) {
+	//	menuPanel event Controller
+	commonMenuPanelControl();
+	//	OS별 이벤트 분기
+	if(deviceInfo == "Android") {
+		$("#index_btn_ktConsole").click(function() {
+			callIntent('ktConsole');
+		});
+		$("#index_btn_qTest").click(function() {
+			callIntent('qtest');
+		});
+	} else {
+		$("#index_btn_ktConsole", "#index_btn_qTest").click(function() {
+			showiOSAlert();
+		});
+	}
+});

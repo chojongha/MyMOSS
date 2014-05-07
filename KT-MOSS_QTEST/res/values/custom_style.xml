@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sets the text styles -->
+<resources>
+
+    <style name="CustomTheme" parent="android:Theme">
+        <item name="android:windowTitleSize">40dp</item>
+        <item name="android:windowTitleBackgroundStyle">@style/WindowTitleStyle</item>
+        
+    </style>
+
+    <style name="WindowTitleStyle">
+        <item name="android:padding">0px</item>
+    </style>
+
+  
+
+
+</resources>

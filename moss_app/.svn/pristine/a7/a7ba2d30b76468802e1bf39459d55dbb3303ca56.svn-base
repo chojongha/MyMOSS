@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<!-- <meta name="viewport" content="height=device-height,width=device-width,initial-scale=1.0,maximum-scale=1.0, target-densityDpi=high-dpi"> -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>MainPage</title>
+</head>
+<body>
+	<div data-role="page" id="page_index">
+		<div data-theme="a" data-role="header" id="page_header" class="header">
+			<a data-role="button" href="#menuPanel" data-mini="false" class="ui-btn-left">Menu</a>
+			<h3>MOSS</h3>
+		</div>
+		<!-- MenuPanel  -->
+		<div data-role="panel" id="menuPanel" data-theme="a" data-display="reveal" data-position-fixed="true" data-swipe-close="false">
+			<!-- Panel Content를 스크립트로 생성 -->
+		</div>
+		<!-- MenuPanel  -->
+		<div data-role="content">
+			<div id="wrap">
+			<!--logo1-->
+				<div id="main_logo01"><img alt="KT MOSS" src="../img/mainimg01.png" width="80%"></div>
+			<!--//logo1-->
+			
+				<div id="container">
+					<div id="mainmenu">
+
+					<ul>
+					<li><a href="alarmList_noti.html"><img alt="상황공유" src="../img/mainimg02.png"/></a></li>
+					<li><a href="board_notice.html"><img alt="커뮤니티" src="../img/mainimg03.png"></a></li>
+					<li><a href="#"><img alt="원격콘솔" src="../img/mainimg04.png" onclick="callIntent('ktConsole');"></a></li>
+					<li><a href="#"><img alt="품질측정" src="../img/mainimg05.png" onclick="callIntent('qtest');"></a></li>
+					</ul>
+					</div>
+				</div>
+			
+			<!--logo2-->
+				<div id="main_logo02"><img alt="O" src="../img/mainimg06.png" width="40em"></div>
+			<!--//logo2-->
+			
+			<!--footer-->
+				<div id="footer"></div>
+			<!--footer//-->
+			</div>
+		</div>
+		<div data-theme="a" data-role="footer" data-position="fixed">
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,129 @@
+/**
+ *		board_open_write.js
+ */
+
+var board_open_write_debugPrefix = "[board_open_write.js] : ";
+
+function setBoardWriteSubmit() {
+    
+    if($("#board_writeSubject").val().length == "") {
+        showCommonAlert("제목작성", '제목을 입력하세요');
+    }else if($("#board_writeContent").val().length == "") {
+        showCommonAlert("내용작성", '내용을 입력하세요');
+    }else {
+       
+        if($("#openFileButton").val().length == 0) {
+            console.log(board_open_write_debugPrefix + "============= 댓글 ==========");
+            $("#writerid_onlyText").val(loginId);
+            $("#writername_onlyText").val(userName);
+            $("#board_writeSubject_onlyText").val($("#board_writeSubject").val());
+            $("#board_writeContent_onlyText").val($("#board_writeContent").val());
+            
+            console.log(board_open_write_debugPrefix + "============= 댓글 입력 파라미터 ==========");
+            console.log(board_open_write_debugPrefix + "writerid = " + $("#writerid_onlyText").val());
+            console.log(board_open_write_debugPrefix + "writername = " + $("#writername_onlyText").val());
+            console.log(board_open_write_debugPrefix + "content = " + $("#board_writeSubject_onlyText").val());
+            console.log(board_open_write_debugPrefix + "subject = " + $("#board_writeContent_onlyText").val());
+            
+            $( "#board_write_BDfree_onlyText" ).submit();   
+        } else {
+            console.log(board_open_write_debugPrefix + "============= 댓글 + 사진 ==========");
+            $("#writerid").val(loginId);
+            $("#writername").val(userName);
+            
+            console.log(board_open_write_debugPrefix + "============= 댓글 입력 파라미터 ==========");
+            console.log(board_open_write_debugPrefix + "writerid = " + $("#writerid").val());
+            console.log(board_open_write_debugPrefix + "writername = " + $("#writername").val());
+            console.log(board_open_write_debugPrefix + "content = " + $("#board_writeContent").val());
+            console.log(board_open_write_debugPrefix + "subject = " + $("#board_writeSubject").val());
+            console.log(board_open_write_debugPrefix + "BDfile = " + $("#openFileButton").val());
+            
+            $( "#board_write_BDfree" ).submit(); 
+        }
+    }
+}
+
+function showBoardRequestWrite(formData, jqForm, options) {
+    $.mobile.loading( "show", {
+          text: "작성 글 업로드...",
+          textVisible: true,
+          theme: "a",
+          html: ""
+    });
+    
+    var queryString = $.param(formData); 
+    console.log(board_open_write_debugPrefix + 'About to submit: \n\n' + queryString);
+
+    return true; 
+} 
+
+function showBoardResponseWrite(responseText, statusText, xhr, $form)  { 
+    console.log(board_open_write_debugPrefix + 'status: ' + statusText + '\n\nresponseText: \n' + responseText + '\n\nThe output div should have already been updated with the responseText.');
+    
+    var headerData = responseText.header;
+    // header log
+    console.log(board_open_write_debugPrefix + "============= showBoardResponseWrite =============");
+    $.each(headerData, function(key, val){
+        console.log(board_open_write_debugPrefix + key + " : " + val);
+    });
+    if(headerData.result != 0) {
+        $.mobile.hidePageLoadingMsg();
+        showCommonAlert("자유게시판", headerData.errMsg);
+    } else { 
+        $.mobile.hidePageLoadingMsg();
+        $("#board_writeSubject").val("");
+        showCommonAlert("자유게시판", '게시글이 등록되었습니다');
+        $.mobile.changePage("board_open.html");
+    }
+} 
+
+var boardWriteOptions = { 
+        beforeSubmit:  showBoardRequestWrite,    // pre-submit callback 
+        success:       showBoardResponseWrite,   // post-submit callback
+        url : url + "WriteBDFree",
+        dataType:  "json",              // 'xml', 'script', or 'json' (expected server response type)
+        clearForm: true,                // clear all form fields after successful submit 
+        resetForm: true,                // reset the form after successful submit 
+        timeout:   commonTimeout
+};
+
+function tableResize() {
+    //디바이스에 따라 화면 높이 맞추기
+    var header = $("div[data-role='header']:visible");      //  header 사이즈
+    var footer = $("div[data-role='footer']:visible");      //  footer 사이즈
+    var content = $("div[data-role='content']:visible");    //  content 사이즈
+    var viewport_height = $(window).height();               //  전체 화면 사이즈
+    //  content 사이즈 계산 (전체화면높이 - header높이 - footer높이 - 상하padding)
+    var content_height = (viewport_height - header.outerHeight() - footer.outerHeight()) - 18;
+    //  content 상하 margin 제거
+    content_height -= (content.outerHeight() - content.height());
+    
+    var tdHeight = $("#openWrite_title").height();
+    //  content 높이에서 td 2개 높이를 제외한 값으로 Textarea 크기를 설정한다.
+    var tdTextareaHeight = content_height - (tdHeight * 2);
+    //  Textarea 크기 설정
+    $("#board_writeContent").css('height', tdTextareaHeight);
+}
+
+$(document).on("pagebeforeshow","#page_board_open_write",function(event){
+   
+});
+
+$(document).on("pageshow","#page_board_open_write",function(event){
+
+    
+    $('#btn_boardSubmit').click(function(){
+        setBoardWriteSubmit();
+    });
+    
+    $("#board_write_BDfree").attr("data-ajax", false);
+    $("#board_write_BDfree_onlyText").attr("data-ajax", false);
+    // ajax 폼 전송
+    $("#board_write_BDfree").ajaxForm(boardWriteOptions);
+    $("#board_write_BDfree_onlyText").ajaxForm(boardWriteOptions);
+    
+    //  테이블 사이즈 변경
+    tableResize();
+}); 
+
+

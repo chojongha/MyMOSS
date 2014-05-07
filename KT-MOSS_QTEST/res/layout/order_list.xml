@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_background" >
+
+
+
+    <ListView
+        android:id="@+id/orderlistView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_layout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
+
+    <RelativeLayout
+        android:id="@+id/button_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="53dp"
+        android:layout_alignParentBottom="true"        
+   
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal" >
+
+            <RadioGroup
+                android:id="@+id/group_grp"
+                android:layout_width="fill_parent"
+                android:layout_height="53dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="3dp"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/p_btn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bottom_radio_selector2"
+                    android:button="@null"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="진행"
+                    android:textColor="@drawable/txt_radio_selector"
+                    android:textSize="16dp" />
+
+                <RadioButton
+                    android:id="@+id/c_btn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bottom_radio_selector2"
+                    android:button="@null"
+                    android:checked="false"
+                    android:gravity="center"
+                    android:text="완료"
+                    android:textColor="@drawable/txt_radio_selector"
+                    android:textSize="16dp" />
+            </RadioGroup>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Login Page</title>
+</head>
+<body>
+	<div data-role="page" id="page_config">
+		<div data-theme="a" data-role="header" class="header">
+	        <a data-role="button" href="#menuPanel" data-mini="false" class="ui-btn-left">Menu</a>
+	        <h3>MOSS</h3>
+	    </div>
+		<!-- MenuPanel  -->
+		<div data-role="panel" id="menuPanel" data-theme="a" data-display="reveal" data-position-fixed="true" data-swipe-close="false">
+			<!-- Panel Content를 스크립트로 생성 -->
+		</div>
+		<!-- MenuPanel  -->
+		<div data-role="content" id="content">
+			<div class='ui-grid-a'>
+			    <div class='ui-block-a'><div class='ui-bar ui-bar-f'>버전</div></div>
+			    <div class='ui-block-b'><div class='ui-bar ui-bar-f'><span id='version'></span></div></div>
+			    <div class='ui-block-a'><div class='ui-bar ui-bar-f'>자동로그인</div></div>
+			    <div class='ui-block-b' id='box_autoLogin'>
+			        <select name='flip-7' id='config_autoLogin' data-role='slider' data-mini='true' onchange='checkField(this.value);'>
+			            <option value='N'>OFF</option>
+			            <option value='Y'>ON</option>
+			        </select>
+			    </div>
+			    <div class='ui-block-solo'><div class='ui-bar ui-bar-f'>시작페이지 설정</div></div>
+			</div><!-- grid-a -->
+			<div id='box_startPage'></div>
+			<select id='config_startPage' data-icon='star' data-mini='true' onchange='checkField(this.value);'>
+				<option value='index.html'>메인화면</option>
+				<option value='alarmList_noti.html'>고장상황 진행</option>
+				<option value='alarmList_success.html'>고장상황 완료</option>
+				<option value='alarmList_TFMS.html'>TT 목록</option>
+				<option value='board_notice.html'>공지사항</option>
+				<option value='board_manual.html'>업무매뉴얼</option>
+			</select>
+		</div>
+		<div data-theme="a" data-role="footer" data-position="fixed">
+		</div>
+	</div>
+</body>
+</html>

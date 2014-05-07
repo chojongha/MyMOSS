@@ -1,0 +1,58 @@
+//라디오버튼 생성
+$(document).on("pagebeforeshow","#page_manualList", function(event){
+	
+	$.ajax({		
+		url: url+"WorkOdrList",
+		type: "post",
+		timeout: 10*1000,
+		dataType: "json",
+		data: {workerID:'91038948'},
+		success: function(result){
+			var bodyData=result.body;
+			var manualPop="";
+			
+			if(bodyData.length > 0){
+				$.each(bodyData, function(key,val){
+					manualPop += "<input type='radio' name='manual' data-theme='d' data-iconpos='right' id='" + val.custName + "' value='" + val.custName + "' checked=''>" +
+								 "<label for='" + val.custName + "'>"+val.custName+"</label>\n";
+				});
+			}else{
+				manualPop = '<h2>없음</h2>';
+			}
+			
+			$('#manual-controlgroup').html(manualPop).trigger("create");
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			
+		}
+	});
+});
+
+//라디오 버튼 선택후 확인 클릭시 파라미터 전송
+/*function SendParameter(){
+	
+	var isChecked=$(":input:radio[name=manual]:checked").val();
+	
+	if(isChecked=='고객전송'){
+		$(location).attr('href','board_manual.html?checked=고객전송');
+		
+	}else if(isChecked=="기간전송"){
+		$(location).attr('href','board_manual.html?checked=기간전송');
+	
+	}else if(isChecked=="인터넷"){ 
+		$(location).attr('href','board_manual.html?checked=인터넷');
+	
+	}else if(isChecked=="전원"){
+		$(location).attr('href','board_manual.html?checked=전원');
+	
+	}else if(isChecked=="교환"){
+		$(location).attr('href','board_manual.html?checked=교환');
+	
+	}else if(isChecked=="초고속"){
+		$(location).attr('href','board_manual.html?checked=초고속');
+	
+	}else{
+		$(location).attr('href','board_manual.html?checked=고객망');
+	}
+}
+*/

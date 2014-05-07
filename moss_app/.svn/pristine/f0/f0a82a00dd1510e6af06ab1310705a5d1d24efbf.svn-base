@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>진행상황의 업무매뉴얼</title>
+
+<link rel="stylesheet" href="../jquery.mobile/jquery.mobile-1.3.2.min.css" />
+<link rel="stylesheet" href="../css/common.css" />
+<script src="../jquery.mobile/jquery-1.7.2.min"></script>
+<script src="../jquery.mobile/jquery.mobile-1.3.2.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/cordova.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/manual.js"></script>
+
+
+<style type="text/css">
+.ui-bar {
+	padding:0;
+}
+label {
+	width:200px;
+}
+#popup_report {
+	padding-left:30px;
+	padding-right:30px;
+	padding-bottom:10px;
+}
+#btn_group {
+	padding-top:10px;
+}
+</style>
+
+</head>
+<body onload="init();">
+	<div data-role="page" id="page_alarmList_manual">
+		<div data-theme="a" data-role="header" data-position="fixed" data-tap-toggle="false">
+			<a data-role="button" href="alarmList_noti_detail.html" data-iconpos="notext" data-icon="back" data-iconpos="left" class="ui-btn-left"data-ajax="false" data-rel="external">back</a>
+			<h3>업무매뉴얼</h3>
+		</div>
+		<div data-role="content" id=content>
+			
+			<ul id="alarm_manualList" data-role="listview" data-inset="false">   <!-- data-filter="true" -->
+   			    <li name="업무매뉴얼">
+			    	<a href="board_manual_detail.html" data-ajax="false" data-rel="external">
+				        <h2>광케이블 감시 프로세스</h2>
+				        <table>
+				        	<tr>
+				        		<td>xxxx광케이블</td>
+				        		<td align="right">인터넷</td>
+				        	</tr>
+				        </table>
+			    	</a>
+			    </li>
+			</ul>
+		</div>
+		<div data-theme="a" data-role="footer" data-position="fixed" data-tap-toggle="false">
+		</div>
+	</div>
+</body>
+</html>

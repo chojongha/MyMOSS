@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<!-- <meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=1, width=device-width, height=device-height"> -->
+<!-- <meta name="viewport" content="user-scalable=yes, initial-scale=1.0, width=device-width"> -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Login Page</title>
+
+<link rel="stylesheet" href="../css/style.css" />
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBS30GU8AwyMBl1-LFC83dJTdx3yqdPU4I&sensor=true"></script>
+
+<link rel="stylesheet" href="../jquery.mobile/jquery.mobile-1.3.2.min.css" />
+<script src="../jquery.mobile/jquery-1.7.2.min"></script>
+<script src="../jquery.mobile/jquery.mobile-1.3.2.min.js"></script>
+
+<script type="text/javascript" charset="utf-8" src="../js/cordova.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/gibberish-aes.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/webintent.js"></script>
+<script type="text/javascript" src="../js/gmap/demo.js"></script>
+<script type="text/javascript" src="../js/gmap/jquery.ui.map.js"></script>
+		
+<script type="text/javascript" charset="utf-8" src="../js/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/login.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/alarmList_noti.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/alarmList_noti_detail.js"></script>
+
+</head>
+
+<body onload="init();">
+	<div data-role="page" id="page_login">
+		<div data-role="header" data-position="fixed"></div>
+		<div data-role="content" id="content">
+			<div id="wrap">
+			<!-- login -->
+				<div id="login">
+					<p>로그인</p>
+					<div id="login_box">
+						<ul>
+							<li>
+								<input type="text" name="textinput-hide" id="login_id" placeholder="사번" value="">
+							</li>
+						</ul>
+						<ul>
+							<li>
+								<input type="password" name="textinput-hide" id="login_pw" placeholder="비밀번호" value="">
+							</li>
+						</ul>
+						<ul>
+							<li>
+							    <fieldset class="ui-grid-a" style="margin-top:-0.5em">
+								    <div class="ui-block-a" style="margin-top:10px">자동로그인</div>
+								    <div class="ui-block-b">							        
+								    	<select name="flip-7" id="login_auto" data-role="slider" data-mini="true">
+								            <option value="N">Off</option>
+								            <option value="Y">On</option>
+								        </select>
+								    </div>
+								</fieldset>
+							</li>
+						</ul>
+						<ul>
+							<li>
+								<fieldset class="ui-grid-a" style="margin-top:-1em; margin-bottom:-0.5em">
+							    	<div class="ui-block-a"><button type="submit" id="btn_submit" data-theme="c" data-corners="false">확인</button></div>
+							    	<div class="ui-block-b"><button type="submit" id="btn_cancel" data-theme="c" data-corners="false">취소</button></div>
+								</fieldset>
+							</li>
+						</ul>
+					</div>
+				</div>
+			<!--//login -->
+			</div>
+		</div>
+		<div data-role="footer" data-position="fixed"></div>
+	</div>
+</body>
+</html>

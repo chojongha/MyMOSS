@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>업무매뉴얼 상세보기</title>
+</head>
+<body>
+	<div data-role="page" id="page_manual_detail">
+		<div data-theme="a" data-role="header" data-position="fixed" data-tap-toggle="false" id="beforeList" class="header">	
+			<a href="board_manual.html" data-role="button" data-mini="false" class="ui-btn-left"><img src="../img/detail_back.png"></a>
+			<h3>업무 매뉴얼 상세</h3>
+		</div>
+		<div data-role="content" id="content">
+			<div class="CSSTableGenerator">		
+				<div id="manual_table" style="width:100%; table-layout:fixed;">				
+					<!-- 업무 메뉴얼 상세테이블 동적 추가 -->				
+				</div>
+			</div>			
+		</div>
+		<div data-theme="c" data-role="footer" id="add" data-position="fixed" data-tap-toggle="false">
+		</div> 
+	</div>
+</body>
+</html>

@@ -1,0 +1,220 @@
+var transOfficeDetail_debugPrefix = "[transOffice_detail.js] : ";
+
+function showTransOffice_detail(){
+	
+	$.ajax({
+		url: url + "WorkOdrList",
+		type: "post",
+		timeout: 10*1000,
+		dataType: "json",
+		data: {workerID: '91038948'},
+		
+		success: function(result){
+			var bodyData = result.body;
+			var transOfficeTB ="";
+//			var imgPop ="";
+			
+			$.each(bodyData, function(key, val){
+				
+				 transOfficeTB = '<table>'+
+									'<tr>'+
+									'<th class="th" align="left" colspan="2">국사정보</th>	'+				
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">고유정보</td>'+
+									'<td class="td" align="left" id="TO_info"></td>'+  	// TO는 Trans Office
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">시설형태</td>'+
+									'<td class="td" align="left" id="TO_facilForm"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">국사명</td>'+
+									'<td class="td" align="left" id="TO_area"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">사진정보</td>'+
+									'<td class="td" align="left" id="TO_pic">사진보기&nbsp;<a href="#TO_img" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="../img/show_img.png" style="width:1em; height:1em;"></a></td>'+
+									'</tr>'+
+										
+	// 이미지클릭시 국사사진팝업으로 띄우기 					
+//									'<div data-role="popup" id="TO_img" data-overlay-theme="a" data-theme="d" data-corners="false">'+
+//									'<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a><img class="popphoto" src="../img/transOfficePhoto.png" style="max-height:512px;" alt="국사사진">'+
+//									'</div>'+ 
+										
+									'<tr>'+
+									'<th class="th" align="left" colspan="2">위치정보</th>	'+				
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">주소</td>'+
+									'<td class="td" align="left" id="TO_addr"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">상세정보</td>'+
+									'<td class="td" align="left" id="TO_detailAddr"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">위도</td>'+
+									'<td class="td" align="left" id="TO_lat"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">경도</td>'+
+									'<td class="td" align="left" id="TO_longi"></td>'+
+									'</tr>'+
+										
+									'<tr>'+
+									'<th class="th" align="left" colspan="2">출입정보</th>'+				
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">제한시간</td>'+
+									'<td class="td" align="left" id="TO_timeLimit"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">출입방법</td>'+
+									'<td class="td" align="left" id="TO_visitRule"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">건물관리자</td>'+
+									'<td class="td" align="left" id="TO_manager"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">건물전화</td>'+
+									'<td class="td" align="left" id="TO_tel"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">건물 관리자 휴대전화</td>'+
+									'<td class="td" align="left" id="TO_manaPhone"></td>'+
+									'</tr>'+
+										
+									'<tr>'+
+									'<th class="th" align="left" colspan="2">시설정보</th>	'+				
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">장비내역 1</td>'+
+									'<td class="td" align="left" id="TO_equiHistory1"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">장비내역 2</td>'+
+									'<td class="td" align="left" id="TO_equiHistory2"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">장비내역 3</td>'+
+									'<td class="td" align="left" id="TO_equiHistory3"></td>'+
+									'</tr>'+
+												
+									'<tr>'+
+									'<th class="th" align="left" colspan="2">관리정보</th>'+					
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">관할센터</td>'+
+									'<td class="td" align="left" id="TO_jurisCenter"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">관할운용팀</td>'+
+									'<td class="td" align="left" id="TO_jurisTeam"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">무선운용단</td>'+
+									'<td class="td" align="left" id="TO_wirelessGroup"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">무선운용팀</td>'+
+									'<td class="td" align="left" id="TO_wirelessTeam"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">유지보수사</td>'+
+									'<td class="td" align="left" id="TO_maintenance"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">담당(정)</td>'+
+									'<td class="td" align="left" id="TO_charge"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">연락처(정)</td>'+
+									'<td class="td" align="left" id="TO_chargeTel"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">담당(부)</td>'+
+									'<td class="td" align="left" id="TO_subCharge"></td>'+
+									'</tr>'+
+									'<tr>'+
+									'<td class="td_subject" align="left" width="40%">연락처(부)</td>'+
+									'<td class="td" align="left" id="TO_subChargeTel"></td>'+
+									'</tr>'+
+									'</table>';
+				
+//				imgPop = '<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a><img id="imgSrc" class="popphoto" src="../img/transOfficePhoto.png" style="max-height:512px;" alt="국사사진">';
+								
+				$("#table_transOfficeDetail").html(transOfficeTB); 
+//				$("#TO_img").html(imgPop);
+								
+				$('#TO_info').text(val.workOdrNum);
+				$('#TO_facilForm').text(val.workOdrKind);
+				$('#TO_area').text(val.workOdrKind);
+				$('#TO_addr').text(val.addr);
+				$('#TO_detailAddr').text(val.addrEtc);
+				$('#TO_lat').text(val.workOdrNum);
+				$('#TO_longi').text(val.workOdrNum);
+				$('#TO_timeLimit').text(val.rsvDT);
+				$('#TO_visitRule').text(val.odrType);
+				$('#TO_manager').text(val.custName);
+				$('#TO_tel').text(val.telNum);
+				$('#TO_manaPhone').text(val.telNum);
+				$('#TO_equiHistory1').text(val.odrType);
+				$('#TO_equiHistory2').text(val.odrType);
+				$('#TO_equiHistory3').text(val.odrType);
+				$('#TO_jurisCenter').text(val.odrType);
+				$('#TO_jurisTeam').text(val.custName);
+				$('#TO_wirelessGroup').text(val.custName);
+				$('#TO_wirelessTeam').text(val.custName);
+				$('#TO_maintenance').text(val.custName);
+				$('#TO_charge').text(val.custName);
+				$('#TO_chargeTel').text(val.telNum);
+				$('#TO_subCharge').text(val.custName);
+				$('#TO_subChargeTel').text(val.telNum); 
+			});
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+	        console.log(jqXHR.responseText);
+	    }
+	});
+}
+
+function showTransOfficeImg(){
+	$.ajax({
+		url: url + "WorkOdrList",
+		type: "post",
+		timeout: 10*1000,
+		dataType: "json",
+		data: {workerID: '91038948'},
+		
+		success: function(result){
+			var bodyData = result.body;
+//			var transOfficeTB ="";
+			var imgPop ="";
+			
+			$.each(bodyData, function(key, val){
+								 
+				imgPop = '<div data-role="popup" id="TO_img" data-overlay-theme="a" data-theme="d" data-corners="false">'+
+						 '<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a><img class="popphoto" src="../img/transOfficePhoto.png" style="max-height:512px;" alt="국사사진">'+
+						 '</div>';
+				
+				$("#table_transOfficeDetail").append(imgPop).trigger("create");										
+			});
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(transOfficeDetail_debugPrefix + "국사상세정보 출력 에러 : " + jqXHR.status);
+	        console.log(transOfficeDetail_debugPrefix + "국사상세정보 출력 에러 : " + jqXHR.responseText);
+			console.log(transOfficeDetail_debugPrefix + "국사상세정보 출력 에러 : " + errorThrown);
+	    }
+	});
+}
+
+$(document).on("pagebeforeshow","#page_transOffice_detail",function(event){
+	showTransOffice_detail();
+});
+
+$(document).on("pageshow","#page_transOffice_detail",function(event){
+//	showTransOffice_detail();
+	showTransOfficeImg();
+});
